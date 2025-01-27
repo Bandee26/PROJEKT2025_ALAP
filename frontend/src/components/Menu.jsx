@@ -16,7 +16,7 @@ function Menu() {
       <Container>
         <Navbar.Brand href="/">
                 <img src={Logo} style={imageStyle} alt="Logo"/>
-                B&K autókereskedés
+                Használtautó kereskedés
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
