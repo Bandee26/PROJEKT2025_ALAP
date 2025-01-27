@@ -2,7 +2,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import filmImage from './assets/film.jpg';
+import filmImage from './assets/hatter.jpg';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';

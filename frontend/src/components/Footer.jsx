@@ -24,8 +24,8 @@ return(
           <h5 className="text-uppercase">Contact</h5>
           <p>
             Mezőtúr Dózsa György út 17.<br />
-            Email: info@telekimezotur.hu<br />
-            Phone: +123 456 789
+            Email: info@hasznalautoker.hu<br />
+            Phone: +36 1 456 789
           </p>
         </div>
       </div>
