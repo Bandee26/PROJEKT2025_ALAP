@@ -5,7 +5,7 @@ let pool = sql.createPool(config);
 
 async function selectTermek() {
     try{ 
-     const [rows] = await pool.query('select * from autók');
+     const [rows] = await pool.query('select * from autok');
      return rows;
     }
     catch(error){

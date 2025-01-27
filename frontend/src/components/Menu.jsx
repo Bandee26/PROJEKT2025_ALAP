@@ -12,7 +12,7 @@ function Menu() {
       };
 
   return (
-    <Navbar expand="lg" className="bg-white">
+    <Navbar expand="lg" className="bg-white fixed-menu">
       <Container>
         <Navbar.Brand href="/">
                 <img src={Logo} style={imageStyle} alt="Logo"/>
@@ -22,7 +22,7 @@ function Menu() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link href="#link">Kínálat</Nav.Link>
             <NavDropdown title="Fehasználóknak" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Regisztráció</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Bejelentkezés</NavDropdown.Item>
