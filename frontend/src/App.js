@@ -2,10 +2,11 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import filmImage from './assets/film.jpg';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import filmImage from './assets/hatter.jpg';
+import { Container, Row, Col } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CustomCard from './components/Card'; // CustomCard importálása
 
 function App() {
   const appStyle = {
@@ -13,13 +14,19 @@ function App() {
     flexDirection: 'column',
     minHeight: '100vh', // A teljes képernyő magasságának beállítása
   };
+
   const mainStyle = {
+    position: 'relative', // A tartalom és háttér együttműködéséhez
+  };
+
+  const parallaxStyle = {
     backgroundImage: `url(${filmImage})`,
     backgroundSize: 'cover', // A kép teljesen kitölti a rendelkezésre álló teret, a képarány megtartásával.
-    backgroundPosition: 'center', // A kép középre igazítva jelenik meg.
-    backgroundRepeat: 'no-repeat', // A kép nem ismétlődik.
-    flex: '1', // A fő tartalom kitölti a fennmaradó helyet
-    padding: '20px',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed', // Parallax effektus
+    height: '400px', // A parallax szekció magassága
+    width: '100%',
   };
 
   const [products, setProducts] = useState([]);
@@ -28,7 +35,7 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/');
+        const response = await axios.get('http://localhost:8080/termek');
         setProducts(response.data.products || []); // Ensure the data is always an array
       } catch (err) {
         setError('Hiba!');
@@ -41,46 +48,34 @@ function App() {
   return (
     <div style={appStyle}>
       <Menu />
-      <main style={mainStyle}>
-        <h1 style={{ color: 'Black', textAlign: 'center' }}>
-
-        </h1>
-
-        
-      </main>
       
-      <Container className="my-4">
-        <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
-        {error && <p className="text-danger text-center">{error}</p>}
-        <Row>
-          {products && products.length > 0 ? (
-            products.map((car) => (
-              <Col key={car["Azonosító"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                <Card>
-                  <Card.Body>
-                    <Card.Title>{car["10"]}</Card.Title> {/* Rendszám */}
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Márka ID: {car["Márka ID"]}
-                    </Card.Subtitle>
-                    <Card.Text>
-                      <strong>Évjárat:</strong> {car["Évjárat"]}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>Kilométeróra állás:</strong> {car["Kilométeróra állás"]}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>Ár:</strong> {car["Ár"]} Ft
-                    </Card.Text>
-                    <Button variant="primary">Kosárba</Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <p className="text-center">Nincs megjeleníthető autó.</p>
-          )}
-        </Row>
-      </Container>
+      {/* Parallax háttér */}
+      <div style={parallaxStyle}></div>
+      
+      <main style={mainStyle}>
+        <Container className="my-4">
+          <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
+          {error && <p className="text-danger text-center">{error}</p>}
+          
+          {/* Itt jelennek meg a kártyák */}
+          <Row>
+            {products && products.length > 0 ? (
+              products.map((car) => (
+                <Col key={car["Azonosító"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                  <CustomCard
+                    imageSrc='/car3.jpg' // Példa kép URL
+                    title={car.Rendszam} // Rendszám
+                    subtitle={`Márka ID: ${car.Marka_ID}`}
+                    description={`Évjárat: ${car.Evjarat} | Kilométeróra állás: ${car.Kilometerora} | Ár: ${car.Ar} Ft`}
+                  />
+                </Col>
+              ))
+            ) : (
+              <p className="text-center">Nincs megjeleníthető autó.</p>
+            )}
+          </Row>
+        </Container>
+      </main>
 
       <Footer />
     </div>
