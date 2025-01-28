@@ -68,9 +68,9 @@ function App() {
       <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
         <CustomCard
           imageSrc='/car3.jpg' // Példa kép URL
-          title={auto.Rendszam} // Rendszám
-          subtitle={`Evjarat: ${auto.Evjarat} | Ar: ${auto.Ar} Ft`}  // Évjárat és ár
-          description={`Kilométeróra: ${auto.Kilometerora} | Sebessegvalto: ${auto.Sebessegvalto_ID}`} // Kilométeróra, sebességváltó
+          title={`${auto.Marka}  ${auto.Modell}`} // Rendszám
+          subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft | Rendszam: ${auto.Rendszam} Ft`}  // Évjárat és ár
+          description={`Kilométeróra: ${auto.Kilometerora} | Sebessegvalto: ${auto.Sebessegvalto}`} // Kilométeróra, sebességváltó
         />
       </Col>
     ))
