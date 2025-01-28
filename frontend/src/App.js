@@ -64,8 +64,8 @@ function App() {
                 <Col key={car["Azonosító"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
                   <CustomCard
                     imageSrc='/car3.jpg' // Példa kép URL
-                    title={car.Rendszam} // Rendszám
-                    subtitle={`Márka ID: ${car.Marka_ID}`}
+                    title={car.Marka_ID} // Rendszám
+                    subtitle={`Rendszám: ${car.Rendszam}`}
                     description={`Évjárat: ${car.Evjarat} | Kilométeróra állás: ${car.Kilometerora} | Ár: ${car.Ar} Ft`}
                   />
                 </Col>
