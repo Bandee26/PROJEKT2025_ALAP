@@ -1,0 +1,9 @@
+UPDATE autok
+SET Modell_ID = CASE 
+    WHEN Marka_ID = 1 THEN FLOOR(RAND() * 3) + 1   -- Véletlenszerűen 1, 2 vagy 3
+    WHEN Marka_ID = 2 THEN FLOOR(RAND() * 3) + 4   -- Véletlenszerűen 4, 5 vagy 6
+    WHEN Marka_ID = 3 THEN FLOOR(RAND() * 3) + 7   -- Véletlenszerűen 7, 8 vagy 9
+    WHEN Marka_ID = 4 THEN FLOOR(RAND() * 3) + 10  -- Véletlenszerűen 10, 11 vagy 12
+    WHEN Marka_ID = 5 THEN FLOOR(RAND() * 3) + 13  -- Véletlenszerűen 13, 14 vagy 15
+    ELSE Modell_ID  -- Ha nincs változtatás, maradjon az eredeti érték
+END;
