@@ -69,8 +69,11 @@ function App() {
         <CustomCard
           imageSrc='/car3.jpg' // Példa kép URL
           title={`${auto.Marka}  ${auto.Modell}`} // Rendszám
-          subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft | Rendszam: ${auto.Rendszam} Ft`}  // Évjárat és ár
-          description={`Kilométeróra: ${auto.Kilometerora} | Sebessegvalto: ${auto.Sebessegvalto}`} // Kilométeróra, sebességváltó
+          subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}  // Évjárat és ár
+          description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`} // Kilométeróra, sebességváltó
+          adatok={`Km.állás: ${auto.Kilometerora} | Motortipusa: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat tipusa: ${auto.Hasznalat} | Autó szine: ${auto.Szin}`}
+          year={`${auto.Rendszam}`}
+          elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
         />
       </Col>
     ))
