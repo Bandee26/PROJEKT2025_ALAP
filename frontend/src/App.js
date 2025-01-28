@@ -36,14 +36,17 @@ function App() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:8080/termek');
+        console.log(response);  // A válasz logolása
         setProducts(response.data.products || []); // Ensure the data is always an array
       } catch (err) {
+        console.error('Fetch error:', err);  // Hiba részletes naplózása
         setError('Hiba!');
       }
     };
-
+  
     fetchProducts();
   }, []);
+  
 
   return (
     <div style={appStyle}>
@@ -61,11 +64,11 @@ function App() {
           <Row>
             {products && products.length > 0 ? (
               products.map((car) => (
-                <Col key={car["Azonosító"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                <Col key={car["Marka_ID"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
                   <CustomCard
                     imageSrc='/car3.jpg' // Példa kép URL
                     title={car.Rendszam} // Rendszám
-                    subtitle={`Márka ID: ${car.Marka_ID}`}
+                    subtitle={car.Marka} // Márka név (nem az ID)
                     description={`Évjárat: ${car.Evjarat} | Kilométeróra állás: ${car.Kilometerora} | Ár: ${car.Ar} Ft`}
                   />
                 </Col>
