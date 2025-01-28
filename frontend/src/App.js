@@ -62,20 +62,23 @@ function App() {
           
           {/* Itt jelennek meg a kártyák */}
           <Row>
-            {products && products.length > 0 ? (
-              products.map((car) => (
-                <Col key={car["Marka_ID"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                  <CustomCard
-                    imageSrc='/car3.jpg' // Példa kép URL
-                    title={car.Rendszam} // Rendszám
-                    subtitle={car.Marka} // Márka név (nem az ID)
-                    description={`Évjárat: ${car.Evjarat} | Kilométeróra állás: ${car.Kilometerora} | Ár: ${car.Ar} Ft`}
-                  />
-                </Col>
-              ))
-            ) : (
-              <p className="text-center">Nincs megjeleníthető autó.</p>
-            )}
+          <Row>
+  {products && products.length > 0 ? (
+    products.map((auto) => (
+      <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
+        <CustomCard
+          imageSrc='/car3.jpg' // Példa kép URL
+          title={auto.Rendszam} // Rendszám
+          subtitle={`Evjarat: ${auto.Evjarat} | Ar: ${auto.Ar} Ft`}  // Évjárat és ár
+          description={`Kilométeróra: ${auto.Kilometerora} | Sebessegvalto: ${auto.Sebessegvalto_ID}`} // Kilométeróra, sebességváltó
+        />
+      </Col>
+    ))
+  ) : (
+    <p className="text-center">Nincs megjeleníthető autó.</p>
+  )}
+</Row>
+
           </Row>
         </Container>
       </main>

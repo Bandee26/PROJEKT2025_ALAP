@@ -5,12 +5,12 @@ const sql = require('mysql2/promise');
 
 let pool = sql.createPool(config);
 
-// Lekérdezi a markaid nézetet
-// dboperations.js
 
-async function selectTermekWithMarkaFromView() {
+
+async function selectAutoFromAutorendszer() {
   try {
-    const [rows] = await pool.query('SELECT Marka FROM markaidleker');  // Frissítve: markaid helyett markaidleker
+    // Lekérdezés a már létező 'autorendszer' nézetből
+    const [rows] = await pool.query('SELECT * FROM autorendszer');  // Az új nézet használata
     return rows;
   } catch (error) {
     console.error("Database query failed:", error);  // Hibák naplózása
@@ -18,7 +18,6 @@ async function selectTermekWithMarkaFromView() {
   }
 }
 
-
 module.exports = {
-  selectTermekWithMarkaFromView
+  selectAutoFromAutorendszer
 };
