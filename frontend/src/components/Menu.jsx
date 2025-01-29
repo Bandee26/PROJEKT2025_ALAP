@@ -76,6 +76,22 @@ function Menu() {
                                     onChange={() => handleBrandToggle("Audi")}
                                 />
                             </Dropdown.ItemText>
+                            <Dropdown.ItemText>
+                                <Form.Check
+                                    type="checkbox"
+                                    label="Ford"
+                                    checked={selectedBrands.includes("Ford")}
+                                    onChange={() => handleBrandToggle("Ford")}
+                                />
+                            </Dropdown.ItemText>
+                            <Dropdown.ItemText>
+                                <Form.Check
+                                    type="checkbox"
+                                    label="Volkswagen"
+                                    checked={selectedBrands.includes("Volkswagen")}
+                                    onChange={() => handleBrandToggle("Volkswagen")}
+                                />
+                            </Dropdown.ItemText>
                         </DropdownButton>
                         <Form.Control
                             type="search"
