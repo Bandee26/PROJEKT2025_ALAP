@@ -62,22 +62,6 @@ function App() {
           
           {/* Itt jelennek meg a kártyák */}
           <Row>
-<<<<<<< HEAD
-            {products && products.length > 0 ? (
-              products.map((car) => (
-                <Col key={car["Azonosító"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                  <CustomCard
-                    imageSrc='/car3.jpg' // Példa kép URL
-                    title={car.Rendszam} // Rendszám
-                    subtitle={`Márka ID: ${car.Marka_ID}`}
-                    description={`Évjárat: ${car.Evjarat} | Kilométeróra állás: ${car.Kilometerora} | Ár: ${car.Ar} Ft`}
-                  />
-                </Col>
-              ))
-            ) : (
-              <p className="text-center">Nincs megjeleníthető autó.</p>
-            )}
-=======
           <Row>
   {products && products.length > 0 ? (
     products.map((auto) => (
@@ -98,7 +82,6 @@ function App() {
   )}
 </Row>
 
->>>>>>> 84a45b6e9f28e78149b4e1a165c68f952137b592
           </Row>
         </Container>
       </main>
