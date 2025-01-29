@@ -14,4 +14,11 @@ router.get('/', async function(req, res, next) {
   }
 });
 
+router.get('/page/:pageNo', (req, res) =>{
+  let oldal = Number(req.params.pageNo)
+  Db.selectProductPerPage(oldal)
+    .then(adat => res.json(adat))
+    .catch(error => res.send(error))
+})
+
 module.exports = router;
