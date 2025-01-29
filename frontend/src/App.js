@@ -62,6 +62,7 @@ function App() {
           
           {/* Itt jelennek meg a kártyák */}
           <Row>
+<<<<<<< HEAD
             {products && products.length > 0 ? (
               products.map((car) => (
                 <Col key={car["Azonosító"]} xs={12} sm={6} md={4} lg={3} className="mb-4">
@@ -76,6 +77,28 @@ function App() {
             ) : (
               <p className="text-center">Nincs megjeleníthető autó.</p>
             )}
+=======
+          <Row>
+  {products && products.length > 0 ? (
+    products.map((auto) => (
+      <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
+        <CustomCard
+          imageSrc='/car3.jpg' // Példa kép URL
+          title={`${auto.Marka}  ${auto.Modell}`} // Rendszám
+          subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}  // Évjárat és ár
+          description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`} // Kilométeróra, sebességváltó
+          adatok={`Km.állás: ${auto.Kilometerora} | Motortipusa: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat tipusa: ${auto.Hasznalat} | Autó szine: ${auto.Szin}`}
+          year={`${auto.Rendszam}`}
+          elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
+        />
+      </Col>
+    ))
+  ) : (
+    <p className="text-center">Nincs megjeleníthető autó.</p>
+  )}
+</Row>
+
+>>>>>>> 84a45b6e9f28e78149b4e1a165c68f952137b592
           </Row>
         </Container>
       </main>

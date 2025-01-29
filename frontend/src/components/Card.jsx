@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 
-const CustomCard = ({ imageSrc, title, subtitle, description }) => {
+const CustomCard = ({ imageSrc, title, subtitle, description, year, adatok, elado }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShow = () => setShowModal(true);
@@ -26,6 +26,11 @@ const CustomCard = ({ imageSrc, title, subtitle, description }) => {
         </Modal.Header>
         <Modal.Body>
           <img src={imageSrc} alt={title} style={{ width: '100%', height: 'auto' }} />
+          <div className="mt-3">
+            <p><strong>Rendszám:</strong> {year}</p>
+            <p><strong>Autó adatai:</strong> {adatok}</p>
+            <p><strong>Eladó adatai:</strong> {elado}</p>
+          </div>
         </Modal.Body>
       </Modal>
     </div>
