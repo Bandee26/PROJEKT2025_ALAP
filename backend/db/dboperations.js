@@ -5,7 +5,18 @@ const sql = require('mysql2/promise');
 
 let pool = sql.createPool(config);
 
-
+ //Lapozás
+ async function selectProductPerPage(pageNo) {
+  try {
+      const [elements] = await pool.query(
+          'SELECT * FROM autorendszer ORDER BY Evjarat LIMIT ?, 20', 
+          [(pageNo - 1) * 20]
+      );
+      return elements;
+  } catch (error) {
+      throw error;
+  }
+}
 
 async function selectAutoFromAutorendszer() {
   try {
@@ -19,5 +30,5 @@ async function selectAutoFromAutorendszer() {
 }
 
 module.exports = {
-  selectAutoFromAutorendszer
+  selectAutoFromAutorendszer, selectProductPerPage
 };

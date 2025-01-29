@@ -67,7 +67,7 @@ function App() {
     products.map((auto) => (
       <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
         <CustomCard
-          imageSrc='/car3.jpg' // Példa kép URL
+          imageSrc={`http://localhost:8080/${auto.Modell}.jpg`} // Példa kép URL
           title={`${auto.Marka}  ${auto.Modell}`} // Rendszám
           subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}  // Évjárat és ár
           description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`} // Kilométeróra, sebességváltó
