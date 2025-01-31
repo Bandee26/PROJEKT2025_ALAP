@@ -72,7 +72,7 @@ function Menu() {
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('/api/login', {
+            const response = await fetch('http://localhost:8080/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,8 +85,8 @@ function Menu() {
             const result = await response.json();
             if (result.success) {
                 setMessage('Sikeres bejelentkezés!');
-                setIsLoggedIn(true);
-                setShowLoginModal(false);
+                setIsLoggedIn(true); // Bejelentkezett státusz
+                setShowLoginModal(false); // Zárd be a modalt
             } else {
                 setMessage('Helytelen email vagy jelszó.');
             }
@@ -213,37 +213,37 @@ function Menu() {
 
             {/* Bejelentkezési modal */}
             <Modal show={showLoginModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Bejelentkezés</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleLoginSubmit}>
-                        <Form.Group className="mb-3" controlId="formLoginEmail">
-                            <Form.Label>Email cím</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Adja meg az email címét"
-                                value={loginEmail}
-                                onChange={(e) => setLoginEmail(e.target.value)}
-                            />
-                        </Form.Group>
+    <Modal.Header closeButton>
+        <Modal.Title>Bejelentkezés</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        <Form onSubmit={handleLoginSubmit}>
+            <Form.Group className="mb-3" controlId="formLoginEmail">
+                <Form.Label>Email cím</Form.Label>
+                <Form.Control
+                    type="email"
+                    placeholder="Adja meg az email címét"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                />
+            </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formLoginPassword">
-                            <Form.Label>Jelszó</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Adja meg a jelszavát"
-                                value={loginPassword}
-                                onChange={(e) => setLoginPassword(e.target.value)}
-                            />
-                        </Form.Group>
+            <Form.Group className="mb-3" controlId="formLoginPassword">
+                <Form.Label>Jelszó</Form.Label>
+                <Form.Control
+                    type="password"
+                    placeholder="Adja meg a jelszavát"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                />
+            </Form.Group>
 
-                        <Button variant="primary" type="submit">
-                            Bejelentkezés
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
+            <Button variant="primary" type="submit">
+                Bejelentkezés
+            </Button>
+        </Form>
+    </Modal.Body>
+</Modal>
         </>
     );
 }

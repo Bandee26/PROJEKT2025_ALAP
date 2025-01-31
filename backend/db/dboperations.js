@@ -49,16 +49,16 @@ async function registerUser(email, password, nev, telefon) {
 
 // Bejelentkezés függvény
 async function loginUser(email, password) {
-  const hashedPassword = hashPassword(password);  // A jelszó hash-elése
+  const hashedPassword = hashPassword(password);  // A megadott jelszó hashelése
   try {
       const [rows] = await pool.query(
           'SELECT * FROM regisztracio WHERE email = ? AND jelszo = ?', 
-          [email, hashedPassword]  // Hash-elt jelszó lekérdezés
+          [email, hashedPassword]
       );
       if (rows.length > 0) {
-          return true; // Sikeres belépés
+          return true;  // Ha van találat, akkor sikeres belépés
       } else {
-          return false; // Sikertelen belépés
+          return false;  // Ha nincs találat, sikertelen belépés
       }
   } catch (error) {
       console.error('Login failed:', error);
