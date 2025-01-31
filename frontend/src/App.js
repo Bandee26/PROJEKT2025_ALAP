@@ -49,7 +49,7 @@ function App() {
   
 
   return (
-    <div style={appStyle}>
+    <div class='szin' tyle={appStyle}>
       <Menu />
       
       {/* Parallax háttér */}
