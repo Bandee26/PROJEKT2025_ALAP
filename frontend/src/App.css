@@ -1,3 +1,7 @@
+.szin{
+  background-color:rgba(236, 175, 70, 0.397);
+}
+
 body{
  /*background-image: url('/assets/film.jpg'); */
  background-size: cover;
