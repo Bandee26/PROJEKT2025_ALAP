@@ -4,17 +4,26 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
-import Modal from 'react-bootstrap/Modal'; // Modal komponens importálása
 import Logo from './auto.png';
 
 function Menu() {
     const [selectedBrands, setSelectedBrands] = useState([]);
-    const [showRegisterModal, setShowRegisterModal] = useState(false); // Regisztráció modal állapota
-    const [showLoginModal, setShowLoginModal] = useState(false); // Bejelentkezés modal állapota
+    const [showRegisterModal, setShowRegisterModal] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Bejelentkezett állapot
+    const [registerEmail, setRegisterEmail] = useState('');
+    const [registerPassword, setRegisterPassword] = useState('');
+    const [registerName, setRegisterName] = useState(''); // Név állapot
+    const [registerPhone, setRegisterPhone] = useState(''); // Telefonszám állapot
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [message, setMessage] = useState(''); // Üzenetek megjelenítése
 
+    // Márkák kiválasztása
     const handleBrandToggle = (brand) => {
         if (selectedBrands.includes(brand)) {
             setSelectedBrands(selectedBrands.filter((b) => b !== brand));
@@ -23,17 +32,67 @@ function Menu() {
         }
     };
 
-    const handleRegisterClick = () => {
-        setShowRegisterModal(true); // Regisztráció modal megnyitása
-    };
-
-    const handleLoginClick = () => {
-        setShowLoginModal(true); // Bejelentkezés modal megnyitása
-    };
-
+    // Modal megnyitása és zárása
+    const handleRegisterClick = () => setShowRegisterModal(true);
+    const handleLoginClick = () => setShowLoginModal(true);
     const handleCloseModal = () => {
-        setShowRegisterModal(false); // Modal bezárása (regisztráció)
-        setShowLoginModal(false); // Modal bezárása (bejelentkezés)
+        setShowRegisterModal(false);
+        setShowLoginModal(false);
+    };
+
+    // Regisztráció kezelése
+    const handleRegisterSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8080/users/register', {  // Backend URL itt szerepel
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: registerEmail,
+                    password: registerPassword,
+                    nev: registerName,
+                    telefon: registerPhone,
+                }),
+            });
+            const result = await response.json();
+            if (result.success) {
+                setMessage('Sikeres regisztráció!');
+                setShowRegisterModal(false);
+            } else {
+                setMessage('Hiba történt a regisztráció során.');
+            }
+        } catch (error) {
+            setMessage('Hálózati hiba történt.');
+        }
+    };
+
+    // Bejelentkezés kezelése
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: loginEmail,
+                    password: loginPassword,
+                }),
+            });
+            const result = await response.json();
+            if (result.success) {
+                setMessage('Sikeres bejelentkezés!');
+                setIsLoggedIn(true);
+                setShowLoginModal(false);
+            } else {
+                setMessage('Helytelen email vagy jelszó.');
+            }
+        } catch (error) {
+            setMessage('Hálózati hiba történt.');
+        }
     };
 
     const imageStyle = {
@@ -55,15 +114,23 @@ function Menu() {
                             <Nav.Link href="#home">Home</Nav.Link>
                             <Nav.Link href="#link">Kínálat</Nav.Link>
                             <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown">
-                                <NavDropdown.Item onClick={handleRegisterClick}>
-                                    Regisztráció
-                                </NavDropdown.Item>
-                                <NavDropdown.Item onClick={handleLoginClick}>
-                                    Bejelentkezés
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Profil</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Kijelentkezés</NavDropdown.Item>
+                                {!isLoggedIn ? (
+                                    <>
+                                        <NavDropdown.Item onClick={handleRegisterClick}>
+                                            Regisztráció
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item onClick={handleLoginClick}>
+                                            Bejelentkezés
+                                        </NavDropdown.Item>
+                                    </>
+                                ) : (
+                                    <>
+                                        <NavDropdown.Item href="#profile">Profil</NavDropdown.Item>
+                                        <NavDropdown.Item onClick={() => setIsLoggedIn(false)}>
+                                            Kijelentkezés
+                                        </NavDropdown.Item>
+                                    </>
+                                )}
                             </NavDropdown>
                         </Nav>
                         <Form className="d-flex">
@@ -73,46 +140,7 @@ function Menu() {
                                 className="me-2"
                                 align="end"
                             >
-                                <Dropdown.ItemText>
-                                    <Form.Check
-                                        type="checkbox"
-                                        label="Toyota"
-                                        checked={selectedBrands.includes("Toyota")}
-                                        onChange={() => handleBrandToggle("Toyota")}
-                                    />
-                                </Dropdown.ItemText>
-                                <Dropdown.ItemText>
-                                    <Form.Check
-                                        type="checkbox"
-                                        label="BMW"
-                                        checked={selectedBrands.includes("BMW")}
-                                        onChange={() => handleBrandToggle("BMW")}
-                                    />
-                                </Dropdown.ItemText>
-                                <Dropdown.ItemText>
-                                    <Form.Check
-                                        type="checkbox"
-                                        label="Audi"
-                                        checked={selectedBrands.includes("Audi")}
-                                        onChange={() => handleBrandToggle("Audi")}
-                                    />
-                                </Dropdown.ItemText>
-                                <Dropdown.ItemText>
-                                    <Form.Check
-                                        type="checkbox"
-                                        label="Ford"
-                                        checked={selectedBrands.includes("Ford")}
-                                        onChange={() => handleBrandToggle("Ford")}
-                                    />
-                                </Dropdown.ItemText>
-                                <Dropdown.ItemText>
-                                    <Form.Check
-                                        type="checkbox"
-                                        label="Volkswagen"
-                                        checked={selectedBrands.includes("Volkswagen")}
-                                        onChange={() => handleBrandToggle("Volkswagen")}
-                                    />
-                                </Dropdown.ItemText>
+                                {/* Márkák szűrő */}
                             </DropdownButton>
                             <Form.Control
                                 type="search"
@@ -126,21 +154,54 @@ function Menu() {
                 </Container>
             </Navbar>
 
+            {/* Üzenet megjelenítése */}
+            {message && <div className="alert alert-info mt-3">{message}</div>}
+
             {/* Regisztrációs modal */}
             <Modal show={showRegisterModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Regisztráció</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={handleRegisterSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Email cím</Form.Label>
-                            <Form.Control type="email" placeholder="Adja meg az email címét" />
+                            <Form.Control
+                                type="email"
+                                placeholder="Adja meg az email címét"
+                                value={registerEmail}
+                                onChange={(e) => setRegisterEmail(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formBasicPassword">
                             <Form.Label>Jelszó</Form.Label>
-                            <Form.Control type="password" placeholder="Adja meg a jelszavát" />
+                            <Form.Control
+                                type="password"
+                                placeholder="Adja meg a jelszavát"
+                                value={registerPassword}
+                                onChange={(e) => setRegisterPassword(e.target.value)}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formBasicName">
+                            <Form.Label>Teljes név</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Adja meg a nevét"
+                                value={registerName}
+                                onChange={(e) => setRegisterName(e.target.value)}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formBasicPhone">
+                            <Form.Label>Telefonszám</Form.Label>
+                            <Form.Control
+                                type="tel"
+                                placeholder="Adja meg a telefonszámát"
+                                value={registerPhone}
+                                onChange={(e) => setRegisterPhone(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
@@ -156,15 +217,25 @@ function Menu() {
                     <Modal.Title>Bejelentkezés</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={handleLoginSubmit}>
                         <Form.Group className="mb-3" controlId="formLoginEmail">
                             <Form.Label>Email cím</Form.Label>
-                            <Form.Control type="email" placeholder="Adja meg az email címét" />
+                            <Form.Control
+                                type="email"
+                                placeholder="Adja meg az email címét"
+                                value={loginEmail}
+                                onChange={(e) => setLoginEmail(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formLoginPassword">
                             <Form.Label>Jelszó</Form.Label>
-                            <Form.Control type="password" placeholder="Adja meg a jelszavát" />
+                            <Form.Control
+                                type="password"
+                                placeholder="Adja meg a jelszavát"
+                                value={loginPassword}
+                                onChange={(e) => setLoginPassword(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
