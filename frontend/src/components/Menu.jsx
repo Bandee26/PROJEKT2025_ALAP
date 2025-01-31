@@ -22,6 +22,18 @@ function Menu() {
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [message, setMessage] = useState(''); // Üzenetek megjelenítése
+    const [name, setName] = useState('');  // Név állapot
+    const [phone, setPhone] = useState('');  // Telefonszám állapot
+    const [userEmail, setUserEmail] = useState('');
+
+   
+    
+
+
+    // Profil módosító modal
+    const [showProfileModal, setShowProfileModal] = useState(false);
+    const [profileName, setProfileName] = useState(''); // Név
+    const [profilePhone, setProfilePhone] = useState(''); // Telefonszám
 
     // Márkák kiválasztása
     const handleBrandToggle = (brand) => {
@@ -86,6 +98,7 @@ function Menu() {
             if (result.success) {
                 setMessage('Sikeres bejelentkezés!');
                 setIsLoggedIn(true); // Bejelentkezett státusz
+                setUserEmail(loginEmail); // Email elmentése a profil frissítéshez
                 setShowLoginModal(false); // Zárd be a modalt
             } else {
                 setMessage('Helytelen email vagy jelszó.');
@@ -94,6 +107,41 @@ function Menu() {
             setMessage('Hálózati hiba történt.');
         }
     };
+    // Profil frissítése
+    const handleProfileSubmit = async (e) => {
+        e.preventDefault();
+    
+        // Ellenőrizd, hogy a nevet és telefonszámot kitöltötte-e a felhasználó
+        if (!name || !phone || !userEmail) {
+            setMessage('Minden mezőt ki kell tölteni!');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:8080/users/updateProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    phone: phone,
+                    email: userEmail,  // Az aktuális felhasználó email címe
+                }),
+            });
+    
+            const result = await response.json();
+            if (result.success) {
+                setMessage('Profil sikeresen frissítve');
+                setShowProfileModal(false);
+            } else {
+                setMessage('Hiba történt a profil frissítése során');
+            }
+        } catch (error) {
+            setMessage('Hálózati hiba történt');
+        }
+    };
+    
 
     const imageStyle = {
         width: "40px",
@@ -125,7 +173,9 @@ function Menu() {
                                     </>
                                 ) : (
                                     <>
-                                        <NavDropdown.Item href="#profile">Profil</NavDropdown.Item>
+                                        <NavDropdown.Item onClick={() => setShowProfileModal(true)}>
+                                            Profil
+                                        </NavDropdown.Item>
                                         <NavDropdown.Item onClick={() => setIsLoggedIn(false)}>
                                             Kijelentkezés
                                         </NavDropdown.Item>
@@ -213,37 +263,74 @@ function Menu() {
 
             {/* Bejelentkezési modal */}
             <Modal show={showLoginModal} onHide={handleCloseModal}>
-    <Modal.Header closeButton>
-        <Modal.Title>Bejelentkezés</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        <Form onSubmit={handleLoginSubmit}>
-            <Form.Group className="mb-3" controlId="formLoginEmail">
-                <Form.Label>Email cím</Form.Label>
-                <Form.Control
-                    type="email"
-                    placeholder="Adja meg az email címét"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                />
-            </Form.Group>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bejelentkezés</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleLoginSubmit}>
+                        <Form.Group className="mb-3" controlId="formLoginEmail">
+                            <Form.Label>Email cím</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Adja meg az email címét"
+                                value={loginEmail}
+                                onChange={(e) => setLoginEmail(e.target.value)}
+                            />
+                        </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formLoginPassword">
-                <Form.Label>Jelszó</Form.Label>
-                <Form.Control
-                    type="password"
-                    placeholder="Adja meg a jelszavát"
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                />
-            </Form.Group>
+                        <Form.Group className="mb-3" controlId="formLoginPassword">
+                            <Form.Label>Jelszó</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Adja meg a jelszavát"
+                                value={loginPassword}
+                                onChange={(e) => setLoginPassword(e.target.value)}
+                            />
+                        </Form.Group>
 
-            <Button variant="primary" type="submit">
-                Bejelentkezés
-            </Button>
-        </Form>
-    </Modal.Body>
-</Modal>
+                        <Button variant="primary" type="submit">
+                            Bejelentkezés
+                        </Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
+            {/* Profil módosító modal */}
+            <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Profil frissítése</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleProfileSubmit}>
+                        <Form.Group controlId="formProfileName">
+                            <Form.Label>Név</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Adja meg a nevét"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}  // A név állapot frissítése
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formProfilePhone">
+                            <Form.Label>Telefonszám</Form.Label>
+                            <Form.Control
+                                type="tel"
+                                placeholder="Adja meg a telefonszámát"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}  // A telefonszám állapot frissítése
+                            />
+                        </Form.Group>
+
+                        <Button variant="primary" type="submit">
+                            Frissítés
+                        </Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
+            {/* Üzenet megjelenítése */}
+            {message && <div className="alert alert-info mt-3">{message}</div>}
         </>
     );
 }

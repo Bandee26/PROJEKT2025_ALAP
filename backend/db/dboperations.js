@@ -66,7 +66,22 @@ async function loginUser(email, password) {
   }
 }
 
+// Adatbázis frissítő függvény
+async function updateUserProfile(name, phone) {
+  try {
+      const [result] = await pool.query(
+          'UPDATE regisztracio SET nev = ?, telefon = ? WHERE email = ?',
+          [name, phone, 'example@domain.com'] // Az email-t dinamikusan kell lekérni a session-ből vagy tokenből
+      );
+      return result.affectedRows > 0;  // Ha történt módosítás, akkor igazat ad vissza
+  } catch (error) {
+      console.error('Profile update failed:', error);
+      throw new Error('Hiba történt a profil frissítésekor');
+  }
+}
+
+
 module.exports = {
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
-  loginUser
+  loginUser ,updateUserProfile
 };
