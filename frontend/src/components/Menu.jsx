@@ -81,32 +81,32 @@ function Menu() {
     };
 
     // Bejelentkezés kezelése
-    const handleLoginSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:8080/users/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: loginEmail,
-                    password: loginPassword,
-                }),
-            });
-            const result = await response.json();
-            if (result.success) {
-                setMessage('Sikeres bejelentkezés!');
-                setIsLoggedIn(true); // Bejelentkezett státusz
-                setUserEmail(loginEmail); // Email elmentése a profil frissítéshez
-                setShowLoginModal(false); // Zárd be a modalt
-            } else {
-                setMessage('Helytelen email vagy jelszó.');
-            }
-        } catch (error) {
-            setMessage('Hálózati hiba történt.');
+const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch('http://localhost:8080/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: loginEmail,
+                password: loginPassword,
+            }),
+        });
+        const result = await response.json();
+        if (result.success) {
+            setIsLoggedIn(true); // Bejelentkezett státusz
+            setUserEmail(loginEmail); // Email elmentése a profil frissítéshez
+            setShowLoginModal(false); // Zárd be a modalt
+            setMessage('Sikeres bejelentkezés!'); // Üzenet beállítása csak egyszer
+        } else {
+            setMessage('Helytelen email vagy jelszó.');
         }
-    };
+    } catch (error) {
+        setMessage('Hálózati hiba történt.');
+    }
+};
     // Profil frissítése
     const handleProfileSubmit = async (e) => {
         e.preventDefault();
@@ -329,8 +329,7 @@ function Menu() {
                 </Modal.Body>
             </Modal>
 
-            {/* Üzenet megjelenítése */}
-            {message && <div className="alert alert-info mt-3">{message}</div>}
+           
         </>
     );
 }
