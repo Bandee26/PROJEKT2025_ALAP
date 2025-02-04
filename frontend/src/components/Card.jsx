@@ -8,13 +8,13 @@ const CustomCard = ({ imageSrc, title, subtitle, description, year, adatok, elad
   const handleClose = () => setShowModal(false);
 
   return (
-    <div>
-      <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={imageSrc} />
+    <div className='kartya'>
+      <Card className='doboz' style={{ width: '18rem' }}>
+        <Card.Img className='kep' variant="top" src={imageSrc} />
         <Card.Body>
-          <Card.Title>{title}</Card.Title>
+          <Card.Title className='card-title'>{title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
-          <Card.Text>{description}</Card.Text>
+          <Card.Text className='card-text'>{description}</Card.Text>
           <Button variant="primary" onClick={handleShow}>Részletek</Button>
         </Card.Body>
       </Card>

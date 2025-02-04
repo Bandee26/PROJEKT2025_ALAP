@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.kartya{
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  width: 250px;
+}
+
+.card-text{
+  font-weight: 700;
+}
+
+.card-title{
+  font-size:xx-small;
+}
+
