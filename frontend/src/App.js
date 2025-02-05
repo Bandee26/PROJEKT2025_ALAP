@@ -51,7 +51,11 @@ function App() {
   
 
   return (
-    <div class='szin' tyle={appStyle}>
+    <div class='szin'  tyle={appStyle}>
+      <video autoPlay loop muted playsInline className="background-video">
+    <source src="/frontend/public/video.mp4" type="video/mp4" />
+    A böngésződ nem támogatja a videó elemet.
+  </video>
       <Menu />
       {/* Parallax háttér */}
       <div style={parallaxStyle}></div>
@@ -82,7 +86,7 @@ function App() {
     ))
   ) : (
     <p className="text-center">Nincs megjeleníthető autó.</p>
-  )}
+  )} 
 </Row>
 
           </Row>
