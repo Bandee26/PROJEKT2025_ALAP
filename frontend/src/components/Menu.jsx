@@ -184,14 +184,6 @@ const handleLoginSubmit = async (e) => {
                             </NavDropdown>
                         </Nav>
                         <Form className="d-flex">
-                            <DropdownButton
-                                variant="outline-secondary"
-                                title="Szűrő"
-                                className="me-2"
-                                align="end"
-                            >
-                                {/* Márkák szűrő */}
-                            </DropdownButton>
                             <Form.Control
                                 type="search"
                                 placeholder="Keresés"
