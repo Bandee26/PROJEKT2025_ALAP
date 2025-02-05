@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomCard from './components/Card'; // CustomCard importálása
 import Szuro from './components/Szuro.jsx'
+import Kinalat from './components/Kinalat.jsx';
 
 function App() {
   const appStyle = {
@@ -60,6 +61,7 @@ function App() {
           <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
           {error && <p className="text-danger text-center">{error}</p>}
           
+          <Kinalat></Kinalat>
       
           {/* Itt jelennek meg a kártyák */}
           <Row>
