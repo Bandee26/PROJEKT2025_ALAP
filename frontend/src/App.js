@@ -32,6 +32,7 @@ function App() {
 
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]); // Kedvencek állapota
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -41,16 +42,24 @@ function App() {
         setProducts(response.data.products || []); // Ensure the data is always an array
       } catch (err) {
         console.error('Fetch error:', err);  // Hiba részletes naplózása
-        setError('Hiba!');
+        setError('Hiba! Nem sikerült betölteni a termékeket.');
       }
     };
-  
+
     fetchProducts();
   }, []);
-  
+
+  // Kedvencek kezelése
+  const handleFavoriteToggle = (autoId) => {
+    if (favorites.includes(autoId)) {
+      setFavorites(favorites.filter(id => id !== autoId)); // Eltávolítás a kedvencek közül
+    } else {
+      setFavorites([...favorites, autoId]); // Hozzáadás a kedvencekhez
+    }
+  };
 
   return (
-    <div class='szin' tyle={appStyle}>
+    <div className='szin' style={appStyle}>
       <Menu />
       {/* Parallax háttér */}
       <div style={parallaxStyle}></div>
@@ -59,30 +68,28 @@ function App() {
         <Container className="my-4">
           <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
           {error && <p className="text-danger text-center">{error}</p>}
-          
-      
+
           {/* Itt jelennek meg a kártyák */}
           <Row>
-          <Row>
-  {products && products.length > 0 ? (
-    products.map((auto) => (
-      <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
-        <CustomCard
-          imageSrc={`http://localhost:8080/${auto.Modell}.jpg`} // Példa kép URL
-          title={`${auto.Marka}  ${auto.Modell}`} // Rendszám
-          subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}  // Évjárat és ár
-          description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`} // Kilométeróra, sebességváltó
-          adatok={`Km.állás: ${auto.Kilometerora} | Motortipusa: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat tipusa: ${auto.Hasznalat} | Autó szine: ${auto.Szin}`}
-          year={`${auto.Rendszam}`}
-          elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
-        />
-      </Col>
-    ))
-  ) : (
-    <p className="text-center">Nincs megjeleníthető autó.</p>
-  )}
-</Row>
-
+            {products && products.length > 0 ? (
+              products.map((auto) => (
+                <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                  <CustomCard
+                    imageSrc={`http://localhost:8080/${auto.Modell}.jpg`} // Példa kép URL
+                    title={`${auto.Marka}  ${auto.Modell}`} // Márka és modell
+                    subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}  // Évjárat és ár
+                    description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`} // Kilométeróra és üzemanyag típus
+                    adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat típusa: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
+                    year={`${auto.Rendszam}`} // Rendszám
+                    elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`} // Eladó információ
+                    isFavorite={favorites.includes(auto.Auto_ID)} // Kedvencek állapot
+                    onFavoriteToggle={() => handleFavoriteToggle(auto.Auto_ID)} // Kedvencek gomb kezelése
+                  />
+                </Col>
+              ))
+            ) : (
+              <p className="text-center">Nincs megjeleníthető autó.</p>
+            )}
           </Row>
         </Container>
       </main>
