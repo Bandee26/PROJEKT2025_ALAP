@@ -1,6 +1,7 @@
 const config = require('./dbconfig');
 const sql = require('mysql2/promise');
 const crypto = require('crypto');
+const { validateHeaderValue } = require('http');
 
 let pool = sql.createPool(config);
 
@@ -81,7 +82,42 @@ async function updateUserProfile(name, phone) {
 }
 
 
+async function selectProductWhere(whereConditions){
+  const conditions = []
+  const values = []
+
+  const mappings = {
+    Marka: {sql: 'Marka LiKE', value: (val) => '%${val}%'},
+    Modell: {sql: 'Modell LiKE', value: (val) => '%${val}%'}
+  }
+
+  console.log("dfgdfsgdfs",whereConditions)
+
+  for(const [key, {sql, value}] of Object.entries(mappings))
+    {
+      console.log(whereConditions[key])
+      if(whereConditions[key]){
+        conditions.push(sql)
+        values.push(value(whereConditions[key]))
+      }
+    }
+
+    const whereClause = conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""
+
+    const query = `SELECT * FROM autorendszer ${whereClause} ORDER BY Ar`
+
+    console.log(query)
+
+    try{
+      const [elements] = await pool.query(query, values)
+    }
+    catch (error)
+    {
+      throw error
+    }
+}
+
 module.exports = {
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
-  loginUser ,updateUserProfile
+  loginUser ,updateUserProfile, selectProductWhere
 };

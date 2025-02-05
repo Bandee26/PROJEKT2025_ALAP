@@ -7,6 +7,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomCard from './components/Card'; // CustomCard importálása
+import Szuro from './components/Szuro.jsx'
 
 function App() {
   const appStyle = {
@@ -51,15 +52,15 @@ function App() {
   return (
     <div class='szin' tyle={appStyle}>
       <Menu />
-      
       {/* Parallax háttér */}
       <div style={parallaxStyle}></div>
-      
+      <Szuro></Szuro>
       <main style={mainStyle}>
         <Container className="my-4">
           <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
           {error && <p className="text-danger text-center">{error}</p>}
           
+      
           {/* Itt jelennek meg a kártyák */}
           <Row>
           <Row>
