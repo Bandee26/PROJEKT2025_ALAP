@@ -19,7 +19,7 @@ const FilterComponent = () => {
         fetchBrands();
 
         // Termékek lekérése Axios segítségével
-        axios.get('/api/products')
+        axios.get('http://localhost:8080/termek')
             .then(response => {
                 setProducts(response.data.products);
             })
@@ -78,15 +78,7 @@ const FilterComponent = () => {
                 </div>
             </div>
 
-            <div className="products-container">
-                <h3>Termékek:</h3>
-                {products.map((product) => (
-                    <div key={product.id} className="product-card">
-                        <h3>{product.name}</h3>
-                        <p>{product.price} Ft</p>
-                    </div>
-                ))}
-            </div>
+          
         </div>
     );
 };

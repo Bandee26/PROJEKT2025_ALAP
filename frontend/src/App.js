@@ -73,7 +73,7 @@ function App() {
           <Row>
             {products && products.length > 0 ? (
               products.map((auto) => (
-                <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={3} className="mb-4">
                   <CustomCard
                     imageSrc={`http://localhost:8080/${auto.Modell}.jpg`} // Példa kép URL
                     title={`${auto.Marka}  ${auto.Modell}`} // Márka és modell
@@ -82,8 +82,8 @@ function App() {
                     adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat típusa: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
                     year={`${auto.Rendszam}`} // Rendszám
                     elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`} // Eladó információ
-                    isFavorite={favorites.includes(auto.Auto_ID)} // Kedvencek állapot
-                    onFavoriteToggle={() => handleFavoriteToggle(auto.Auto_ID)} // Kedvencek gomb kezelése
+                    isFavorite={favorites.includes(auto.Rendszam)} // Kedvencek állapot
+                    onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)} // Kedvencek gomb kezelése
                   />
                 </Col>
               ))
