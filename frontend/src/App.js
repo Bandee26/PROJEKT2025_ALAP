@@ -72,7 +72,7 @@ function App() {
           <Row>
   {products && products.length > 0 ? (
     products.map((auto) => (
-      <Col key={auto.Auto_ID} xs={12} sm={6} md={4} lg={3} className="mb-4">
+      <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={3} className="mb-4">
         <CustomCard
           imageSrc={`http://localhost:8080/${auto.Modell}.jpg`} // Példa kép URL
           title={`${auto.Marka}  ${auto.Modell}`} // Rendszám
