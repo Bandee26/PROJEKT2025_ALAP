@@ -65,12 +65,38 @@ const FilterComponent = () => {
                     step={100}
                     value={priceRange}
                     onChange={setPriceRange}
-                    renderTrack={(props, state) => (
-                        <div {...props} style={{ ...props.style, backgroundColor: '#ddd', height: '6px' }} />
-                    )}
-                    renderThumb={(props, state) => (
-                        <div {...props} style={{ ...props.style, backgroundColor: '#007BFF', width: '20px', height: '20px', borderRadius: '50%' }} />
-                    )}
+                    renderTrack={(props, state) => {
+                        // Kivesszük a key-t, majd külön adjuk át
+                        const { key, ...restProps } = props;
+                        return (
+                            <div
+                                key={key}
+                                {...restProps}
+                                style={{ 
+                                    ...restProps.style, 
+                                    backgroundColor: '#ddd', 
+                                    height: '6px' 
+                                }}
+                            />
+                        );
+                    }}
+                    renderThumb={(props, state) => {
+                        // Kivesszük a key-t, majd külön adjuk át
+                        const { key, ...restProps } = props;
+                        return (
+                            <div
+                                key={key}
+                                {...restProps}
+                                style={{ 
+                                    ...restProps.style, 
+                                    backgroundColor: '#007BFF', 
+                                    width: '20px', 
+                                    height: '20px', 
+                                    borderRadius: '50%' 
+                                }}
+                            />
+                        );
+                    }}
                 />
                 <div>
                     <span>Min: {priceRange[0]} Ft</span>

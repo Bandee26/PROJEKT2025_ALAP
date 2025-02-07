@@ -8,7 +8,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomCard from './components/Card'; // CustomCard importálása
 import Szuro from './components/Szuro.jsx'
-import Kinalat from './components/Kinalat.jsx';
 
 function App() {
   const appStyle = {
@@ -51,7 +50,7 @@ function App() {
   
 
   return (
-    <div class='szin'  tyle={appStyle}>
+    <div className='szin'  tyle={appStyle}>
       <video autoPlay loop muted playsInline className="background-video">
     <source src="/frontend/public/video.mp4" type="video/mp4" />
     A böngésződ nem támogatja a videó elemet.
@@ -65,7 +64,7 @@ function App() {
           <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
           {error && <p className="text-danger text-center">{error}</p>}
           
-          <Kinalat></Kinalat>
+          
       
           {/* Itt jelennek meg a kártyák */}
           <Row>
