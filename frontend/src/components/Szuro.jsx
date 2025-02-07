@@ -89,6 +89,7 @@ const Szuro = ({ onFilterChange, products }) => {
           <span style={{ marginLeft: '10px' }}>Max: {priceRange[1]} Ft</span>
         </div>
       </div>
+      
     </div>
   );
 };
