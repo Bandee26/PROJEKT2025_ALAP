@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import ReactSlider from 'react-slider';
 import axios from 'axios';
-import CustomCard from './Card';  // Importáljuk a CustomCard komponenst
-import { Row, Col } from 'react-bootstrap';  // Importáljuk a Bootstrap Row és Col komponenst
+import { Row, Col } from 'react-bootstrap';
 
-const FilterComponent = () => {
-  const [brands, setBrands] = useState([]);  // Márkák
+const Szuro = ({ onFilterChange, products }) => {
+  const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
-  const [priceRange, setPriceRange] = useState([1000, 4000]);
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  const [priceRange, setPriceRange] = useState([1000, 100000000]);
 
   useEffect(() => {
     const fetchBrands = async () => {
       try {
         const response = await axios.get('http://localhost:8080/termek');
-        setBrands(response.data.brands || []);  // Ha nem érkezik adat, egy üres tömböt adunk
+        setBrands(response.data.brands || []);
       } catch (error) {
         console.error('Márkák lekérése sikertelen:', error);
       }
@@ -27,8 +23,7 @@ const FilterComponent = () => {
     axios.get('http://localhost:8080/termek')
       .then(response => {
         console.log(response.data);
-        setProducts(response.data.products || []);  // Ha nem érkezik adat, egy üres tömböt adunk
-        setBrands([...new Set(response.data.products?.map(product => product.Marka)) || []]); // Ha nincs adat, üres tömb
+        setBrands([...new Set(response.data.products?.map(product => product.Marka)) || []]);
       })
       .catch(error => {
         console.error('Hiba történt:', error);
@@ -42,8 +37,8 @@ const FilterComponent = () => {
       Number(product.Ar) >= priceRange[0] && Number(product.Ar) <= priceRange[1]
     );
     
-    setFilteredProducts(filtered);
-  }, [selectedBrands, priceRange, products]);
+    onFilterChange(filtered); // Szűrt termékek továbbítása az App komponensnek
+  }, [selectedBrands, priceRange, products, onFilterChange]);
 
   const handleBrandChange = (event) => {
     const brand = event.target.value;
@@ -55,15 +50,6 @@ const FilterComponent = () => {
       }
     });
   };
-
-  const handleFavoriteToggle = (productId) => {
-    if (favorites.includes(productId)) {
-      setFavorites(favorites.filter(id => id !== productId));
-    } else {
-      setFavorites([...favorites, productId]);
-    }
-  };
-  
 
   return (
     <div className="filter-container">
@@ -90,7 +76,7 @@ const FilterComponent = () => {
         <h3>Ár szűrő:</h3>
         <ReactSlider
           min={0}
-          max={50000000}
+          max={100000000}
           step={100}
           value={priceRange}
           onChange={setPriceRange}
@@ -106,35 +92,8 @@ const FilterComponent = () => {
           <span style={{ marginLeft: '10px' }}>Max: {priceRange[1]} Ft</span>
         </div>
       </div>
-
-      <div className="filtered-products text-center ">
-        <h3>Szűrt termékek:</h3>
-        {filteredProducts.length > 0 ? (
-          <Row>
-            {filteredProducts.map((product) => (
-              <Col key={product.Rendszam} xs={12} sm={6} md={4} lg={2} className="mb-5">
-                <CustomCard
-                  imageSrc={`http://localhost:8080/${product.Modell}.jpg`} // Példa kép URL
-                  title={`${product.Marka}  ${product.Modell}`} // Márka és modell
-                  subtitle={`Évjárat: ${product.Evjarat} | Ár: ${product.Ar} Ft`}  // Évjárat és ár
-                  description={`Kilométeróra: ${product.Kilometerora} | Üzemanyag: ${product.Motortipus}`} // Kilométeróra és üzemanyag típus
-                  adatok={`Km.állás: ${product.Kilometerora} | Motortípus: ${product.Motortipus} | Motorspec.: ${product.Motorspecifikacio} | Sebességváltó: ${product.Sebessegvalto} | Használat típusa: ${product.Hasznalat} | Autó színe: ${product.Szin}`}
-                  year={`${product.Rendszam}`} // Rendszám
-                  elado={`${product.Nev} | Tel.: ${product.Telefon} | Email: ${product.Email}`} // Eladó információ
-                  isFavorite={favorites.includes(product.Rendszam)} // Kedvencek állapot
-                  onFavoriteToggle={() => handleFavoriteToggle(product.Rendszam)} // Kedvencek gomb kezelése
-                />
-              </Col>
-            ))}
-          </Row>
-        ) : (
-          <p>Nincs találat</p>
-        )}
-      </div>
-
-      
     </div>
   );
 };
 
-export default FilterComponent;
+export default Szuro;
