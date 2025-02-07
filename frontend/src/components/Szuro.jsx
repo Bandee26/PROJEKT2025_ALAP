@@ -3,39 +3,46 @@ import ReactSlider from 'react-slider';  // importáljuk a ReactSlider-t
 import axios from 'axios';
 
 const FilterComponent = () => {
-    const [brands, setBrands] = useState([]);
+    const [brands, setBrands] = useState([]);  // A márkák tárolása
     const [selectedBrands, setSelectedBrands] = useState([]);
-    const [priceRange, setPriceRange] = useState([1000, 4000]); // előre beállított ár
-    const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [priceRange, setPriceRange] = useState([1000, 4000]);  // Előre beállított ár
+    const [products, setProducts] = useState([]);  // Termékek tárolása
+    const [filteredProducts, setFilteredProducts] = useState([]);  // Szűrt termékek tárolása
+
 
     useEffect(() => {
         // Márkák lekérése a backendről
         const fetchBrands = async () => {
-            // Példa márkák lekérése a backendről, amit cserélhetsz saját API hívásra
-            const fetchedBrands = ['Toyota', 'BMW', 'Audi'];
-            setBrands(fetchedBrands);
+            try {
+                const response = await axios.get('http://localhost:8080/termek'); // Márkák lekérése API-ról
+                setBrands(response.data.brands);  // Beállítjuk a kapott márkákat
+            } catch (error) {
+                console.error('Márkák lekérése sikertelen:', error);
+            }
         };
 
         fetchBrands();
 
         // Termékek lekérése Axios segítségével
         axios.get('http://localhost:8080/termek')
-            .then(response => {
-                setProducts(response.data.products);
-            })
-            .catch(error => {
-                console.error('Hiba történt:', error);
-            });
+        .then(response => {
+            console.log(response.data);  // Ellenőrizd a termékek válaszát
+            setProducts(response.data.products);
+            setBrands([...new Set(response.data.products.map(product => product.Marka))]);  // Márkák generálása a termékekből
+        })
+        .catch(error => {
+            console.error('Hiba történt:', error);
+        });
 
     }, []);  // üres függőségi tömb, hogy csak egyszer fusson
 
     useEffect(() => {
         // Szűrés a kiválasztott márkák és az ár intervallum alapján
         const filtered = products.filter(product =>
-            (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
-            product.price >= priceRange[0] && product.price <= priceRange[1]
+            (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) &&
+            Number(product.Ar) >= priceRange[0] && Number(product.Ar) <= priceRange[1]  // Biztosítsuk, hogy az ár szám
         );
+        
         setFilteredProducts(filtered);
     }, [selectedBrands, priceRange, products]);
 
@@ -43,9 +50,9 @@ const FilterComponent = () => {
         const brand = event.target.value;
         setSelectedBrands((prevSelected) => {
             if (prevSelected.includes(brand)) {
-                return prevSelected.filter(b => b !== brand);
+                return prevSelected.filter(b => b !== brand);  // Márka eltávolítása, ha már ki van választva
             } else {
-                return [...prevSelected, brand];
+                return [...prevSelected, brand];  // Márka hozzáadása, ha nincs kiválasztva
             }
         });
     };
@@ -90,16 +97,16 @@ const FilterComponent = () => {
             </div>
 
             <div className="filtered-products">
-                <h3>Szűrt termékek:</h3>
-                {filteredProducts.length > 0 ? (
-                    <ul>
-                        {filteredProducts.map((product) => (
-                            <li key={product.Rendszam}>{product.Marka} - {product.Ar} Ft</li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>Nincs találat</p>
-                )}
+            <h3>Szűrt termékek:</h3>
+    {filteredProducts.length > 0 ? (
+        <ul>
+            {filteredProducts.map((product) => (
+                <li key={product.Rendszam}>{product.Marka} {product.Modell} - {product.Ar} Ft</li>
+            ))}
+        </ul>
+    ) : (
+        <p>Nincs találat</p>
+    )}
             </div>
         </div>
     );
