@@ -45,3 +45,10 @@ body{
     transform: rotate(360deg);
   }
 }
+
+.product-details {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+}
