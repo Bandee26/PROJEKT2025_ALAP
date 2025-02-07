@@ -6,43 +6,40 @@ import { Row, Col } from 'react-bootstrap';
 const Szuro = ({ onFilterChange, products }) => {
   const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
-  const [priceRange, setPriceRange] = useState([1000, 100000000]);
+  const [priceRange, setPriceRange] = useState([0, 100000000]);
 
   useEffect(() => {
-    const fetchBrands = async () => {
+    const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8080/termek');
-        setBrands(response.data.brands || []);
+        const fetchedProducts = response.data.products || [];
+        const fetchedBrands = [...new Set(fetchedProducts.map(product => product.Marka))];
+        
+        setBrands(fetchedBrands);
       } catch (error) {
-        console.error('Márkák lekérése sikertelen:', error);
+        console.error('Failed to fetch data:', error);
       }
     };
 
-    fetchBrands();
+    fetchData();
+  }, []);  // This only runs once when the component mounts
 
-    axios.get('http://localhost:8080/termek')
-      .then(response => {
-        console.log(response.data);
-        setBrands([...new Set(response.data.products?.map(product => product.Marka)) || []]);
-      })
-      .catch(error => {
-        console.error('Hiba történt:', error);
-      });
-
-  }, []);
-
+  // Handling brand and price filter changes
   useEffect(() => {
     const filtered = products.filter(product =>
       (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) &&
       Number(product.Ar) >= priceRange[0] && Number(product.Ar) <= priceRange[1]
     );
-    
-    onFilterChange(filtered); // Szűrt termékek továbbítása az App komponensnek
-  }, [selectedBrands, priceRange, products, onFilterChange]);
+
+    // Call onFilterChange after filtering the products
+    if (onFilterChange) {
+      onFilterChange(filtered);
+    }
+  }, [selectedBrands, priceRange, products]);  // Dependency array ensures this runs only when necessary
 
   const handleBrandChange = (event) => {
     const brand = event.target.value;
-    setSelectedBrands((prevSelected) => {
+    setSelectedBrands(prevSelected => {
       if (prevSelected.includes(brand)) {
         return prevSelected.filter(b => b !== brand);
       } else {
