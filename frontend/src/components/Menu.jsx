@@ -26,14 +26,19 @@ function Menu() {
     const [phone, setPhone] = useState('');  // Telefonszám állapot
     const [userEmail, setUserEmail] = useState('');
 
-   
-    
-
-
     // Profil módosító modal
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [profileName, setProfileName] = useState(''); // Név
     const [profilePhone, setProfilePhone] = useState(''); // Telefonszám
+
+    // Kedvencek modal
+    const [showFavoritesModal, setShowFavoritesModal] = useState(false);
+    // Példa kedvenc autók adatai; később ezeket például backendről töltheti be
+    const [favorites, setFavorites] = useState([
+        "BMW X5",
+        "Audi A6",
+        "Mercedes-Benz C-Class"
+    ]);
 
     // Márkák kiválasztása
     const handleBrandToggle = (brand) => {
@@ -96,10 +101,10 @@ function Menu() {
             });
             const result = await response.json();
             if (result.success) {
-                setMessage('Sikeres bejelentkezés!');
                 setIsLoggedIn(true); // Bejelentkezett státusz
                 setUserEmail(loginEmail); // Email elmentése a profil frissítéshez
                 setShowLoginModal(false); // Zárd be a modalt
+                setMessage('Sikeres bejelentkezés!');
             } else {
                 setMessage('Helytelen email vagy jelszó.');
             }
@@ -107,16 +112,17 @@ function Menu() {
             setMessage('Hálózati hiba történt.');
         }
     };
+
     // Profil frissítése
     const handleProfileSubmit = async (e) => {
         e.preventDefault();
-    
+
         // Ellenőrizd, hogy a nevet és telefonszámot kitöltötte-e a felhasználó
         if (!name || !phone || !userEmail) {
             setMessage('Minden mezőt ki kell tölteni!');
             return;
         }
-    
+
         try {
             const response = await fetch('http://localhost:8080/users/updateProfile', {
                 method: 'POST',
@@ -129,7 +135,7 @@ function Menu() {
                     email: userEmail,  // Az aktuális felhasználó email címe
                 }),
             });
-    
+
             const result = await response.json();
             if (result.success) {
                 setMessage('Profil sikeresen frissítve');
@@ -141,7 +147,6 @@ function Menu() {
             setMessage('Hálózati hiba történt');
         }
     };
-    
 
     const imageStyle = {
         width: "40px",
@@ -175,6 +180,9 @@ function Menu() {
                                     <>
                                         <NavDropdown.Item onClick={() => setShowProfileModal(true)}>
                                             Profil
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item onClick={() => setShowFavoritesModal(true)}>
+                                            Kedvencek
                                         </NavDropdown.Item>
                                         <NavDropdown.Item onClick={() => setIsLoggedIn(false)}>
                                             Kijelentkezés
@@ -300,7 +308,7 @@ function Menu() {
                                 type="text"
                                 placeholder="Adja meg a nevét"
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}  // A név állapot frissítése
+                                onChange={(e) => setName(e.target.value)}
                             />
                         </Form.Group>
 
@@ -310,7 +318,7 @@ function Menu() {
                                 type="tel"
                                 placeholder="Adja meg a telefonszámát"
                                 value={phone}
-                                onChange={(e) => setPhone(e.target.value)}  // A telefonszám állapot frissítése
+                                onChange={(e) => setPhone(e.target.value)}
                             />
                         </Form.Group>
 
@@ -321,8 +329,23 @@ function Menu() {
                 </Modal.Body>
             </Modal>
 
-            {/* Üzenet megjelenítése */}
-            {message && <div className="alert alert-info mt-3">{message}</div>}
+            {/* Kedvencek modal */}
+            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Kedvencek</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {favorites.length === 0 ? (
+                        <p>Nincsenek kedvenc autók.</p>
+                    ) : (
+                        <ul>
+                            {favorites.map((car, index) => (
+                                <li key={index}>{car}</li>
+                            ))}
+                        </ul>
+                    )}
+                </Modal.Body>
+            </Modal>
         </>
     );
 }

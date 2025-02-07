@@ -32,6 +32,7 @@ function App() {
 
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]); // Kedvencek állapota
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -41,13 +42,21 @@ function App() {
         setProducts(response.data.products || []); // Ensure the data is always an array
       } catch (err) {
         console.error('Fetch error:', err);  // Hiba részletes naplózása
-        setError('Hiba!');
+        setError('Hiba! Nem sikerült betölteni a termékeket.');
       }
     };
-  
+
     fetchProducts();
   }, []);
-  
+
+  // Kedvencek kezelése
+  const handleFavoriteToggle = (autoId) => {
+    if (favorites.includes(autoId)) {
+      setFavorites(favorites.filter(id => id !== autoId)); // Eltávolítás a kedvencek közül
+    } else {
+      setFavorites([...favorites, autoId]); // Hozzáadás a kedvencekhez
+    }
+  };
 
   return (
     <div className='szin'  tyle={appStyle}>

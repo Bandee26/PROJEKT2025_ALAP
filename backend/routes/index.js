@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send('Vizsaga Backend 2025');
+  res.send('Backend 2025 fut');
 });
 
 module.exports = router;
