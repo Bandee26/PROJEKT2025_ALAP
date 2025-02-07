@@ -7,12 +7,13 @@ const FilterComponent = () => {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [priceRange, setPriceRange] = useState([1000, 4000]); // előre beállított ár
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
 
     useEffect(() => {
         // Márkák lekérése a backendről
         const fetchBrands = async () => {
             // Példa márkák lekérése a backendről, amit cserélhetsz saját API hívásra
-            const fetchedBrands = ['Toyota', 'BMW', 'Audi', 'Mercedes', 'Ford'];
+            const fetchedBrands = ['Toyota', 'BMW', 'Audi'];
             setBrands(fetchedBrands);
         };
 
@@ -29,6 +30,15 @@ const FilterComponent = () => {
 
     }, []);  // üres függőségi tömb, hogy csak egyszer fusson
 
+    useEffect(() => {
+        // Szűrés a kiválasztott márkák és az ár intervallum alapján
+        const filtered = products.filter(product =>
+            (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
+            product.price >= priceRange[0] && product.price <= priceRange[1]
+        );
+        setFilteredProducts(filtered);
+    }, [selectedBrands, priceRange, products]);
+
     const handleBrandChange = (event) => {
         const brand = event.target.value;
         setSelectedBrands((prevSelected) => {
@@ -43,25 +53,26 @@ const FilterComponent = () => {
     return (
         <div className="filter-container">
             <div className="checkbox-group">
-                <h3>Válassz márkát:</h3>
-                {brands.map((brand) => (
-                    <label key={brand}>
-                        <input
-                            type="checkbox"
-                            value={brand}
-                            onChange={handleBrandChange}
-                            checked={selectedBrands.includes(brand)}
-                        />
-                        {brand}
-                    </label>
-                ))}
+    <h3>Válassz márkát:</h3>
+    {products.map((product) => (
+        <label key={product.Rendszam}>
+            <input
+                type="checkbox"
+                value={product.Marka}
+                onChange={handleBrandChange}
+                checked={selectedBrands.includes(product.Marka)}
+            />
+            {product.Marka}
+        </label>
+    ))}
+
             </div>
 
             <div className="slider-container">
                 <h3>Ár szűrő:</h3>
                 <ReactSlider
                     min={0}
-                    max={5000}
+                    max={50000000}
                     step={100}
                     value={priceRange}
                     onChange={setPriceRange}
@@ -78,7 +89,18 @@ const FilterComponent = () => {
                 </div>
             </div>
 
-          
+            <div className="filtered-products">
+                <h3>Szűrt termékek:</h3>
+                {filteredProducts.length > 0 ? (
+                    <ul>
+                        {filteredProducts.map((product) => (
+                            <li key={product.Rendszam}>{product.Marka} - {product.Ar} Ft</li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>Nincs találat</p>
+                )}
+            </div>
         </div>
     );
 };
