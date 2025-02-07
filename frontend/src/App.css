@@ -6,7 +6,6 @@
   position: relative;
   width: 100%;
   height: 100vh; /* Teljes képernyő */
-  overflow: hidden;
 }
 
 .background-video {
