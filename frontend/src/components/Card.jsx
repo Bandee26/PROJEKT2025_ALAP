@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal, ButtonGroup } from 'react-bootstrap';
 
-const CustomCard = ({ 
-  imageSrc, 
-  title, 
-  subtitle, 
-  description, 
-  year, 
-  adatok, 
-  elado, 
-  isFavorite,  // Kedvencek állapota
-  onFavoriteToggle  // Kedvencek kezelése
-}) => {
+const CustomCard = ({ imageSrc, title, subtitle, description, year, adatok, elado, isFavorite, onFavoriteToggle, onShowDetails }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShow = () => setShowModal(true);
@@ -29,8 +19,8 @@ const CustomCard = ({
           <ButtonGroup className="mt-2">
             <Button variant="primary" onClick={handleShow}>Részletek</Button>
             <Button 
-              variant={isFavorite ? 'danger' : 'success'}  // Szín a kedvencek állapot alapján
-              onClick={onFavoriteToggle}  // Gomb eseménykezelője
+              variant={isFavorite ? 'danger' : 'success'}  
+              onClick={onFavoriteToggle}
             >
               {isFavorite ? 'Kedvencekből eltávolít' : 'Kedvencekhez adás'}
             </Button>
@@ -38,7 +28,7 @@ const CustomCard = ({
         </Card.Body>
       </Card>
 
-      {/* Modal a kártya nagyításához */}
+      {/* Részletek modal */}
       <Modal show={showModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
