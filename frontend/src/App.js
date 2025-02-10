@@ -65,39 +65,60 @@ function App() {
       <Menu />
       {/* Parallax háttér */}
       <div style={parallaxStyle}></div>
-      
 
-      <div className="video-hatter">
-      {/* Add the Video component to display the video as background */}
-      <Video />
+      <main>
+        <Container className="my-4">
+          <Row>
+            {/* Szűrő a bal oldalon, most már teljesen a bal szélén */}
+            <Col
+              xs={12} 
+              sm={4} 
+              md={3} 
+              className="mb-4"
+              style={{
+                padding: '10px',    // Padding a szűrő komponenshez
+                backgroundColor: '#fff', // Háttér szín
+                boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)', // Árnyék
+                height: 'auto',      // Ne legyen fix magasság
+                position: 'absolute', // A szűrő a bal oldalon fixálva
+                top: 0,              // Felülről kezdődjön
+                left: 0,             // Bal oldalra igazítva
+                width: '250px',      // A szűrő szélessége most 200px
+                zIndex: 999,         // További tartalom fölött legyen
+                marginTop: '467px',  // A szűrő pozicionálása a képernyőn
+              }}
+            >
+              <Szuro onFilterChange={handleFilterChange} products={products} />
+            </Col>
 
-      
+            {/* Termékek a jobb oldalon */}
+            <Col xs={12} sm={8} md={11} className="mb-5" style={{ marginLeft: 'auto' }}> {/* 220px margó a szűrő mellett */}
+              {/* "Jelenlegi kínálatunk" csak akkor jelenik meg, ha van találat */}
+              {filteredProducts.length > 0 && (
+                <>
+                  <h1 className="text-center mb-4">Jelenlegi Kínálatunk</h1>
+                  <Row>
+                    {filteredProducts.map((auto) => (
+                      <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                        <CustomCard
+                          imageSrc={`http://localhost:8080/${auto.Modell}.jpg`} // Példa kép URL
+                          title={`${auto.Marka}  ${auto.Modell}`} // Márka és modell
+                          subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}  // Évjárat és ár
+                          description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`} // Kilométeróra és üzemanyag típus
+                          adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat típusa: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
+                          year={`${auto.Rendszam}`} // Rendszám
+                          elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`} // Eladó információ
+                          isFavorite={favorites.includes(auto.Rendszam)} // Kedvencek állapot
+                          onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)} // Kedvencek gomb kezelése
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                </>
+              )}
 
-
-        {/* Tartalom a videó előtt */}
-        <Szuro />
-        <main style={mainStyle}>
-          <Container className="my-4">
-            <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
-            {error && <p className="text-danger text-center">{error}</p>}
-
-            {/* Kártyák */}
-            <Row>
-              {products && products.length > 0 ? (
-                products.map((auto) => (
-                  <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                    <CustomCard
-                      imageSrc={`http://localhost:8080/${auto.Modell}.jpg`}
-                      title={`${auto.Marka}  ${auto.Modell}`}
-                      subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
-                      description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
-                      adatok={`Km.állás: ${auto.Kilometerora} | Motortipusa: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat tipusa: ${auto.Hasznalat} | Autó szine: ${auto.Szin}`}
-                      year={`${auto.Rendszam}`}
-                      elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
-                    />
-                  </Col>
-                ))
-              ) : (
+              {/* Ha nincs találat, akkor egy üzenetet jelenítünk meg */}
+              {filteredProducts.length === 0 && (
                 <p className="text-center">Nincs megjeleníthető autó.</p>
               )}
             </Row>
