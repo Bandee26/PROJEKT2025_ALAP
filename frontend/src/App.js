@@ -96,7 +96,7 @@ function App() {
               {/* "Jelenlegi kínálatunk" csak akkor jelenik meg, ha van találat */}
               {filteredProducts.length > 0 && (
                 <>
-                  <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
+                  <h1 className="text-center mb-4">Jelenlegi Kínálatunk</h1>
                   <Row>
                     {filteredProducts.map((auto) => (
                       <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={3} className="mb-4">
