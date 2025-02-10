@@ -4,6 +4,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import Logo from './auto.png';
@@ -23,8 +25,6 @@ function Menu() {
     const [name, setName] = useState('');  // Név állapot
     const [phone, setPhone] = useState('');  // Telefonszám állapot
     const [userEmail, setUserEmail] = useState('');
-    const [alertMessage, setAlertMessage] = useState(''); // Alert üzenet kezelése
-    const [alertVariant, setAlertVariant] = useState('info'); // Alert típus
 
     // Profil módosító modal
     const [showProfileModal, setShowProfileModal] = useState(false);
@@ -33,6 +33,7 @@ function Menu() {
 
     // Kedvencek modal
     const [showFavoritesModal, setShowFavoritesModal] = useState(false);
+    // Példa kedvenc autók adatai; később ezeket például backendről töltheti be
     const [favorites, setFavorites] = useState([
         "BMW X5",
         "Audi A6",
@@ -54,14 +55,13 @@ function Menu() {
     const handleCloseModal = () => {
         setShowRegisterModal(false);
         setShowLoginModal(false);
-        setAlertMessage(''); // Üzenet törlése a modal bezárásakor
     };
 
     // Regisztráció kezelése
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/users/register', {
+            const response = await fetch('http://localhost:8080/users/register', {  // Backend URL itt szerepel
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,15 +75,13 @@ function Menu() {
             });
             const result = await response.json();
             if (result.success) {
-                setAlertMessage('Sikeres regisztráció!');
-                setAlertVariant('success'); // Success alert
+                setMessage('Sikeres regisztráció!');
+                setShowRegisterModal(false);
             } else {
-                setAlertMessage('Hiba történt a regisztráció során.');
-                setAlertVariant('danger'); // Error alert
+                setMessage('Hiba történt a regisztráció során.');
             }
         } catch (error) {
-            setAlertMessage('Hálózati hiba történt.');
-            setAlertVariant('danger'); // Error alert
+            setMessage('Hálózati hiba történt.');
         }
     };
 
@@ -106,24 +104,22 @@ function Menu() {
                 setIsLoggedIn(true); // Bejelentkezett státusz
                 setUserEmail(loginEmail); // Email elmentése a profil frissítéshez
                 setShowLoginModal(false); // Zárd be a modalt
-                setAlertMessage('Sikeres bejelentkezés!');
-                setAlertVariant('success'); // Success alert
+                setMessage('Sikeres bejelentkezés!');
             } else {
-                setAlertMessage('Helytelen email vagy jelszó.');
-                setAlertVariant('danger'); // Error alert
+                setMessage('Helytelen email vagy jelszó.');
             }
         } catch (error) {
-            setAlertMessage('Hálózati hiba történt.');
-            setAlertVariant('danger'); // Error alert
+            setMessage('Hálózati hiba történt.');
         }
     };
 
     // Profil frissítése
     const handleProfileSubmit = async (e) => {
         e.preventDefault();
+
+        // Ellenőrizd, hogy a nevet és telefonszámot kitöltötte-e a felhasználó
         if (!name || !phone || !userEmail) {
-            setAlertMessage('Minden mezőt ki kell tölteni!');
-            setAlertVariant('danger'); // Error alert
+            setMessage('Minden mezőt ki kell tölteni!');
             return;
         }
 
@@ -136,22 +132,19 @@ function Menu() {
                 body: JSON.stringify({
                     name: name,
                     phone: phone,
-                    email: userEmail,
+                    email: userEmail,  // Az aktuális felhasználó email címe
                 }),
             });
 
             const result = await response.json();
             if (result.success) {
-                setAlertMessage('Profil sikeresen frissítve');
-                setAlertVariant('success'); // Success alert
+                setMessage('Profil sikeresen frissítve');
                 setShowProfileModal(false);
             } else {
-                setAlertMessage('Hiba történt a profil frissítése során');
-                setAlertVariant('danger'); // Error alert
+                setMessage('Hiba történt a profil frissítése során');
             }
         } catch (error) {
-            setAlertMessage('Hálózati hiba történt');
-            setAlertVariant('danger'); // Error alert
+            setMessage('Hálózati hiba történt');
         }
     };
 
@@ -211,12 +204,8 @@ function Menu() {
                 </Container>
             </Navbar>
 
-            {/* Alert üzenet */}
-            {alertMessage && (
-                <div className={`alert alert-${alertVariant} mt-3`}>
-                    {alertMessage}
-                </div>
-            )}
+            {/* Üzenet megjelenítése */}
+            {message && <div className="alert alert-info mt-3">{message}</div>}
 
             {/* Regisztrációs modal */}
             <Modal show={showRegisterModal} onHide={handleCloseModal}>

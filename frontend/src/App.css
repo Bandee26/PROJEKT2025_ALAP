@@ -85,20 +85,3 @@ body{
     transform: rotate(360deg);
   }
 }
-
-.product-details {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin-top: 20px;
-  background-color: #f9f9f9;
-}
-
-.checkbox-list {
-  display: flex;
-  flex-direction: column; /* Stack checkboxes vertically */
-  gap: 10px; /* Adds space between checkboxes */
-}
-
-.checkbox-group label {
-  display: block; /* Ensures each checkbox is on its own line */
-}
