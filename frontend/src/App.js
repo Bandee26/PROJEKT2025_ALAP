@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomCard from './components/Card'; // CustomCard importálása
 import Szuro from './components/Szuro.jsx'
+import Video from './components/video.jsx';
 
 function App() {
   const appStyle = {
@@ -61,44 +62,50 @@ function App() {
   return (
     <div className='szin'  tyle={appStyle}>
       
-      
-
       <Menu />
       {/* Parallax háttér */}
       <div style={parallaxStyle}></div>
-      <Szuro></Szuro>
-      <main style={mainStyle}>
-        <Container className="my-4">
-          <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
-          {error && <p className="text-danger text-center">{error}</p>}
-          
-          
       
-          {/* Itt jelennek meg a kártyák */}
-          <Row>
-          <Row>
-  {products && products.length > 0 ? (
-    products.map((auto) => (
-      <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={3} className="mb-4">
-        <CustomCard
-          imageSrc={`http://localhost:8080/${auto.Modell}.jpg`} // Példa kép URL
-          title={`${auto.Marka}  ${auto.Modell}`} // Rendszám
-          subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}  // Évjárat és ár
-          description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`} // Kilométeróra, sebességváltó
-          adatok={`Km.állás: ${auto.Kilometerora} | Motortipusa: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat tipusa: ${auto.Hasznalat} | Autó szine: ${auto.Szin}`}
-          year={`${auto.Rendszam}`}
-          elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
-        />
-      </Col>
-    ))
-  ) : (
-    <p className="text-center">Nincs megjeleníthető autó.</p>
-  )} 
-</Row>
 
-          </Row>
-        </Container>
-      </main>
+      <div className="video-hatter">
+      {/* Add the Video component to display the video as background */}
+      <Video />
+
+      
+
+
+        {/* Tartalom a videó előtt */}
+        <Szuro />
+        <main style={mainStyle}>
+          <Container className="my-4">
+            <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
+            {error && <p className="text-danger text-center">{error}</p>}
+
+            {/* Kártyák */}
+            <Row>
+              {products && products.length > 0 ? (
+                products.map((auto) => (
+                  <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                    <CustomCard
+                      imageSrc={`http://localhost:8080/${auto.Modell}.jpg`}
+                      title={`${auto.Marka}  ${auto.Modell}`}
+                      subtitle={`Évjarat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
+                      description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
+                      adatok={`Km.állás: ${auto.Kilometerora} | Motortipusa: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat tipusa: ${auto.Hasznalat} | Autó szine: ${auto.Szin}`}
+                      year={`${auto.Rendszam}`}
+                      elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
+                    />
+                  </Col>
+                ))
+              ) : (
+                <p className="text-center">Nincs megjeleníthető autó.</p>
+              )}
+            </Row>
+          </Container>
+        </main>
+      </div>
+
+
 
       <Footer />
     </div>
