@@ -82,6 +82,8 @@ function App() {
             {error && <p className="text-danger text-center">{error}</p>}
 
             {/* Kártyák */}
+            
+            <div className='card-container'>
             <Row>
               {products && products.length > 0 ? (
                 products.map((auto) => (
@@ -101,6 +103,8 @@ function App() {
                 <p className="text-center">Nincs megjeleníthető autó.</p>
               )}
             </Row>
+            </div>
+
           </Container>
         </main>
       </div>

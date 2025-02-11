@@ -85,3 +85,9 @@ body{
     transform: rotate(360deg);
   }
 }
+
+.card-container {
+  max-height: 1000px; /* Meghatározhatod, hogy mekkora legyen a konténer magassága */
+  width: 1400px;
+  overflow-y: auto; /* Vertikális görgetés engedélyezése */
+}
