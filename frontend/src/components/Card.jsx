@@ -18,41 +18,37 @@ const CustomCard = ({
   const handleClose = () => setShowModal(false);
 
   return (
-    <div className='kartya'>
-      <Card className='doboz' style={{ width: '18rem' }}>
-        <Card.Img className='kep' variant="top" src={imageSrc} />
-        <Card.Body>
-          <Card.Title className='card-title'>{title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
-          <Card.Text className='card-text'>{description}</Card.Text>
+    <div className='kartya hover-effect'>
+  <Card className='doboz kartya-hover' style={{ width: '18rem' }}>
+    <Card.Img className='kep image-hover' variant="top" src={imageSrc} />
+    <Card.Body>
+      <Card.Title className='card-title'>{title}</Card.Title>
+      <Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
+      <Card.Text className='card-text'>{description}</Card.Text>
+      <ButtonGroup className="mt-2">
+        <Button className="hover-button" variant="primary" onClick={handleShow}>Részletek</Button>
+        <Button className="hover-button" variant={isFavorite ? 'danger' : 'success'} onClick={onFavoriteToggle}>
+          {isFavorite ? 'Kedvencekből eltávolít' : 'Kedvencekhez adás'}
+        </Button>
+      </ButtonGroup>
+    </Card.Body>
+  </Card>
 
-          <ButtonGroup className="mt-2">
-            <Button variant="primary" onClick={handleShow}>Részletek</Button>
-            <Button 
-              variant={isFavorite ? 'danger' : 'success'}  // Szín a kedvencek állapot alapján
-              onClick={onFavoriteToggle}  // Gomb eseménykezelője
-            >
-              {isFavorite ? 'Kedvencekből eltávolít' : 'Kedvencekhez adás'}
-            </Button>
-          </ButtonGroup>
-        </Card.Body>
-      </Card>
-
-      {/* Modal a kártya nagyításához */}
-      <Modal show={showModal} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <img src={imageSrc} alt={title} style={{ width: '100%', height: 'auto' }} />
-          <div className="mt-3">
-            <p><strong>Rendszám:</strong> {year}</p>
-            <p><strong>Autó adatai:</strong> {adatok}</p>
-            <p><strong>Eladó adatai:</strong> {elado}</p>
-          </div>
-        </Modal.Body>
-      </Modal>
-    </div>
+  {/* Modal a kártya nagyításához */}
+  <Modal show={showModal} onHide={handleClose} centered>
+    <Modal.Header closeButton>
+      <Modal.Title>{title}</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <img src={imageSrc} alt={title} style={{ width: '100%', height: 'auto' }} />
+      <div className="mt-3">
+        <p><strong>Rendszám:</strong> {year}</p>
+        <p><strong>Autó adatai:</strong> {adatok}</p>
+        <p><strong>Eladó adatai:</strong> {elado}</p>
+      </div>
+    </Modal.Body>
+  </Modal>
+</div>
   );
 };
 
