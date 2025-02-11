@@ -56,7 +56,7 @@ code {
 
 /* A gombok hover effektusa */
 .hover-button:hover {
-  transform: scale(1.05); /* A gombok kissé megnövekednek */
+  transform: scale(1.3); /* A gombok kissé megnövekednek */
   transition: transform 0.2s ease; /* Zökkenőmentes animáció */
 }
 

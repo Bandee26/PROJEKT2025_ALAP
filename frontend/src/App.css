@@ -87,7 +87,7 @@ body {
 
 /* Kártyákat tartalmazó konténer */
 .card-container {
-  max-height: 1000px; /* Meghatározhatod, hogy mekkora legyen a konténer magassága */
+  max-height: 900px; /* Meghatározhatod, hogy mekkora legyen a konténer magassága */
   width: 1400px;
   overflow-y: auto; /* Vertikális görgetés engedélyezése */
   
