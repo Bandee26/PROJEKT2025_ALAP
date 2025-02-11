@@ -2,13 +2,15 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import filmImage from './assets/hatter.jpg';
 import { Container, Row, Col } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomCard from './components/Card'; // CustomCard importálása
 import Szuro from './components/Szuro.jsx'
 import Video from './components/video.jsx';
+import ImageSlider from './components/ImageSlider.jsx';
+
+
 
 function App() {
   const appStyle = {
@@ -21,19 +23,8 @@ function App() {
     position: 'relative', // A tartalom és háttér együttműködéséhez
   };
 
-  const parallaxStyle = {
-    backgroundImage: `url(${filmImage})`,
-    backgroundSize: 'cover', // A kép teljesen kitölti a rendelkezésre álló teret, a képarány megtartásával.
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundAttachment: 'fixed', // Parallax effektus
-    height: '400px', // A parallax szekció magassága
-    width: '100%',
-  };
-
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  const [favorites, setFavorites] = useState([]); // Kedvencek állapota
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -50,28 +41,16 @@ function App() {
     fetchProducts();
   }, []);
 
-  // Kedvencek kezelése
-  const handleFavoriteToggle = (autoId) => {
-    if (favorites.includes(autoId)) {
-      setFavorites(favorites.filter(id => id !== autoId)); // Eltávolítás a kedvencek közül
-    } else {
-      setFavorites([...favorites, autoId]); // Hozzáadás a kedvencekhez
-    }
-  };
-
   return (
     <div className='szin'  tyle={appStyle}>
       
       <Menu />
-      {/* Parallax háttér */}
-      <div style={parallaxStyle}></div>
       
+      <ImageSlider></ImageSlider>      
 
       <div className="video-hatter">
-      {/* Add the Video component to display the video as background */}
       <Video />
 
-      
 
 
         {/* Tartalom a videó előtt */}
