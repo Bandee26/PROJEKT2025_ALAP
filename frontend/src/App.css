@@ -90,11 +90,12 @@ body {
   max-height: 900px; /* Meghatározhatod, hogy mekkora legyen a konténer magassága */
   width: 1400px;
   overflow-y: auto; /* Vertikális görgetés engedélyezése */
+  overflow-x: hidden;
   
   /* Scrollbar testreszabása */
   --sb-track-color: #919a9e;
   --sb-thumb-color: #328cd6;
-  --sb-size: 20px;
+  --sb-size: 15px;
 }
 
 .card-container::-webkit-scrollbar {
