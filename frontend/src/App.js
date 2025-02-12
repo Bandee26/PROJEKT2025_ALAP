@@ -45,8 +45,6 @@ function App() {
     <div className='szin'  tyle={appStyle}>
       
       <Menu />
-      
-      <ImageSlider></ImageSlider>      
 
       <div className="video-hatter">
       <Video />
