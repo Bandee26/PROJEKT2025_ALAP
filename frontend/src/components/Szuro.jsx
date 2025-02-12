@@ -82,7 +82,7 @@ const FilterComponent = () => {
 
             </div>
 
-            <div className="slider-container">
+            <div >
                 <h3>Ár szűrő:</h3>
                 <ReactSlider
                     min={0}

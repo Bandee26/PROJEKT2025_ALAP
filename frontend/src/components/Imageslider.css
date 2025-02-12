@@ -15,6 +15,7 @@
     height: 100%;
     object-fit: cover; /* Képek nem torzulnak, de kitöltik a rendelkezésre álló teret */
     flex-shrink: 0; /* Megakadályozza a képek összenyomódását */
+    animation: slide 20s linear infinite
 }
 
 /* A képek folyamatos csúszása */

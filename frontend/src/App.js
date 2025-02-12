@@ -46,7 +46,7 @@ function App() {
       
       <Menu />
       
-      <ImageSlider></ImageSlider>      
+      <ImageSlider></ImageSlider>   
 
       <div className="video-hatter">
       <Video />
