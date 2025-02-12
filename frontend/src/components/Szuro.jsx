@@ -68,19 +68,19 @@ const FilterComponent = () => {
         <div className="filter-container">
             <div className="checkbox-group">
     <h3>Válassz márkát:</h3>
-    {products.map((product) => (
-        <label key={product.Rendszam}>
+    {brands.map((brand) => (
+        <label key={brand}>
             <input
                 type="checkbox"
-                value={product.Marka}
+                value={brand}
                 onChange={handleBrandChange}
-                checked={selectedBrands.includes(product.Marka)}
+                checked={selectedBrands.includes(brand)}
             />
-            {product.Marka}
+            {brand}
         </label>
     ))}
+</div>
 
-            </div>
 
             <div >
                 <h3>Ár szűrő:</h3>
