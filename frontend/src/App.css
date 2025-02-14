@@ -91,6 +91,7 @@ body {
   width: 1400px;
   overflow-y: auto; /* Vertikális görgetés engedélyezése */
   overflow-x: hidden;
+  border-radius: 10px;
   
   /* Scrollbar testreszabása */
   --sb-track-color: #919a9e;

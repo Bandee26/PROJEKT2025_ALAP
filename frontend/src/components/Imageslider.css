@@ -4,11 +4,11 @@
     position: relative;
     overflow: hidden;
 }
-
+/*
 .slider {
     display: flex;
-    animation: slide 20s linear infinite; /* A képek folyamatos csúszása */
-}
+    animation: slide 20s linear infinite; /* A képek folyamatos csúszása 
+}*/
 
 .slider-image {
     width: 100%; /* A képek kitöltik a teljes szélességet */
