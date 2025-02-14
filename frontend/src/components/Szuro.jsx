@@ -9,38 +9,20 @@ const FilterComponent = () => {
     const [products, setProducts] = useState([]);  // Termékek tárolása
     const [filteredProducts, setFilteredProducts] = useState([]);  // Szűrt termékek tárolása
 
-
     useEffect(() => {
-        // Márkák lekérése a backendről
-        const fetchBrands = async () => {
+        // Márkák és termékek lekérése a backendről
+        const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/termek'); // Márkák lekérése API-ról
-                setBrands(response.data.brands);  // Beállítjuk a kapott márkákat
+                const response = await axios.get('http://localhost:8080/termek');
+                setProducts(response.data.products);
+                // Márkák generálása a termékekből
+                setBrands([...new Set(response.data.products.map(product => product.Marka))]);
             } catch (error) {
-                console.error('Márkák lekérése sikertelen:', error);
+                console.error('Hiba történt:', error);
             }
         };
 
-        fetchBrands();
-
-        // Termékek lekérése Axios segítségével
-        axios.get('http://localhost:8080/termek')
-            .then(response => {
-                setProducts(response.data.products);
-            })
-            .catch(error => {
-                console.error('Hiba történt:', error);
-            });
-        axios.get('http://localhost:8080/termek')
-        .then(response => {
-            console.log(response.data);  // Ellenőrizd a termékek válaszát
-            setProducts(response.data.products);
-            setBrands([...new Set(response.data.products.map(product => product.Marka))]);  // Márkák generálása a termékekből
-        })
-        .catch(error => {
-            console.error('Hiba történt:', error);
-        });
-
+        fetchData();
     }, []);  // üres függőségi tömb, hogy csak egyszer fusson
 
     useEffect(() => {
@@ -67,22 +49,25 @@ const FilterComponent = () => {
     return (
         <div className="filter-container">
             <div className="checkbox-group">
-    <h3>Válassz márkát:</h3>
-    {brands.map((brand) => (
-        <label key={brand}>
-            <input
-                type="checkbox"
-                value={brand}
-                onChange={handleBrandChange}
-                checked={selectedBrands.includes(brand)}
-            />
-            {brand}
-        </label>
-    ))}
-</div>
+                <h3>Válassz márkát:</h3>
+                {brands.length > 0 ? (  // Ellenőrizzük, hogy a 'brands' tömb nem üres
+                    brands.map((brand) => (
+                        <label key={brand}>
+                            <input
+                                type="checkbox"
+                                value={brand}
+                                onChange={handleBrandChange}
+                                checked={selectedBrands.includes(brand)}
+                            />
+                            {brand}
+                        </label>
+                    ))
+                ) : (
+                    <p>Loading brands...</p>  // Ha még nincsenek márkák, mutassunk egy töltődő üzenetet
+                )}
+            </div>
 
-
-            <div >
+            <div>
                 <h3>Ár szűrő:</h3>
                 <ReactSlider
                     min={0}
@@ -91,7 +76,6 @@ const FilterComponent = () => {
                     value={priceRange}
                     onChange={setPriceRange}
                     renderTrack={(props, state) => {
-                        // Kivesszük a key-t, majd külön adjuk át
                         const { key, ...restProps } = props;
                         return (
                             <div
@@ -106,7 +90,6 @@ const FilterComponent = () => {
                         );
                     }}
                     renderThumb={(props, state) => {
-                        // Kivesszük a key-t, majd külön adjuk át
                         const { key, ...restProps } = props;
                         return (
                             <div
@@ -130,16 +113,16 @@ const FilterComponent = () => {
             </div>
 
             <div className="filtered-products">
-            <h3>Szűrt termékek:</h3>
-    {filteredProducts.length > 0 ? (
-        <ul>
-            {filteredProducts.map((product) => (
-                <li key={product.Rendszam}>{product.Marka} {product.Modell} - {product.Ar} Ft</li>
-            ))}
-        </ul>
-    ) : (
-        <p>Nincs találat</p>
-    )}
+                <h3>Szűrt termékek:</h3>
+                {filteredProducts.length > 0 ? (
+                    <ul>
+                        {filteredProducts.map((product) => (
+                            <li key={product.Rendszam}>{product.Marka} {product.Modell} - {product.Ar} Ft</li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>Nincs találat</p>
+                )}
             </div>
         </div>
     );
