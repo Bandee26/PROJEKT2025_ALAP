@@ -5,13 +5,13 @@
 .szin {
   position: relative;
   width: 100%;
-  height: 100vh; /* Teljes képernyő */
+  height: 1500px; /* Teljes képernyő */
 }
 
 .video-hatter {
-  position: relative; /* Ezzel a tartalom a videó előtt marad */
+  position: relative; /* Tartalom a videó előtt marad */
   width: 100%;
-  height: 160%;
+  height: 400%; /* Módosítva, hogy kitöltse a teljes képernyőt */
   overflow: hidden;
 }
 
@@ -31,7 +31,9 @@
   z-index: 1; /* Tartalom a videó fölött maradjon */
   padding: 20px;
   border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* Félátszó fekete háttér */
 }
+
 
 .content {
   position: relative;

@@ -19,18 +19,24 @@ const CustomCard = ({
 
   return (
     <div className='kartya hover-effect'>
-      <Card className='doboz kartya-hover' style={{ width: '18rem' }}>
+      <Card className='doboz kartya-hover shadow-sm rounded' style={{ width: '18rem' }}>
         <Card.Img className='kep image-hover' variant="top" src={imageSrc} />
         <Card.Body>
-          <Card.Title className='card-title'>{title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
-          <Card.Text className='card-text'>{description}</Card.Text>
-          <ButtonGroup className="mt-2">
+          <Card.Title className='text-center'>{title}</Card.Title>
+          <Card.Subtitle className="mb-3 text-muted text-center">{subtitle}</Card.Subtitle>
+          <Card.Text className='card-text text-center'>{description}</Card.Text>
+
+          {/* Gombok elrendezése */}
+          <div className="d-flex justify-content-between mt-3">
             <Button className="hover-button" variant="primary" onClick={handleShow}>Részletek</Button>
-            <Button className="hover-button" variant={isFavorite ? 'danger' : 'success'} onClick={onFavoriteToggle}>
+            <Button
+              className="hover-button"
+              variant={isFavorite ? 'danger' : 'success'}
+              onClick={onFavoriteToggle}
+            >
               {isFavorite ? 'Kedvencekből eltávolít' : 'Kedvencekhez adás'}
             </Button>
-          </ButtonGroup>
+          </div>
         </Card.Body>
       </Card>
 
