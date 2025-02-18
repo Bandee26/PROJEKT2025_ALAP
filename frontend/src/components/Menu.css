@@ -1,0 +1,5 @@
+.fixed-menu .nav-link,
+.fixed-menu .navbar-brand,
+.fixed-menu .dropdown-item {
+    color: white !important;
+}
