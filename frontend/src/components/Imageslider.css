@@ -1,0 +1,29 @@
+.slider-container {
+    width: 100%;
+    height: 400px; /* Parallax háttér mérete */
+    position: relative;
+    overflow: hidden;
+}
+/*
+.slider {
+    display: flex;
+    animation: slide 20s linear infinite; /* A képek folyamatos csúszása 
+}*/
+
+.slider-image {
+    width: 100%; /* A képek kitöltik a teljes szélességet */
+    height: 100%;
+    object-fit: cover; /* Képek nem torzulnak, de kitöltik a rendelkezésre álló teret */
+    flex-shrink: 0; /* Megakadályozza a képek összenyomódását */
+    animation: slide 20s linear infinite
+}
+
+/* A képek folyamatos csúszása */
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}

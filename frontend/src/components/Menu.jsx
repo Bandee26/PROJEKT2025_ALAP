@@ -155,7 +155,7 @@ function Menu() {
 
     return (
         <>
-            <Navbar expand="lg" className="bg-white fixed-menu">
+            <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#328cd6' }}>
                 <Container>
                     <Navbar.Brand href="/">
                         <img src={Logo} style={imageStyle} alt="Logo" />

@@ -5,6 +5,32 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Görgető testreszabás */
+  --sb-track-color: #919a9e;
+  --sb-thumb-color: #328cd6;
+  --sb-size: 20px;
+}
+
+body::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 50px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 50px;
+  border: 2px solid #232E33;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }
 
 code {
@@ -12,16 +38,36 @@ code {
     monospace;
 }
 
-.kartya{
-  box-shadow: rgb(38, 57, 77) 20px 20px 30px 50px;
+/* Kártyák stílusai */
+.kartya {
+  -webkit-box-shadow: 0px 0px 120px 0px rgba(255, 255, 255, 1);
+  -moz-box-shadow: 0px 0px 120px 0px rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 120px 0px rgba(255, 255, 255, 1);
   width: 250px;
+  margin-top: 20px;
+  margin-left: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Simulációs animáció */
 }
 
-.card-text{
+.kartya:hover {
+  transform: translateY(-10px); /* Kártya elmozdul felfelé */
+  box-shadow: 0px 0px 20px 5px rgba(255, 255, 255, 0.8); /* Felvillanás effektus */
+}
+
+/* A gombok hover effektusa */
+.hover-button:hover {
+  transform: scale(1.3); /* A gombok kissé megnövekednek */
+  transition: transform 0.2s ease; /* Zökkenőmentes animáció */
+}
+
+.card-text {
   font-weight: 700;
 }
 
-.card-title{
-  font-size:xx-small;
+.card-title {
+  font-size: xx-small;
 }
 
+.kinalat{
+  width: 1300px;
+}

@@ -1,17 +1,17 @@
-.bg-white fixed-menu{
+.bg-white.fixed-menu {
   background-color: #282c34;
 }
 
 .szin {
   position: relative;
   width: 100%;
-  height: 100vh; /* Teljes képernyő */
+  height: 1500px; /* Teljes képernyő */
 }
 
 .video-hatter {
-  position: relative; /* Ezzel a tartalom a videó előtt marad */
+  position: relative; /* Tartalom a videó előtt marad */
   width: 100%;
-  height: 150%;
+  height: 400%; /* Módosítva, hogy kitöltse a teljes képernyőt */
   overflow: hidden;
 }
 
@@ -31,6 +31,7 @@
   z-index: 1; /* Tartalom a videó fölött maradjon */
   padding: 20px;
   border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* Félátszó fekete háttér */
 }
 
 
@@ -42,9 +43,9 @@
   padding: 20px;
 }
 
-body{
- /*background-image: url('/assets/film.jpg'); */
- background-size: cover;
+body {
+  /*background-image: url('/assets/film.jpg'); */
+  background-size: cover;
 }
 
 .App {
@@ -83,5 +84,40 @@ body{
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Kártyákat tartalmazó konténer */
+.card-container {
+  max-height: 900px; /* Meghatározhatod, hogy mekkora legyen a konténer magassága */
+  width: 1400px;
+  overflow-y: auto; /* Vertikális görgetés engedélyezése */
+  overflow-x: hidden;
+  border-radius: 10px;
+  
+  /* Scrollbar testreszabása */
+  --sb-track-color: #919a9e;
+  --sb-thumb-color: #328cd6;
+  --sb-size: 15px;
+}
+
+.card-container::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.card-container::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 50px;
+}
+
+.card-container::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 50px;
+  border: 2px solid #232E33;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .card-container {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
 }
