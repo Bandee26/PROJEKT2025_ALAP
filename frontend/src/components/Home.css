@@ -1,0 +1,93 @@
+.home-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .background-images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 100%;
+    display: flex;
+    animation: slide 15s linear infinite;
+  }
+  
+  .image-slide {
+    width: 33.33%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.6) saturate(1.2);
+  }
+  
+  .image-slide:nth-child(1) {
+    background-image: url('https://via.placeholder.com/600x400?text=Kép+1');
+  }
+  
+  .image-slide:nth-child(2) {
+    background-image: url('https://via.placeholder.com/600x400?text=Kép+2');
+  }
+  
+  .image-slide:nth-child(3) {
+    background-image: url('https://via.placeholder.com/600x400?text=Kép+3');
+  }
+  
+  @keyframes slide {
+    0% {
+      transform: translateX(0);
+    }
+    33% {
+      transform: translateX(-33.33%);
+    }
+    66% {
+      transform: translateX(-66.66%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color:black;
+    z-index: 2;
+    animation: bounceMove 3s ease-in-out infinite;
+  }
+  
+  @keyframes bounceMove {
+    0% {
+      transform: translateX(-100%) translateY(-50%); /* Kezdjük balról kívülről */
+    }
+    25% {
+      transform: translateX(0%) translateY(-50%); /* A szöveg elérte a bal oldali középpontot */
+    }
+    50% {
+      transform: translateX(100%) translateY(-50%); /* A szöveg jobbra mozdul */
+    }
+    75% {
+      transform: translateX(0%) translateY(-50%); /* A szöveg visszatér a középre */
+    }
+    100% {
+      transform: translateX(-100%) translateY(-50%); /* A szöveg újra balra mozdul */
+    }
+  }
+  
+  .content h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  }
+  
+  .content p {
+    font-size: 1.5rem;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  }
+  
