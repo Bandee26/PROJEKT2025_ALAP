@@ -61,7 +61,7 @@ function App() {
         <Video />
 
         <Container className="my-4" style={{ position: 'relative', zIndex: 1 }}>
-          <Row className="d-flex justify-content-between">
+          <Row className="d-flex justify-content-between kinalat">
             {/* Szűrő oldalsáv */}
             <Col xs={12} sm={3} md={3} lg={2}>
               <Szuro onFilterChange={handleFilterChange} products={products} />
@@ -76,7 +76,7 @@ function App() {
                     {filteredProducts.map((auto) => (
                       <Col
                         key={auto.Rendszam}
-                        xs={12} sm={6} md={4} lg={3}
+                        xs={12} sm={6} md={4} lg={4}
                         style={{ padding: '10px', maxWidth: '350px' }}
                       >
                         <CustomCard
