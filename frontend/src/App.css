@@ -34,7 +34,6 @@
   background-color: rgba(0, 0, 0, 0.5); /* Félátszó fekete háttér */
 }
 
-
 .content {
   position: relative;
   z-index: 1; /* A videó fölött legyen */
@@ -94,11 +93,11 @@ body {
   overflow-y: auto; /* Vertikális görgetés engedélyezése */
   overflow-x: hidden;
   border-radius: 10px;
-  
-  /* Scrollbar testreszabása */
-  --sb-track-color: #919a9e;
-  --sb-thumb-color: #328cd6;
-  --sb-size: 15px;
+
+  /* Scrollbar testreszabása a index.css alapján */
+  --sb-track-color: #222;  /* Világos szürke */
+  --sb-thumb-color: #006aff;  /* Világos kék */
+  --sb-size: 20px;
 }
 
 .card-container::-webkit-scrollbar {
@@ -112,7 +111,7 @@ body {
 
 .card-container::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 50px;
+  border-radius: 1px;
   border: 2px solid #232E33;
 }
 
