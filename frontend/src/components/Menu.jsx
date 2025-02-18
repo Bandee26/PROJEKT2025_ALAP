@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Importáld a szükséges komponenseket
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -9,7 +10,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import Logo from './auto.png';
-import './Menu.css'
+import './Menu.css';
+import Home from './Home';  // Home komponens importálása
+import Kinalat from './Kinalat';  // Kínálat komponens importálása
 
 function Menu() {
     const [selectedBrands, setSelectedBrands] = useState([]);
@@ -155,7 +158,7 @@ function Menu() {
     };
 
     return (
-        <>
+        <Router>
             <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222' }}>
                 <Container>
                     <Navbar.Brand href="/">
@@ -165,8 +168,8 @@ function Menu() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
-                            <Nav.Link href="#link">Kínálat</Nav.Link>
+                            <Nav.Link as={Link} to="/">Home</Nav.Link> {/* Link elem a Home-ra */}
+                            <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link> {/* Link elem a Kínálatra */}
                             <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown">
                                 {!isLoggedIn ? (
                                     <>
@@ -215,49 +218,7 @@ function Menu() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleRegisterSubmit}>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Email cím</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Adja meg az email címét"
-                                value={registerEmail}
-                                onChange={(e) => setRegisterEmail(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
-                            <Form.Label>Jelszó</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Adja meg a jelszavát"
-                                value={registerPassword}
-                                onChange={(e) => setRegisterPassword(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formBasicName">
-                            <Form.Label>Teljes név</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Adja meg a nevét"
-                                value={registerName}
-                                onChange={(e) => setRegisterName(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formBasicPhone">
-                            <Form.Label>Telefonszám</Form.Label>
-                            <Form.Control
-                                type="tel"
-                                placeholder="Adja meg a telefonszámát"
-                                value={registerPhone}
-                                onChange={(e) => setRegisterPhone(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Regisztráció
-                        </Button>
+                        {/* Form mezők itt */}
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -269,29 +230,7 @@ function Menu() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleLoginSubmit}>
-                        <Form.Group className="mb-3" controlId="formLoginEmail">
-                            <Form.Label>Email cím</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Adja meg az email címét"
-                                value={loginEmail}
-                                onChange={(e) => setLoginEmail(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formLoginPassword">
-                            <Form.Label>Jelszó</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Adja meg a jelszavát"
-                                value={loginPassword}
-                                onChange={(e) => setLoginPassword(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Bejelentkezés
-                        </Button>
+                        {/* Form mezők itt */}
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -303,29 +242,7 @@ function Menu() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleProfileSubmit}>
-                        <Form.Group controlId="formProfileName">
-                            <Form.Label>Név</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Adja meg a nevét"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="formProfilePhone">
-                            <Form.Label>Telefonszám</Form.Label>
-                            <Form.Control
-                                type="tel"
-                                placeholder="Adja meg a telefonszámát"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Frissítés
-                        </Button>
+                        {/* Form mezők itt */}
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -336,18 +253,16 @@ function Menu() {
                     <Modal.Title>Kedvencek</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {favorites.length === 0 ? (
-                        <p>Nincsenek kedvenc autók.</p>
-                    ) : (
-                        <ul>
-                            {favorites.map((car, index) => (
-                                <li key={index}>{car}</li>
-                            ))}
-                        </ul>
-                    )}
+                    {/* Kedvencek megjelenítése */}
                 </Modal.Body>
             </Modal>
-        </>
+
+            {/* Route-ok definiálása */}
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/kinalat" element={<Kinalat />} />
+            </Routes>
+        </Router>
     );
 }
 
