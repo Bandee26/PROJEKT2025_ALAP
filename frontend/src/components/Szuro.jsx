@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ReactSlider from 'react-slider';
 import axios from 'axios';
-import { Row, Col } from 'react-bootstrap';
+import { Card, Form, Row, Col } from 'react-bootstrap';
+import './Szuro.css'; // Egyedi stílusokhoz
 
 const Szuro = ({ onFilterChange, products }) => {
   const [brands, setBrands] = useState([]);
@@ -14,7 +15,7 @@ const Szuro = ({ onFilterChange, products }) => {
         const response = await axios.get('http://localhost:8080/termek');
         const fetchedProducts = response.data.products || [];
         const fetchedBrands = [...new Set(fetchedProducts.map(product => product.Marka))];
-        
+
         setBrands(fetchedBrands);
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -22,88 +23,72 @@ const Szuro = ({ onFilterChange, products }) => {
     };
 
     fetchData();
-  }, []);  // This only runs once when the component mounts
+  }, []);
 
-  // Handling brand and price filter changes
   useEffect(() => {
     const filtered = products.filter(product =>
       (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) &&
-      Number(product.Ar) >= priceRange[0] && Number(product.Ar) <= priceRange[1]
+      Number(product.Ar) >= priceRange[0] &&
+      Number(product.Ar) <= priceRange[1]
     );
 
-    // Call onFilterChange after filtering the products
     if (onFilterChange) {
       onFilterChange(filtered);
     }
-  }, [selectedBrands, priceRange, products]);  // Dependency array ensures this runs only when necessary
+  }, [selectedBrands, priceRange, products]);
 
   const handleBrandChange = (event) => {
     const brand = event.target.value;
-    setSelectedBrands(prevSelected => {
-      if (prevSelected.includes(brand)) {
-        return prevSelected.filter(b => b !== brand);
-      } else {
-        return [...prevSelected, brand];
-      }
-    });
+    setSelectedBrands(prevSelected =>
+      prevSelected.includes(brand) ? prevSelected.filter(b => b !== brand) : [...prevSelected, brand]
+    );
   };
 
   return (
-    <div className="filter-container" style={{
-      position: 'fixed',  // A bal oldalra rögzítjük
-      top: '10px',
-      left: '10px',
-      maxWidth: '300px',  // A szűrő szélessége nem nyúlik túl
-      marginTop: '80px',
-      width: 'auto',  // Az elem szélessége igazodik a tartalomhoz
-      maxHeight: 'calc(100vh - 20px)',  // Az elem magassága ne nyújjon túl
-      overflowY: 'auto',  // Ha túl magas, görgethető legyen
-      backgroundColor: '#fff',
-      padding: '20px',
-      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-      borderRadius: '8px'
-    }}>
-      <div className="checkbox-group">
-        <h3>Válassz márkát:</h3>
-        {brands && brands.length > 0 ? (
-          brands.map((brand) => (
-            <label key={brand}>
-              <input
+    <Card className="szuro-container">
+      <Card.Body>
+        <Card.Title className="text-center text-light">Szűrő</Card.Title>
+
+        {/* Márkák checkboxok */}
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Válassz márkát:</strong></Form.Label>
+          {brands.length > 0 ? (
+            brands.map((brand) => (
+              <Form.Check
+                key={brand}
                 type="checkbox"
+                label={brand}
                 value={brand}
                 onChange={handleBrandChange}
                 checked={selectedBrands.includes(brand)}
+                className="text-light"
               />
-              {brand}
-            </label>
-          ))
-        ) : (
-          <p>Loading brands...</p>
-        )}
-      </div>
+            ))
+          ) : (
+            <p className="text-muted">Márkák betöltése...</p>
+          )}
+        </Form.Group>
 
-      <div className="slider-container">
-        <h3>Ár szűrő:</h3>
-        <ReactSlider
-          min={0}
-          max={100000000}
-          step={100}
-          value={priceRange}
-          onChange={setPriceRange}
-          renderTrack={(props, state) => (
-            <div {...props} style={{ ...props.style, backgroundColor: '#ddd', height: '6px' }} />
-          )}
-          renderThumb={(props, state) => (
-            <div {...props} style={{ ...props.style, backgroundColor: '#007BFF', width: '20px', height: '20px', borderRadius: '50%' }} />
-          )}
-        />
-        <div>
-          <span>Min: {priceRange[0]} Ft</span>
-          <span style={{ marginLeft: '10px' }}>Max: {priceRange[1]} Ft</span>
-        </div>
-      </div>
-      
-    </div>
+        {/* Ár csúszka */}
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Ár szűrő:</strong></Form.Label>
+          <ReactSlider
+            min={0}
+            max={100000000}
+            step={100}
+            value={priceRange}
+            onChange={setPriceRange}
+            className="custom-slider"
+            thumbClassName="slider-thumb"
+            trackClassName="slider-track"
+          />
+          <Row className="mt-2">
+            <Col><small className="text-light">Min: {priceRange[0]} Ft</small></Col>
+            <Col className="text-end"><small className="text-light">Max: {priceRange[1]} Ft</small></Col>
+          </Row>
+        </Form.Group>
+      </Card.Body>
+    </Card>
   );
 };
 

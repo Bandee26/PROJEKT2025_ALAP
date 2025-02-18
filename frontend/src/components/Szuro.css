@@ -1,0 +1,50 @@
+.szuro-container {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    max-width: 300px;
+    margin-top: 80px;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    background-color: #222; /* Sötét háttér */
+    color: white;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+  }
+  
+  /* Egyedi csúszka stílus */
+  .custom-slider {
+    height: 6px;
+    background: #444;
+    border-radius: 3px;
+    position: relative;
+  }
+  
+  .slider-track {
+    background: #007bff;
+    height: 6px;
+    border-radius: 3px;
+  }
+  
+  .slider-thumb {
+    width: 16px;
+    height: 16px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: grab;
+    top: -5px;
+    position: relative;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .slider-thumb:active {
+    cursor: grabbing;
+    background: #0056b3;
+  }
+  
+  /* Checkboxok világosabb színnel */
+  .form-check-label {
+    color: white !important;
+  }
+  

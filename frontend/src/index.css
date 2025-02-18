@@ -7,8 +7,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   /* Görgető testreszabás */
-  --sb-track-color: #919a9e;
-  --sb-thumb-color: #328cd6;
+  --sb-track-color: #222;  /* Világos szürke */
+  --sb-thumb-color: #006aff;  /* Világos kék */
   --sb-size: 20px;
 }
 
@@ -23,7 +23,7 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 50px;
+  border-radius: 1px;
   border: 2px solid #232E33;
 }
 
@@ -40,9 +40,9 @@ code {
 
 /* Kártyák stílusai */
 .kartya {
-  -webkit-box-shadow: 0px 0px 120px 0px rgba(255, 255, 255, 1);
-  -moz-box-shadow: 0px 0px 120px 0px rgba(255, 255, 255, 1);
-  box-shadow: 0px 0px 120px 0px rgba(255, 255, 255, 1);
+  -webkit-box-shadow: 0px 0px 120px 0px rgba(200, 200, 200, 0.9); /* Világos szürke árnyék */
+  -moz-box-shadow: 0px 0px 120px 0px rgba(200, 200, 200, 0.9);
+  box-shadow: 0px 0px 120px 0px rgba(200, 200, 200, 0.9); /* Világos szürke árnyék */
   width: 250px;
   margin-top: 20px;
   margin-left: 20px;
@@ -51,7 +51,7 @@ code {
 
 .kartya:hover {
   transform: translateY(-10px); /* Kártya elmozdul felfelé */
-  box-shadow: 0px 0px 20px 5px rgba(255, 255, 255, 0.8); /* Felvillanás effektus */
+  box-shadow: 0px 0px 20px 5px rgba(200, 200, 200, 1); /* Finomított árnyék */
 }
 
 /* A gombok hover effektusa */
@@ -68,6 +68,6 @@ code {
   font-size: xx-small;
 }
 
-.kinalat{
+.kinalat {
   width: 1300px;
 }

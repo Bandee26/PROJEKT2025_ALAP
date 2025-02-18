@@ -9,6 +9,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import Logo from './auto.png';
+import './Menu.css'
 
 function Menu() {
     const [selectedBrands, setSelectedBrands] = useState([]);
@@ -155,10 +156,10 @@ function Menu() {
 
     return (
         <>
-            <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#328cd6' }}>
+            <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222' }}>
                 <Container>
                     <Navbar.Brand href="/">
-                        <img src={Logo} style={imageStyle} alt="Logo" />
+                        <img src={Logo} style={{...imageStyle, marginRight: '20px'}} alt="Logo" />
                         B&K Autókereskedés
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
