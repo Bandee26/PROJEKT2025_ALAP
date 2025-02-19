@@ -51,7 +51,7 @@ code {
 
 .kartya:hover {
   transform: translateY(-10px); /* Kártya elmozdul felfelé */
-  box-shadow: 0px 0px 20px 5px rgba(200, 200, 200, 1); /* Finomított árnyék */
+  box-shadow: 0px 0px 20px 5px rgb(47, 127, 233); /* Finomított árnyék */
 }
 
 /* A gombok hover effektusa */
