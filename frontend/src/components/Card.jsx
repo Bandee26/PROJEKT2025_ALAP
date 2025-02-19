@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Card, Button, Modal, ButtonGroup } from 'react-bootstrap';
-import CardCSS from './Card.css'
+import { Card, Button, Modal } from 'react-bootstrap';
+import CardCSS from './Card.css';
 
 const CustomCard = ({
   imageSrc,
@@ -10,13 +10,32 @@ const CustomCard = ({
   year,
   adatok,
   elado,
-  isFavorite,  // Kedvencek állapota
-  onFavoriteToggle  // Kedvencek kezelése
+  isFavorite,
+  onFavoriteToggle
 }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+
+  // Dark theme styles
+  const modalStyles = {
+    header: {
+      backgroundColor: '#222',
+      borderColor: '#333',
+      color: '#fff'
+    },
+    body: {
+      backgroundColor: '#222',
+      color: '#fff'
+    },
+    image: {
+      width: '100%',
+      height: 'auto',
+      border: '2px solid #333',
+      borderRadius: '4px'
+    }
+  };
 
   return (
     <div className='kartya hover-effect'>
@@ -27,9 +46,10 @@ const CustomCard = ({
           <Card.Subtitle className="mb-3 text-muted text-center">{subtitle}</Card.Subtitle>
           <Card.Text className='card-text text-center'>{description}</Card.Text>
 
-          {/* Gombok elrendezése */}
           <div className="d-flex justify-content-between mt-3">
-            <Button className="hover-button" variant="primary" onClick={handleShow} style={{backgroundColor: 'orangered'}}>Részletek</Button>
+            <Button className="hover-button" variant="primary" onClick={handleShow} style={{backgroundColor: '#0d6efd'}}>
+              Részletek
+            </Button>
             <Button
               className="hover-button"
               variant={isFavorite ? 'danger' : 'success'}
@@ -41,13 +61,12 @@ const CustomCard = ({
         </Card.Body>
       </Card>
 
-      {/* Modal a kártya nagyításához */}
       <Modal show={showModal} onHide={handleClose} centered>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={modalStyles.header}>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <img src={imageSrc} alt={title} style={{ width: '100%', height: 'auto' }} />
+        <Modal.Body style={modalStyles.body}>
+          <img src={imageSrc} alt={title} style={modalStyles.image} />
           <div className="mt-3">
             <p><strong>Rendszám:</strong> {year}</p>
             <p><strong>Autó adatai:</strong> {adatok}</p>

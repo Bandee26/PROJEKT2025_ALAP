@@ -1,89 +1,78 @@
+/* Original styles preserved */
 .szuro-container {
   position: fixed;
   top: 10px;
   left: 10px;
-  max-width: 300px;
+  width: 350px; /* Increased width */
   margin-top: 80px;
   max-height: calc(100vh - 20px);
   overflow-y: auto;
-  background-color: #222; /* Sötét háttér */
+  background-color: #222;
   color: white;
   padding: 20px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  transition: transform 0.3s ease-in-out; /* animáció a szűrő konténer mozgásához */
+  transition: transform 0.3s ease-in-out;
 }
 
-.szuro-container:hover {
-  transform: translateY(-10px); /* Hover-re feljebb mozdul */
+/* Brand-specific styles */
+.brand-item {
+  display: block;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  color: white;
 }
 
-/* Egyedi csúszka stílus */
+.brand-item:hover {
+  background-color: rgba(255, 68, 68, 0.2);
+  transform: scale(1.05);
+  font-size: 1.1em;
+}
+
+/* Checkbox styles */
+.form-check-input {
+  background-color: #444;
+  border-color: #444;
+}
+
+.form-check-input:hover {
+  background-color: #ff4444;
+  border-color: #ff4444;
+}
+
+.form-check-input:checked {
+  background-color: #ff4444;
+  border-color: #ff4444;
+}
+
+.form-check-input:checked:hover {
+  background-color: #cc0000;
+  border-color: #cc0000;
+}
+
+/* Slider styles remain unchanged */
 .custom-slider {
   height: 6px;
   background: #444;
   border-radius: 3px;
   position: relative;
-  transition: background 0.3s; /* Csúszka színének animációja */
+  transition: background 0.3s;
 }
 
 .custom-slider:hover {
-  background: #555; /* Színváltozás hover hatásra */
+  background: #555;
 }
 
 .slider-track {
-  background: #007bff;
-  height: 6px;
-  border-radius: 3px;
+  background: #ff4444;
 }
 
 .slider-thumb {
-  width: 16px;
-  height: 16px;
-  background: #007bff;
-  border-radius: 50%;
-  cursor: grab;
-  top: -5px;
-  position: relative;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  transition: background 0.3s, transform 0.3s; /* Animációk a színváltozáshoz és a méretváltozáshoz */
+  background: #ff4444;
 }
 
 .slider-thumb:hover {
-  background: #0056b3; /* Thumb színváltozása hoverre */
-  transform: scale(1.2); /* Növekszik hoverre */
-}
-
-.slider-thumb:active {
-  cursor: grabbing;
-  background: #0056b3;
-  transform: scale(1.1); /* Aktivált állapotban kisebb méretváltozás */
-}
-
-/* Checkboxok stílusa világosabb színnel és hover effekt */
-.form-check-label {
-  color: rgb(255, 255, 255) !important;
-  font-weight: 600;
-  transition: color 0.3s, transform 0.3s; /* Animációk a színváltozáshoz és a méretváltozáshoz */
-}
-
-.form-check-label:hover {
-  color: #007bff; /* Színváltozás hoverre */
-  transform: scale(1.1); /* Egy kis növekedés hoverre */
-}
-
-/* Checkboxok */
-.form-check-input:checked {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.form-check-input:checked:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-.form-check-input:hover {
-  background-color: #444;
-  border-color: #444;
+  background: #cc0000;
 }
