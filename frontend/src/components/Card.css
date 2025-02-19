@@ -1,3 +1,47 @@
-.card-body{
+.card-body {
     background-color: '#red';
+}
+
+/* Dark theme styles for image border and frame */
+.kep {
+    border: 4px solid #333;
+    padding: 8px;
+    background-color: #222;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin: 8px 0;
+}
+
+/* White text styles */
+.card-title,
+.card-subtitle,
+.card-text {
+    color: #ffffff;
+}
+
+/* Smaller button styles */
+.hover-button {
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    margin: 0 4px;
+}
+
+/* Hover effects */
+.image-hover:hover {
+    border-color: #0d6efd;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Card hover effects */
+.kartya-hover {
+    background-color: #222;
+    border: 1px solid #333;
+}
+
+.kartya-hover:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+    border-color: #0d6efd;
 }
