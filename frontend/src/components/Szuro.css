@@ -45,6 +45,6 @@
   
   /* Checkboxok világosabb színnel */
   .form-check-label {
-    color: white !important;
+    color: rgb(255, 255, 255) !important;
+    font-weight: 600;
   }
-  

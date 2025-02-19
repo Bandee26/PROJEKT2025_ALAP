@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal, ButtonGroup } from 'react-bootstrap';
+import CardCSS from './Card.css'
 
 const CustomCard = ({
   imageSrc,
@@ -28,7 +29,7 @@ const CustomCard = ({
 
           {/* Gombok elrendezése */}
           <div className="d-flex justify-content-between mt-3">
-            <Button className="hover-button" variant="primary" onClick={handleShow}>Részletek</Button>
+            <Button className="hover-button" variant="primary" onClick={handleShow} style={{backgroundColor: 'orangered'}}>Részletek</Button>
             <Button
               className="hover-button"
               variant={isFavorite ? 'danger' : 'success'}
