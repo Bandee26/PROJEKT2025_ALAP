@@ -5,8 +5,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import Logo from './auto.png';
@@ -26,9 +24,6 @@ function Menu() {
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [message, setMessage] = useState(''); // Üzenetek megjelenítése
-    const [name, setName] = useState('');  // Név állapot
-    const [phone, setPhone] = useState('');  // Telefonszám állapot
-    const [userEmail, setUserEmail] = useState('');
 
     // Profil módosító modal
     const [showProfileModal, setShowProfileModal] = useState(false);
@@ -106,7 +101,6 @@ function Menu() {
             const result = await response.json();
             if (result.success) {
                 setIsLoggedIn(true); // Bejelentkezett státusz
-                setUserEmail(loginEmail); // Email elmentése a profil frissítéshez
                 setShowLoginModal(false); // Zárd be a modalt
                 setMessage('Sikeres bejelentkezés!');
             } else {
@@ -122,7 +116,7 @@ function Menu() {
         e.preventDefault();
 
         // Ellenőrizd, hogy a nevet és telefonszámot kitöltötte-e a felhasználó
-        if (!name || !phone || !userEmail) {
+        if (!profileName || !profilePhone) {
             setMessage('Minden mezőt ki kell tölteni!');
             return;
         }
@@ -134,9 +128,8 @@ function Menu() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: name,
-                    phone: phone,
-                    email: userEmail,  // Az aktuális felhasználó email címe
+                    name: profileName,
+                    phone: profilePhone,
                 }),
             });
 
@@ -152,24 +145,19 @@ function Menu() {
         }
     };
 
-    const imageStyle = {
-        width: "40px",
-        height: "40px",
-    };
-
     return (
         <Router>
             <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222' }}>
                 <Container>
                     <Navbar.Brand href="/">
-                        <img src={Logo} style={{...imageStyle, marginRight: '20px'}} alt="Logo" />
+                        <img src={Logo} style={{ width: "40px", height: "40px", marginRight: '20px' }} alt="Logo" />
                         B&K Autókereskedés
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to="/">Home</Nav.Link> {/* Link elem a Home-ra */}
-                            <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link> {/* Link elem a Kínálatra */}
+                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link>
                             <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown">
                                 {!isLoggedIn ? (
                                     <>
@@ -218,7 +206,45 @@ function Menu() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleRegisterSubmit}>
-                        {/* Form mezők itt */}
+                        <Form.Group controlId="registerName">
+                            <Form.Label>Név</Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                placeholder="Adja meg nevét" 
+                                value={registerName} 
+                                onChange={(e) => setRegisterName(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="registerEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control 
+                                type="email" 
+                                placeholder="Adja meg email címét" 
+                                value={registerEmail} 
+                                onChange={(e) => setRegisterEmail(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="registerPhone">
+                            <Form.Label>Telefonszám</Form.Label>
+                            <Form.Control 
+                                type="tel" 
+                                placeholder="Adja meg telefonszámát" 
+                                value={registerPhone} 
+                                onChange={(e) => setRegisterPhone(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="registerPassword">
+                            <Form.Label>Jelszó</Form.Label>
+                            <Form.Control 
+                                type="password" 
+                                placeholder="Adja meg jelszavát" 
+                                value={registerPassword} 
+                                onChange={(e) => setRegisterPassword(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Regisztráció
+                        </Button>
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -230,7 +256,27 @@ function Menu() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleLoginSubmit}>
-                        {/* Form mezők itt */}
+                        <Form.Group controlId="loginEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control 
+                                type="email" 
+                                placeholder="Adja meg email címét" 
+                                value={loginEmail} 
+                                onChange={(e) => setLoginEmail(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="loginPassword">
+                            <Form.Label>Jelszó</Form.Label>
+                            <Form.Control 
+                                type="password" 
+                                placeholder="Adja meg jelszavát" 
+                                value={loginPassword} 
+                                onChange={(e) => setLoginPassword(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Bejelentkezés
+                        </Button>
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -242,7 +288,25 @@ function Menu() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleProfileSubmit}>
-                        {/* Form mezők itt */}
+                        <Form.Group controlId="profileName">
+                            <Form.Label>Név</Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                value={profileName} 
+                                onChange={(e) => setProfileName(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="profilePhone">
+                            <Form.Label>Telefonszám</Form.Label>
+                            <Form.Control 
+                                type="tel" 
+                                value={profilePhone} 
+                                onChange={(e) => setProfilePhone(e.target.value)} 
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Profil mentése
+                        </Button>
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -253,7 +317,11 @@ function Menu() {
                     <Modal.Title>Kedvencek</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* Kedvencek megjelenítése */}
+                    <ul>
+                        {favorites.map((car, index) => (
+                            <li key={index}>{car}</li>
+                        ))}
+                    </ul>
                 </Modal.Body>
             </Modal>
 

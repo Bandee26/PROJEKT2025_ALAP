@@ -1,5 +1,6 @@
 .fixed-menu .nav-link,
 .fixed-menu .navbar-brand,
 .fixed-menu .dropdown-item {
-    color: white !important;
+    color: rgb(255, 255, 255) !important;
+    background-color: #222;
 }
