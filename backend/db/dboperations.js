@@ -68,13 +68,13 @@ async function loginUser(email, password) {
 }
 
 // Adatbázis frissítő függvény
-async function updateUserProfile(name, phone) {
+async function updateUserProfile(email, name, phone) {
   try {
       const [result] = await pool.query(
           'UPDATE regisztracio SET nev = ?, telefon = ? WHERE email = ?',
-          [name, phone, 'example@domain.com'] // Az email-t dinamikusan kell lekérni a session-ből vagy tokenből
+          [name, phone, email] // Use the email passed as a parameter
       );
-      return result.affectedRows > 0;  // Ha történt módosítás, akkor igazat ad vissza
+      return result.affectedRows > 0;  // If any rows were affected, return true
   } catch (error) {
       console.error('Profile update failed:', error);
       throw new Error('Hiba történt a profil frissítésekor');
