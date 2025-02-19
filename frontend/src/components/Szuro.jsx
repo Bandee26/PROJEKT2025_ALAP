@@ -46,7 +46,6 @@ const Szuro = ({ onFilterChange, products }) => {
 
   return (
     <Card className="szuro-container">
-      <Card.Body>
         <Card.Title className="text-center text-light">Szűrő</Card.Title>
 
         {/* Márkák checkboxok */}
@@ -87,7 +86,6 @@ const Szuro = ({ onFilterChange, products }) => {
             <Col className="text-end"><small className="text-light">Max: {priceRange[1]} Ft</small></Col>
           </Row>
         </Form.Group>
-      </Card.Body>
     </Card>
   );
 };
