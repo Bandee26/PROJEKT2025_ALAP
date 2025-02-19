@@ -12,27 +12,32 @@ import './Menu.css';
 import Home from './Home';  // Home komponens importálása
 import Kinalat from './Kinalat';  // Kínálat komponens importálása
 
-function Menu({ favorites, handleFavoriteToggle, products }) {
+function Menu() {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Bejelentkezett állapot
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
-    const [registerName, setRegisterName] = useState('');
-    const [registerPhone, setRegisterPhone] = useState('');
+    const [registerName, setRegisterName] = useState(''); // Név állapot
+    const [registerPhone, setRegisterPhone] = useState(''); // Telefonszám állapot
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
-    const [message, setMessage] = useState('');
-    const [userEmail, setUserEmail] = useState('');
-    
+    const [message, setMessage] = useState(''); // Üzenetek megjelenítése
+
     // Profil módosító modal
     const [showProfileModal, setShowProfileModal] = useState(false);
-    const [profileName, setProfileName] = useState('');
-    const [profilePhone, setProfilePhone] = useState('');
+    const [profileName, setProfileName] = useState(''); // Név
+    const [profilePhone, setProfilePhone] = useState(''); // Telefonszám
 
     // Kedvencek modal
     const [showFavoritesModal, setShowFavoritesModal] = useState(false);
+    // Példa kedvenc autók adatai; később ezeket például backendről töltheti be
+    const [favorites, setFavorites] = useState([
+        "BMW X5",
+        "Audi A6",
+        "Mercedes-Benz C-Class"
+    ]);
 
     // Márkák kiválasztása
     const handleBrandToggle = (brand) => {
@@ -55,7 +60,7 @@ function Menu({ favorites, handleFavoriteToggle, products }) {
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/users/register', { 
+            const response = await fetch('http://localhost:8080/users/register', {  // Backend URL itt szerepel
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,13 +74,13 @@ function Menu({ favorites, handleFavoriteToggle, products }) {
             });
             const result = await response.json();
             if (result.success) {
-                setMessage('Sikeres regisztráció!');
+                alert('Sikeres regisztráció!');
                 setShowRegisterModal(false);
             } else {
-                setMessage('Hiba történt a regisztráció során.');
+                alert('Hiba történt a regisztráció során.');
             }
         } catch (error) {
-            setMessage('Hálózati hiba történt.');
+            alert('Hálózati hiba történt.');
         }
     };
 
@@ -95,53 +100,50 @@ function Menu({ favorites, handleFavoriteToggle, products }) {
             });
             const result = await response.json();
             if (result.success) {
-                setIsLoggedIn(true); 
-                setUserEmail(loginEmail); 
-                setShowLoginModal(false); 
-                setMessage('Sikeres bejelentkezés!');
+                setIsLoggedIn(true); // Bejelentkezett státusz
+                setShowLoginModal(false); // Zárd be a modalt
+                alert('Sikeres bejelentkezés!');
             } else {
-                setMessage('Helytelen email vagy jelszó.');
+                alert('Helytelen email vagy jelszó.');
             }
         } catch (error) {
-            setMessage('Hálózati hiba történt.');
+            alert('Hálózati hiba történt.');
         }
     };
 
-   // Profil frissítése
-const handleProfileSubmit = async (e) => {
-    e.preventDefault();
-    if (!profileName || !profilePhone || !userEmail) {
-        setMessage('Minden mezőt ki kell tölteni!');
-        return;
-    }
+    // Profil frissítése
+    const handleProfileSubmit = async (e) => {
+        e.preventDefault();
 
-    try {
-        const response = await fetch('http://localhost:8080/users/updateProfile', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: userEmail, // Send the user's email
-                name: profileName,
-                phone: profilePhone,
-            }),
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            setMessage('Profil sikeresen frissítve');
-            setShowProfileModal(false);
-        } else {
-            setMessage('Hiba történt a profil frissítése során');
+        // Ellenőrizd, hogy a nevet és telefonszámot kitöltötte-e a felhasználó
+        if (!profileName || !profilePhone) {
+            alert('Minden mezőt ki kell tölteni!');
+            return;
         }
-    } catch (error) {
-        setMessage('Hálózati hiba történt');
-    }
-};
 
-    // Kedvenc autók kiszűrése a products listából
-    const favoriteCars = products.filter(auto => favorites.includes(auto.Rendszam));
+        try {
+            const response = await fetch('http://localhost:8080/users/updateProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: profileName,
+                    phone: profilePhone,
+                }),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Profil sikeresen frissítve');
+                setShowProfileModal(false);
+            } else {
+                alert('Hiba történt a profil frissítése során');
+            }
+        } catch (error) {
+            alert('Hálózati hiba történt');
+        }
+    };
 
     return (
         <Router>
@@ -194,8 +196,10 @@ const handleProfileSubmit = async (e) => {
                 </Container>
             </Navbar>
 
+            {/* Üzenet megjelenítése */}
             {message && <div className="alert alert-info mt-3">{message}</div>}
 
+            {/* Regisztrációs modal */}
             <Modal show={showRegisterModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Regisztráció</Modal.Title>
@@ -245,32 +249,31 @@ const handleProfileSubmit = async (e) => {
                 </Modal.Body>
             </Modal>
 
+            {/* Bejelentkezési modal */}
             <Modal show={showLoginModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Bejelentkezés</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleLoginSubmit}>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Email cím</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Adja meg az email címét"
-                                value={loginEmail}
-                                onChange={(e) => setLoginEmail(e.target.value)}
+                        <Form.Group controlId="loginEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control 
+                                type="email" 
+                                placeholder="Adja meg email címét" 
+                                value={loginEmail} 
+                                onChange={(e) => setLoginEmail(e.target.value)} 
                             />
                         </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Group controlId="loginPassword">
                             <Form.Label>Jelszó</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Adja meg a jelszavát"
-                                value={loginPassword}
-                                onChange={(e) => setLoginPassword(e.target.value)}
+                            <Form.Control 
+                                type="password" 
+                                placeholder="Adja meg jelszavát" 
+                                value={loginPassword} 
+                                onChange={(e) => setLoginPassword(e.target.value)} 
                             />
                         </Form.Group>
-
                         <Button variant="primary" type="submit">
                             Bejelentkezés
                         </Button>
@@ -278,56 +281,47 @@ const handleProfileSubmit = async (e) => {
                 </Modal.Body>
             </Modal>
 
+            {/* Profil módosító modal */}
             <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Profil módosítása</Modal.Title>
+                    <Modal.Title>Profil frissítése</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleProfileSubmit}>
-                        <Form.Group className="mb-3" controlId="formBasicName">
-                            <Form.Label>Teljes név</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Adja meg a nevét"
-                                value={profileName}
-                                onChange={(e) => setProfileName(e.target.value)}
+                        <Form.Group controlId="profileName">
+                            <Form.Label>Név</Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                value={profileName} 
+                                onChange={(e) => setProfileName(e.target.value)} 
                             />
                         </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formBasicPhone">
+                        <Form.Group controlId="profilePhone">
                             <Form.Label>Telefonszám</Form.Label>
-                            <Form.Control
-                                type="tel"
-                                placeholder="Adja meg a telefonszámát"
-                                value={profilePhone}
-                                onChange={(e) => setProfilePhone(e.target.value)}
+                            <Form.Control 
+                                type="tel" 
+                                value={profilePhone} 
+                                onChange={(e) => setProfilePhone(e.target.value)} 
                             />
                         </Form.Group>
-
                         <Button variant="primary" type="submit">
-                            Frissítés
+                            Profil mentése
                         </Button>
                     </Form>
                 </Modal.Body>
             </Modal>
 
+            {/* Kedvencek modal */}
             <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Kedvenc autók</Modal.Title>
+                    <Modal.Title>Kedvencek</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {favoriteCars.length > 0 ? (
-                        <ul>
-                            {favoriteCars.map((car) => (
-                                <li key={car.Rendszam}>
-                                    {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
-                                    <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Nincsenek kedvenc autók.</p>
-                    )}
+                    <ul>
+                        {favorites.map((car, index) => (
+                            <li key={index}>{car}</li>
+                        ))}
+                    </ul>
                 </Modal.Body>
             </Modal>
 
