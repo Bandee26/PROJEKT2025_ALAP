@@ -74,13 +74,13 @@ function Menu() {
             });
             const result = await response.json();
             if (result.success) {
-                setMessage('Sikeres regisztráció!');
+                alert('Sikeres regisztráció!');
                 setShowRegisterModal(false);
             } else {
-                setMessage('Hiba történt a regisztráció során.');
+                alert('Hiba történt a regisztráció során.');
             }
         } catch (error) {
-            setMessage('Hálózati hiba történt.');
+            alert('Hálózati hiba történt.');
         }
     };
 
@@ -102,12 +102,12 @@ function Menu() {
             if (result.success) {
                 setIsLoggedIn(true); // Bejelentkezett státusz
                 setShowLoginModal(false); // Zárd be a modalt
-                setMessage('Sikeres bejelentkezés!');
+                alert('Sikeres bejelentkezés!');
             } else {
-                setMessage('Helytelen email vagy jelszó.');
+                alert('Helytelen email vagy jelszó.');
             }
         } catch (error) {
-            setMessage('Hálózati hiba történt.');
+            alert('Hálózati hiba történt.');
         }
     };
 
@@ -117,7 +117,7 @@ function Menu() {
 
         // Ellenőrizd, hogy a nevet és telefonszámot kitöltötte-e a felhasználó
         if (!profileName || !profilePhone) {
-            setMessage('Minden mezőt ki kell tölteni!');
+            alert('Minden mezőt ki kell tölteni!');
             return;
         }
 
@@ -135,13 +135,13 @@ function Menu() {
 
             const result = await response.json();
             if (result.success) {
-                setMessage('Profil sikeresen frissítve');
+                alert('Profil sikeresen frissítve');
                 setShowProfileModal(false);
             } else {
-                setMessage('Hiba történt a profil frissítése során');
+                alert('Hiba történt a profil frissítése során');
             }
         } catch (error) {
-            setMessage('Hálózati hiba történt');
+            alert('Hálózati hiba történt');
         }
     };
 
