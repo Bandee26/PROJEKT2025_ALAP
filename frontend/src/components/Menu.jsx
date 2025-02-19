@@ -140,10 +140,9 @@ const handleProfileSubmit = async (e) => {
     }
 };
 
-    // Kedvenc autók kiszűrése a products listából
-    const favoriteCars = products.filter(auto => favorites.includes(auto.Rendszam));
-
+    
     return (
+        
         <Router>
             <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222' }}>
                 <Container>
@@ -312,30 +311,34 @@ const handleProfileSubmit = async (e) => {
             </Modal>
 
             <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Kedvenc autók</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {favoriteCars.length > 0 ? (
-                        <ul>
-                            {favoriteCars.map((car) => (
-                                <li key={car.Rendszam}>
-                                    {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
-                                    <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Nincsenek kedvenc autók.</p>
-                    )}
-                </Modal.Body>
-            </Modal>
+    <Modal.Header closeButton>
+        <Modal.Title>Kedvenc autók</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        {favorites.length > 0 ? ( // Ellenőrizzük, hogy van-e kedvenc autó
+            <ul>
+                {favorites.map((carId) => {
+                    const car = products.find(auto => auto.Rendszam === carId); // Keresd meg az autót a kedvencek között
+                    return (
+                        <li key={car.Rendszam}>
+                            {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
+                            <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
+                        </li>
+                    );
+                })}
+            </ul>
+        ) : (
+            <p>Nincsenek kedvenc autók.</p>
+        )}
+    </Modal.Body>
+</Modal>
 
             {/* Route-ok definiálása */}
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/kinalat" element={<Kinalat />} />
-            </Routes>
+    <Route path="/" element={<Home />} />
+    
+    <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} favorites={favorites} handleFavoriteToggle={handleFavoriteToggle} />} />
+</Routes>
         </Router>
     );
 }

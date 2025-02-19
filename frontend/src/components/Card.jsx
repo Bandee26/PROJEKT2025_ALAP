@@ -11,7 +11,8 @@ const CustomCard = ({
   adatok,
   elado,
   isFavorite,  // Kedvencek állapota
-  onFavoriteToggle  // Kedvencek kezelése
+  onFavoriteToggle,  // Kedvencek kezelése
+  showFavoriteButton  // Új prop a kedvencek gomb láthatóságához
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -30,13 +31,15 @@ const CustomCard = ({
           {/* Gombok elrendezése */}
           <div className="d-flex justify-content-between mt-3">
             <Button className="hover-button" variant="primary" onClick={handleShow} style={{backgroundColor: 'orangered'}}>Részletek</Button>
-            <Button
+            {showFavoriteButton && (  // Csak akkor jelenik meg, ha a felhasználó be van jelentkezve
+              <Button
               className="hover-button"
               variant={isFavorite ? 'danger' : 'success'}
               onClick={onFavoriteToggle}
-            >
+          >
               {isFavorite ? 'Kedvencekből eltávolít' : 'Kedvencekhez adás'}
-            </Button>
+          </Button>
+            )}
           </div>
         </Card.Body>
       </Card>

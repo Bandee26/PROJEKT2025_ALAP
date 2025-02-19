@@ -6,7 +6,8 @@ import CustomCard from './Card';
 import Video from './video.jsx'; // Import the Video component
 
 
-function Kinalat() {
+function Kinalat({ isLoggedIn, handleFavoriteToggle, }) {
+  
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -29,14 +30,7 @@ function Kinalat() {
     fetchProducts();
   }, []);
 
-  // Kedvencek kezelése
-  const handleFavoriteToggle = (autoId) => {
-    if (favorites.includes(autoId)) {
-      setFavorites(favorites.filter(id => id !== autoId));
-    } else {
-      setFavorites([...favorites, autoId]);
-    }
-  };
+ 
 
   // Szűrő komponensből érkező visszahívás: frissítjük a megjelenítendő termékek listáját
   const handleFilterChange = (filtered) => {
@@ -48,6 +42,8 @@ function Kinalat() {
     flexDirection: 'column',
     minHeight: '100vh',
   };
+
+  
 
   return (
     <div className="szin" style={appStyle}>
@@ -69,25 +65,26 @@ function Kinalat() {
                 <>
                   <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
                   <Row className="d-flex justify-content-start g-4">
-                    {filteredProducts.map((auto) => (
-                      <Col
-                        key={auto.Rendszam}
-                        xs={12} sm={6} md={4} lg={4}
-                        style={{ padding: '10px', maxWidth: '350px' }}
-                      >
-                        <CustomCard
-                          imageSrc={`http://localhost:8080/${auto.Modell}.jpg`}
-                          title={`${auto.Marka} ${auto.Modell}`}
-                          subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
-                          description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
-                          adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
-                          year={`${auto.Rendszam}`}
-                          elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
-                          isFavorite={favorites.includes(auto.Rendszam)}
-                          onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}
-                        />
-                      </Col>
-                    ))}
+                  {filteredProducts.map((auto) => (
+  <Col
+    key={auto.Rendszam}
+    xs={12} sm={6} md={4} lg={4}
+    style={{ padding: '10px', maxWidth: '350px' }}
+  >
+    <CustomCard
+      imageSrc={`http://localhost:8080/${auto.Modell}.jpg`}
+      title={`${auto.Marka} ${auto.Modell}`}
+      subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
+      description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
+      adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
+      year={`${auto.Rendszam}`}
+      elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
+      isFavorite={favorites.includes(auto.Rendszam)}
+      onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}
+      showFavoriteButton={isLoggedIn} // Ellenőrizd, hogy ez a prop helyesen van beállítva
+    />
+  </Col>
+))}
                   </Row>
                 </>
               )}
