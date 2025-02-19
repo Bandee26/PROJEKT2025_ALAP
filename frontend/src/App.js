@@ -18,7 +18,7 @@ function App() {
 
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState([]); // Kedvencek állapot
   const [error, setError] = useState(null);
 
   // Termékek lekérése az API-ból
@@ -54,7 +54,7 @@ function App() {
 
   return (
     <div className="szin" style={appStyle}>
-      <Menu />
+      <Menu favorites={favorites} handleFavoriteToggle={handleFavoriteToggle} products={products} /> {/* Kedvencek átadása Menu komponensnek */}
 
       <Footer />
     </div>
