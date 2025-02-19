@@ -8,6 +8,8 @@ const Home = () => {
         <div className="image-slide" />
         <div className="image-slide" />
         <div className="image-slide" />
+        <div className="image-slide" />
+        <div className="image-slide" />
       </div>
       <div className="content">
         <h1>Welcome to the Home Page!</h1>
