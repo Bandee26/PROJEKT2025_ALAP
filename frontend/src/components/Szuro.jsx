@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import ReactSlider from 'react-slider';
 import axios from 'axios';
-import { Card, Form, Row, Col } from 'react-bootstrap';
+import { Card, Form, Row, Col, Button } from 'react-bootstrap';
 import carIcon from './auto.png';
+import { FaArrowLeft } from 'react-icons/fa';
 import './Szuro.css'; // Egyedi stílusokhoz
+
+
 
 
 const Szuro = ({ onFilterChange, products }) => {
   const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 100000000]);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +56,18 @@ const Szuro = ({ onFilterChange, products }) => {
   };
 
   return (
-    <Card className="szuro-container">
+    <div className="filter-container">
+      <Button 
+        className="toggle-button" 
+        onClick={toggleVisibility}
+        variant="secondary"
+      >
+        <FaArrowLeft className={isVisible ? 'arrow-visible' : 'arrow-hidden'} />
+      </Button>
+
+      {isVisible && (
+        <Card className="szuro-container">
+
         <Card.Title className="text-center text-light">Szűrő</Card.Title>
 
         {/* Márkák checkboxok */}
@@ -94,7 +114,10 @@ const Szuro = ({ onFilterChange, products }) => {
           </Row>
 
         </Form.Group>
-    </Card>
+        </Card>
+      )}
+    </div>
+
   );
 };
 

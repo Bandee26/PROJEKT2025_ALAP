@@ -1,11 +1,41 @@
+.filter-container {
+  position: fixed;
+  left: 0;
+  top: 100px;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.filter-container.collapsed {
+  transform: translateX(-100%);
+}
+
+
+.toggle-button {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #444;
+  border: none;
+  border-radius: 0 15px 15px 0;
+  padding: 15px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+.toggle-button:hover {
+  background-color: #555;
+}
+
 .szuro-container {
   background-color: #333;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 0 8px 8px 0;
   width: 350px;
-  position: fixed;
-  left: 20px;
-  top: 100px;
+  position: relative;
+  transition: transform 0.3s ease;
 }
 
 .custom-slider {
@@ -33,4 +63,14 @@
 
 .text-muted {
   color: #999 !important;
+}
+
+.arrow-visible {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+.arrow-hidden {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
 }
