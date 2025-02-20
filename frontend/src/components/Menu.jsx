@@ -158,27 +158,36 @@ function Menu() {
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link>
-                            <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown">
+                            <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="text-white" style={{ backgroundColor: '#222' }}>
+
+
                                 {!isLoggedIn ? (
                                     <>
-                                        <NavDropdown.Item onClick={handleRegisterClick}>
+                                        <NavDropdown.Item onClick={handleRegisterClick} className="text-white" style={{ backgroundColor: '#222' }}>
+
                                             Regisztráció
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item onClick={handleLoginClick}>
+                                        <NavDropdown.Item onClick={handleLoginClick} className="text-white" style={{ backgroundColor: '#222' }}>
+
                                             Bejelentkezés
                                         </NavDropdown.Item>
+
                                     </>
                                 ) : (
                                     <>
-                                        <NavDropdown.Item onClick={() => setShowProfileModal(true)}>
+                                        <NavDropdown.Item onClick={() => setShowProfileModal(true)} className="text-white" style={{ backgroundColor: '#222' }}>
+
                                             Profil
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item onClick={() => setShowFavoritesModal(true)}>
+                                        <NavDropdown.Item onClick={() => setShowFavoritesModal(true)} className="text-white" style={{ backgroundColor: '#222' }}>
+
                                             Kedvencek
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item onClick={() => setIsLoggedIn(false)}>
+                                        <NavDropdown.Item onClick={() => setIsLoggedIn(false)} className="text-white" style={{ backgroundColor: '#222' }}>
+
                                             Kijelentkezés
                                         </NavDropdown.Item>
+
                                     </>
                                 )}
                             </NavDropdown>
@@ -200,8 +209,10 @@ function Menu() {
             {message && <div className="alert alert-info mt-3">{message}</div>}
 
             {/* Regisztrációs modal */}
-            <Modal show={showRegisterModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
+            <Modal show={showRegisterModal} onHide={handleCloseModal} contentClassName="bg-dark text-white">
+                <Modal.Header closeButton className="bg-dark border-secondary text-white">
+
+
                     <Modal.Title>Regisztráció</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -250,8 +261,10 @@ function Menu() {
             </Modal>
 
             {/* Bejelentkezési modal */}
-            <Modal show={showLoginModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
+            <Modal show={showLoginModal} onHide={handleCloseModal} contentClassName="bg-dark text-white">
+                <Modal.Header closeButton className="bg-dark border-secondary text-white">
+
+
                     <Modal.Title>Bejelentkezés</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -282,8 +295,10 @@ function Menu() {
             </Modal>
 
             {/* Profil módosító modal */}
-            <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)}>
-                <Modal.Header closeButton>
+            <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)} contentClassName="bg-dark text-white">
+                <Modal.Header closeButton className="bg-dark border-secondary text-white">
+
+
                     <Modal.Title>Profil frissítése</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -312,8 +327,10 @@ function Menu() {
             </Modal>
 
             {/* Kedvencek modal */}
-            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
-                <Modal.Header closeButton>
+            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)} contentClassName="bg-dark text-white">
+                <Modal.Header closeButton className="bg-dark border-secondary text-white">
+
+
                     <Modal.Title>Kedvencek</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
