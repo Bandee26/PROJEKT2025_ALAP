@@ -309,29 +309,8 @@ const handleProfileSubmit = async (e) => {
                 </Modal.Body>
             </Modal>
 
-            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
-    <Modal.Header closeButton>
-        <Modal.Title>Kedvenc autók</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        {favorites.length > 0 ? ( // Ellenőrizzük, hogy van-e kedvenc autó
-            <ul>
-                {favorites.map((carId) => {
-                    const car = products.find(auto => auto.Rendszam === carId); // Keresd meg az autót a kedvencek között
-                    return (
-                        <li key={car.Rendszam}>
-                            {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
-                            <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
-                        </li>
-                    );
-                })}
-            </ul>
-        ) : (
-            <p>Nincsenek kedvenc autók.</p>
-        )}
-    </Modal.Body>
-</Modal>
-=======
+            
+
             {/* Kedvencek modal */}
             <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)} contentClassName="bg-dark text-white">
                 <Modal.Header closeButton className="bg-dark border-secondary text-white">
