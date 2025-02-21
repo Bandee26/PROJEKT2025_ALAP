@@ -12,7 +12,7 @@ import './Menu.css';
 import Home from './Home';  // Home komponens importálása
 import Kinalat from './Kinalat';  // Kínálat komponens importálása
 
-function Menu({  }) {
+function Menu({ favorites, products, handleFavoriteToggle }) {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -69,13 +69,13 @@ function Menu({  }) {
             });
             const result = await response.json();
             if (result.success) {
-                setMessage('Sikeres regisztráció!');
+                alert('Sikeres regisztráció!');
                 setShowRegisterModal(false);
             } else {
-                setMessage('Hiba történt a regisztráció során.');
+                alert('Hiba történt a regisztráció során.');
             }
         } catch (error) {
-            setMessage('Hálózati hiba történt.');
+            alert('Hálózati hiba történt.');
         }
     };
 
@@ -98,12 +98,12 @@ function Menu({  }) {
                 setIsLoggedIn(true); 
                 setUserEmail(loginEmail); 
                 setShowLoginModal(false); 
-                setMessage('Sikeres bejelentkezés!');
+                alert('Sikeres bejelentkezés!');
             } else {
-                setMessage('Helytelen email vagy jelszó.');
+                alert('Helytelen email vagy jelszó.');
             }
         } catch (error) {
-            setMessage('Hálózati hiba történt.');
+            alert('Hálózati hiba történt.');
         }
     };
 
@@ -111,7 +111,7 @@ function Menu({  }) {
 const handleProfileSubmit = async (e) => {
     e.preventDefault();
     if (!profileName || !profilePhone || !userEmail) {
-        setMessage('Minden mezőt ki kell tölteni!');
+        alert('Minden mezőt ki kell tölteni!');
         return;
     }
 
@@ -130,13 +130,13 @@ const handleProfileSubmit = async (e) => {
 
         const result = await response.json();
         if (result.success) {
-            setMessage('Profil sikeresen frissítve');
+            alert('Profil sikeresen frissítve');
             setShowProfileModal(false);
         } else {
-            setMessage('Hiba történt a profil frissítése során');
+            alert('Hiba történt a profil frissítése során');
         }
     } catch (error) {
-        setMessage('Hálózati hiba történt');
+        alert('Hálózati hiba történt');
     }
 };
 
@@ -312,20 +312,28 @@ const handleProfileSubmit = async (e) => {
             
 
             {/* Kedvencek modal */}
-            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)} contentClassName="bg-dark text-white">
-                <Modal.Header closeButton className="bg-dark border-secondary text-white">
-
-
-                    <Modal.Title>Kedvencek</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <ul>
-                        {favorites.map((car, index) => (
-                            <li key={index}>{car}</li>
-                        ))}
-                    </ul>
-                </Modal.Body>
-            </Modal>
+            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
+    <Modal.Header closeButton>
+        <Modal.Title>Kedvenc autók</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        {favorites.length > 0 ? ( // Ellenőrizzük, hogy van-e kedvenc autó
+            <ul>
+                {favorites.map((carId) => {
+                    const car = products.find(auto => auto.Rendszam === carId); // Keresd meg az autót a kedvencek között
+                    return (
+                        <li key={car.Rendszam}>
+                            {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
+                            <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
+                        </li>
+                    );
+                })}
+            </ul>
+        ) : (
+            <p>Nincsenek kedvenc autók.</p>
+        )}
+    </Modal.Body>
+</Modal>
 
 
             {/* Route-ok definiálása */}
