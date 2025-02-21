@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import ReactSlider from 'react-slider';
 import axios from 'axios';
-import { Card, Form, Row, Col } from 'react-bootstrap';
+import { Card, Form, Row, Col, Button } from 'react-bootstrap';
+import carIcon from './auto.png';
+import { FaArrowLeft } from 'react-icons/fa';
 import './Szuro.css'; // Egyedi stílusokhoz
+
+
+
 
 const Szuro = ({ onFilterChange, products }) => {
   const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 100000000]);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +56,18 @@ const Szuro = ({ onFilterChange, products }) => {
   };
 
   return (
-    <Card className="szuro-container">
+    <div className="filter-container">
+      <Button 
+        className="toggle-button" 
+        onClick={toggleVisibility}
+        variant="secondary"
+      >
+        <FaArrowLeft className={isVisible ? 'arrow-visible' : 'arrow-hidden'} />
+      </Button>
+
+      {isVisible && (
+        <Card className="szuro-container">
+
         <Card.Title className="text-center text-light">Szűrő</Card.Title>
 
         {/* Márkák checkboxok */}
@@ -78,15 +100,24 @@ const Szuro = ({ onFilterChange, products }) => {
             value={priceRange}
             onChange={setPriceRange}
             className="custom-slider"
-            thumbClassName="slider-thumb"
+            renderThumb={(props, state) => (
+              <div {...props}>
+                <img src={carIcon} alt="car" className="slider-car" />
+              </div>
+            )}
             trackClassName="slider-track"
           />
+
           <Row className="mt-2">
-            <Col><small className="text-light">Min: {priceRange[0]} Ft</small></Col>
-            <Col className="text-end"><small className="text-light">Max: {priceRange[1]} Ft</small></Col>
+            <Col><small className="text-light">{priceRange[0]} Ft</small></Col>
+            <Col className="text-end"><small className="text-light">{priceRange[1]} Ft</small></Col>
           </Row>
+
         </Form.Group>
-    </Card>
+        </Card>
+      )}
+    </div>
+
   );
 };
 
