@@ -4,6 +4,8 @@
   top: 100px;
   z-index: 1000;
   transition: transform 0.3s ease;
+  height: 90vh; /* Teljes magasság */
+  overflow-y: auto; /* Görgethetővé teszi, ha túl magas */
 }
 
 .filter-container.collapsed {
@@ -36,6 +38,7 @@
   width: 350px;
   position: relative;
   transition: transform 0.3s ease;
+  min-height: 100vh;
 }
 
 .custom-slider {
