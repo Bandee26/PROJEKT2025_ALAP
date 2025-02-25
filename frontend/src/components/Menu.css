@@ -50,3 +50,7 @@
     translate: 100% 0;
     transition: .2s .2s, scale 0s .4s;
 }
+
+.fixed-menu .custom-dropdown .dropdown-menu {
+    background-color: #222 !important; /* New background color for dropdown */
+}

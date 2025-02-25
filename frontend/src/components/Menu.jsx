@@ -154,7 +154,8 @@ const handleProfileSubmit = async (e) => {
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link>
-                            <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown">
+<NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="custom-dropdown">
+
                                 {!isLoggedIn ? (
                                     <>
                                         <NavDropdown.Item onClick={handleRegisterClick}>
