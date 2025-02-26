@@ -22,10 +22,18 @@ const Szuro = ({ onFilterChange, products }) => {
   const [selectedUsageType, setSelectedUsageType] = useState('');
   const [transmissions, setTransmissions] = useState([]);
   const [selectedTransmission, setSelectedTransmission] = useState('');
+  const [maxKm, setMaxKm] = useState(1000000); // Kilométeróra szűrő – alapból max értéken
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
+
+  // Közös thumb renderelő függvény, ami minden slider esetében ugyanazt a gombot használja
+  const renderCarThumb = (props, state) => (
+    <div {...props}>
+      <img src={carIcon} alt="car" className="slider-car" />
+    </div>
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,13 +81,25 @@ const Szuro = ({ onFilterChange, products }) => {
       (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
       (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) &&
       Number(product.Evjarat) >= yearRange[0] &&
-      Number(product.Evjarat) <= yearRange[1]
+      Number(product.Evjarat) <= yearRange[1] &&
+      Number(product.Kilometerora) <= maxKm
     );
 
     if (onFilterChange) {
       onFilterChange(filtered);
     }
-  }, [selectedBrands, selectedModels, selectedColor, priceRange, selectedEngineType, selectedUsageType, selectedTransmission, yearRange, products]);
+  }, [
+    selectedBrands,
+    selectedModels,
+    selectedColor,
+    priceRange,
+    selectedEngineType,
+    selectedUsageType,
+    selectedTransmission,
+    yearRange,
+    maxKm,
+    products
+  ]);
 
   const handleBrandChange = (event) => {
     const brand = event.target.value;
@@ -142,14 +162,7 @@ const Szuro = ({ onFilterChange, products }) => {
           )}
         </Form.Group>
 
-        {/* Szín szűrő */}
-        <Form.Group className="mb-3">
-          <Form.Label className="text-light"><strong>Szín:</strong></Form.Label>
-          <Form.Select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)}>
-            <option value="">Mindegy</option>
-            {colors.map(color => <option key={color} value={color}>{color}</option>)}
-          </Form.Select>
-        </Form.Group>
+        {/* Csúszkás szűrők egymás alatt */}
 
         {/* Évjárat csúszka */}
         <Form.Group className="mb-3">
@@ -160,35 +173,17 @@ const Szuro = ({ onFilterChange, products }) => {
             step={1}
             value={yearRange}
             onChange={setYearRange}
+            pearling
+            minDistance={1}
             className="custom-slider"
+            thumbClassName="custom-thumb"
+            trackClassName="slider-track"
+            renderThumb={renderCarThumb}
           />
-        </Form.Group>
-
-        {/* Motortípus szűrő */}
-        <Form.Group className="mb-3">
-          <Form.Label className="text-light"><strong>Motortípus:</strong></Form.Label>
-          <Form.Select value={selectedEngineType} onChange={(e) => setSelectedEngineType(e.target.value)}>
-            <option value="">Mindegy</option>
-            {engineTypes.map(type => <option key={type} value={type}>{type}</option>)}
-          </Form.Select>
-        </Form.Group>
-
-        {/* Használat szűrő */}
-        <Form.Group className="mb-3">
-          <Form.Label className="text-light"><strong>Használat:</strong></Form.Label>
-          <Form.Select value={selectedUsageType} onChange={(e) => setSelectedUsageType(e.target.value)}>
-            <option value="">Mindegy</option>
-            {usageTypes.map(type => <option key={type} value={type}>{type}</option>)}
-          </Form.Select>
-        </Form.Group>
-
-        {/* Sebességváltó szűrő */}
-        <Form.Group className="mb-3">
-          <Form.Label className="text-light"><strong>Sebességváltó:</strong></Form.Label>
-          <Form.Select value={selectedTransmission} onChange={(e) => setSelectedTransmission(e.target.value)}>
-            <option value="">Mindegy</option>
-            {transmissions.map(trans => <option key={trans} value={trans}>{trans}</option>)}
-          </Form.Select>
+          <Row className="mt-2">
+            <Col><small className="text-light">Min: {yearRange[0]}</small></Col>
+            <Col className="text-end"><small className="text-light">Max: {yearRange[1]}</small></Col>
+          </Row>
         </Form.Group>
 
         {/* Ár csúszka */}
@@ -201,17 +196,67 @@ const Szuro = ({ onFilterChange, products }) => {
             value={priceRange}
             onChange={setPriceRange}
             className="custom-slider"
-            renderThumb={(props, state) => (
-              <div {...props}>
-                <img src={carIcon} alt="car" className="slider-car" />
-              </div>
-            )}
+            thumbClassName="custom-thumb"
             trackClassName="slider-track"
+            renderThumb={renderCarThumb}
           />
           <Row className="mt-2">
             <Col><small className="text-light">{priceRange[0]} Ft</small></Col>
             <Col className="text-end"><small className="text-light">{priceRange[1]} Ft</small></Col>
           </Row>
+        </Form.Group>
+
+        {/* Kilométeróra csúszka */}
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Max futott km:</strong></Form.Label>
+          <ReactSlider
+            min={0}
+            max={1000000}
+            step={1000}
+            value={maxKm}
+            onChange={setMaxKm}
+            className="custom-slider"
+            thumbClassName="custom-thumb"
+            trackClassName="slider-track"
+            renderThumb={renderCarThumb}
+          />
+          <Row className="mt-2">
+            <Col><small className="text-light">0 km</small></Col>
+            <Col className="text-end"><small className="text-light">{maxKm} km</small></Col>
+          </Row>
+        </Form.Group>
+
+        {/* Egyéb szűrők */}
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Szín:</strong></Form.Label>
+          <Form.Select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)}>
+            <option value="">Mindegy</option>
+            {colors.map(color => <option key={color} value={color}>{color}</option>)}
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Motortípus:</strong></Form.Label>
+          <Form.Select value={selectedEngineType} onChange={(e) => setSelectedEngineType(e.target.value)}>
+            <option value="">Mindegy</option>
+            {engineTypes.map(type => <option key={type} value={type}>{type}</option>)}
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Használat:</strong></Form.Label>
+          <Form.Select value={selectedUsageType} onChange={(e) => setSelectedUsageType(e.target.value)}>
+            <option value="">Mindegy</option>
+            {usageTypes.map(type => <option key={type} value={type}>{type}</option>)}
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Sebességváltó:</strong></Form.Label>
+          <Form.Select value={selectedTransmission} onChange={(e) => setSelectedTransmission(e.target.value)}>
+            <option value="">Mindegy</option>
+            {transmissions.map(trans => <option key={trans} value={trans}>{trans}</option>)}
+          </Form.Select>
         </Form.Group>
       </Card>
     </div>

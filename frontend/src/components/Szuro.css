@@ -4,31 +4,49 @@
   top: 100px;
   z-index: 1000;
   transition: transform 0.3s ease;
-  height: 90vh; /* Teljes magasság */
-  overflow-y: auto; /* Görgethetővé teszi, ha túl magas */
+  height: 90vh;
+  overflow-y: auto;
+  width: 350px;
+  background-color: #333;
+  border-radius: 0 8px 8px 0;
 }
 
 .filter-container.collapsed {
   transform: translateX(-100%);
 }
 
-
 .toggle-button {
-  position: absolute;
-  right: -40px;
-  top: 50%;
-  transform: translateY(-50%);
+  position: fixed;
+  left: 10px;
+  top: 120px;
   background-color: #444;
   border: none;
-  border-radius: 0 15px 15px 0;
-  padding: 15px 10px;
+  border-radius: 50px;
+  padding: 15px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 
 .toggle-button:hover {
   background-color: #555;
+}
+
+.toggle-button::after {
+  content: '\25B6'; /* Jobbra mutató nyíl */
+  display: inline-block;
+  color: white;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.filter-container.collapsed + .toggle-button::after {
+  transform: rotate(180deg);
 }
 
 .szuro-container {
@@ -44,12 +62,31 @@
 .custom-slider {
   height: 8px;
   margin: 10px 0;
+  position: relative;
 }
 
 .slider-track {
   background: #666;
   height: 8px;
   border-radius: 4px;
+}
+
+/* A közös slider thumb – drag kurzorral */
+.custom-thumb {
+  height: 20px;
+  width: 20px;
+  background-color: #FFA500;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  cursor: grab;
+}
+
+.custom-thumb:active {
+  cursor: grabbing;
 }
 
 .slider-car {
