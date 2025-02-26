@@ -37,7 +37,7 @@ const Szuro = ({ onFilterChange, products }) => {
         const fetchedColors = [...new Set(fetchedProducts.map(product => product.Szin))];
         const fetchedEngineTypes = [...new Set(fetchedProducts.map(product => product.Motortipus))];
         const fetchedUsageTypes = [...new Set(fetchedProducts.map(product => product.Hasznalat))];
-        const fetchedTransmissions = [...new Set(fetchedProducts.map(product => product.Valto))];
+        const fetchedTransmissions = [...new Set(fetchedProducts.map(product => product.Sebessegvalto))];
 
         fetchedProducts.forEach(product => {
           if (!fetchedModelsByBrand[product.Marka]) {
@@ -71,7 +71,7 @@ const Szuro = ({ onFilterChange, products }) => {
       Number(product.Ar) <= priceRange[1] &&
       (selectedEngineType === '' || product.Motortipus === selectedEngineType) &&
       (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
-      (selectedTransmission === '' || product.Valto === selectedTransmission) &&
+      (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) &&
       Number(product.Evjarat) >= yearRange[0] &&
       Number(product.Evjarat) <= yearRange[1]
     );
