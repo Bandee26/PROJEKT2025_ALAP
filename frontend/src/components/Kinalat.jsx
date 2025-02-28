@@ -18,7 +18,13 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     const fetchProducts = async () => {
       try {
         setLoading(true); // Set loading to true before fetching
-        const response = await axios.get('http://localhost:8080/termek');
+const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+const response = await axios.get('http://localhost:8080/termek', {
+    headers: {
+        'Authorization': `Bearer ${token}` // Include JWT in the request headers
+    }
+});
+
         setLoading(false); // Set loading to false after fetching
 
         const fetchedProducts = response.data.products || [];
