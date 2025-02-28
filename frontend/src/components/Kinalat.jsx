@@ -10,18 +10,24 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
+
 
   // Termékek lekérése az API-ból
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true); // Set loading to true before fetching
         const response = await axios.get('http://localhost:8080/termek');
+        setLoading(false); // Set loading to false after fetching
+
         const fetchedProducts = response.data.products || [];
         setProducts(fetchedProducts);
         setFilteredProducts(fetchedProducts); // Alapértelmezetten minden termék megjelenik
       } catch (err) {
         console.error('Fetch error:', err);
-        setError('Hiba! Nem sikerült betölteni a termékeket.');
+        setError('Hiba! Nem sikerült betölteni a termékeket. Kérjük, próbálja újra később.'); // Improved error message
+
       }
     };
 
@@ -85,7 +91,9 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                 </>
               )}
 
-              {filteredProducts.length === 0 && (
+              {loading && <p className="text-center">Betöltés...</p>} {/* Loading message */}
+              {filteredProducts.length === 0 && ( 
+
                 <p className="text-center">Nincs megjeleníthető autó.</p>
               )}
 

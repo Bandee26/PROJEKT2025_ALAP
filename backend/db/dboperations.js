@@ -57,14 +57,15 @@ async function loginUser(email, password) {
           [email, hashedPassword]
       );
       if (rows.length > 0) {
-          return true;  // Ha van találat, akkor sikeres belépés
+          return rows[0];  // Return user object for JWT generation
       } else {
-          return false;  // Ha nincs találat, sikertelen belépés
+          return null;  // Return null for unsuccessful login
       }
   } catch (error) {
       console.error('Login failed:', error);
       throw new Error('Hiba történt a bejelentkezés során');
   }
+
 }
 
 // Adatbázis frissítő függvény

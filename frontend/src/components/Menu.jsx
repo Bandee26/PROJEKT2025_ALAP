@@ -6,7 +6,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Added useEffect to the import
 import Logo from './auto.png';
 import './Menu.css';
 import Home from './Home';  // Home komponens importálása
@@ -17,6 +17,8 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [userEmail, setUserEmail] = useState(localStorage.getItem('token') ? '' : ''); // Retrieve email if logged in
+
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [registerName, setRegisterName] = useState('');
@@ -24,8 +26,6 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [message, setMessage] = useState('');
-    const [userEmail, setUserEmail] = useState('');
-    
     // Profil módosító modal
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [profileName, setProfileName] = useState('');
@@ -79,7 +79,25 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
         }
     };
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true);
+            setUserEmail(loginEmail); // Set user email if token exists
+        }
+    }, []);
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true);
+            setUserEmail(loginEmail); // Set user email if token exists
+        }
+    }, []);
+    
     // Bejelentkezés kezelése
+
+
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -95,50 +113,54 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
             });
             const result = await response.json();
             if (result.success) {
+                const token = result.token; // Get the token from the response
+                localStorage.setItem('token', token); // Store JWT in local storage
                 setIsLoggedIn(true); 
                 setUserEmail(loginEmail); 
                 setShowLoginModal(false); 
-                alert('Sikeres bejelentkezés!');
+                alert('Sikeres bejelentkezés!'); 
             } else {
                 alert('Helytelen email vagy jelszó.');
             }
         } catch (error) {
             alert('Hálózati hiba történt.');
         }
-    };
+    }; // Closing brace for handleLoginSubmit
 
-   // Profil frissítése
-const handleProfileSubmit = async (e) => {
-    e.preventDefault();
-    if (!profileName || !profilePhone || !userEmail) {
-        alert('Minden mezőt ki kell tölteni!');
-        return;
-    }
 
-    try {
-        const response = await fetch('http://localhost:8080/users/updateProfile', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: userEmail, // Send the user's email
-                name: profileName,
-                phone: profilePhone,
-            }),
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            alert('Profil sikeresen frissítve');
-            setShowProfileModal(false);
-        } else {
-            alert('Hiba történt a profil frissítése során');
+    // Profil frissítése
+    const handleProfileSubmit = async (e) => {
+        e.preventDefault();
+        if (!profileName || !profilePhone || !userEmail) {
+            alert('Minden mezőt ki kell tölteni!');
+            return;
         }
-    } catch (error) {
-        alert('Hálózati hiba történt');
-    }
-};
+
+        try {
+            const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+            const response = await fetch('http://localhost:8080/users/updateProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Include JWT in the request headers
+                },
+                body: JSON.stringify({
+                    email: userEmail, // Send the user's email
+                    name: profileName,
+                    phone: profilePhone,
+                }),
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Profil sikeresen frissítve');
+                setShowProfileModal(false);
+            } else {
+                alert('Hiba történt a profil frissítése során');
+            }
+        } catch (error) {
+            alert('Hálózati hiba történt');
+        }
+    }; // Closing brace for handleProfileSubmit
 
     return (
         
@@ -154,8 +176,7 @@ const handleProfileSubmit = async (e) => {
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link>
-<NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="custom-dropdown">
-
+                            <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="custom-dropdown">
                                 {!isLoggedIn ? (
                                     <>
                                         <NavDropdown.Item onClick={handleRegisterClick}>
@@ -310,39 +331,35 @@ const handleProfileSubmit = async (e) => {
                 </Modal.Body>
             </Modal>
 
-            
-
             {/* Kedvencek modal */}
             <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
-    <Modal.Header closeButton>
-        <Modal.Title>Kedvenc autók</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        {favorites.length > 0 ? ( // Ellenőrizzük, hogy van-e kedvenc autó
-            <ul>
-                {favorites.map((carId) => {
-                    const car = products.find(auto => auto.Rendszam === carId); // Keresd meg az autót a kedvencek között
-                    return (
-                        <li key={car.Rendszam}>
-                            {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
-                            <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
-                        </li>
-                    );
-                })}
-            </ul>
-        ) : (
-            <p>Nincsenek kedvenc autók.</p>
-        )}
-    </Modal.Body>
-</Modal>
-
+                <Modal.Header closeButton>
+                    <Modal.Title>Kedvenc autók</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {favorites.length > 0 ? ( // Ellenőrizzük, hogy van-e kedvenc autó
+                        <ul>
+                            {favorites.map((carId) => {
+                                const car = products.find(auto => auto.Rendszam === carId); // Keresd meg az autót a kedvencek között
+                                return (
+                                    <li key={car.Rendszam}>
+                                        {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
+                                        <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    ) : (
+                        <p>Nincsenek kedvenc autók.</p>
+                    )}
+                </Modal.Body>
+            </Modal>
 
             {/* Route-ok definiálása */}
             <Routes>
-    <Route path="/" element={<Home />} />
-    
-    <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} favorites={favorites} handleFavoriteToggle={handleFavoriteToggle} />} />
-</Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} handleFavoriteToggle={handleFavoriteToggle} favorites={favorites} />} />
+            </Routes>
         </Router>
     );
 }
