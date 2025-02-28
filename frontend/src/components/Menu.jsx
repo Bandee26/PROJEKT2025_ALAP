@@ -194,7 +194,12 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
                                         <NavDropdown.Item onClick={() => setShowFavoritesModal(true)}>
                                             Kedvencek
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item onClick={() => setIsLoggedIn(false)}>
+<NavDropdown.Item onClick={() => {
+    localStorage.removeItem('token'); // Clear the token
+    setIsLoggedIn(false); // Update the logged-in state
+    window.location.reload(); // Refresh the page
+}}>
+
                                             Kijelentkezés
                                         </NavDropdown.Item>
                                     </>
