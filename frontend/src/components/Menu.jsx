@@ -12,7 +12,7 @@ import './Menu.css';
 import Home from './Home';  // Home komponens importálása
 import Kinalat from './Kinalat';  // Kínálat komponens importálása
 
-function Menu({ favorites, products, handleFavoriteToggle }) {
+function Menu({ favorites, setFavorites, products }) {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -96,8 +96,6 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
     }, []);
     
     // Bejelentkezés kezelése
-
-
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -126,7 +124,6 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
             alert('Hálózati hiba történt.');
         }
     }; // Closing brace for handleLoginSubmit
-
 
     // Profil frissítése
     const handleProfileSubmit = async (e) => {
@@ -161,6 +158,46 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
             alert('Hálózati hiba történt');
         }
     }; // Closing brace for handleProfileSubmit
+
+    // Handle favorite toggle
+    const handleFavoriteToggle = async (carId) => {
+        if (!isLoggedIn) {
+            alert('Kérjük, jelentkezzen be a kedvencek kezeléséhez.');
+            return;
+        }
+
+        const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+        const isFavorite = favorites.includes(carId);
+
+        try {
+            const response = await fetch(`http://localhost:8080/users/favorites/${carId}`, {
+                method: isFavorite ? 'DELETE' : 'POST', // Use DELETE to remove, POST to add
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Include JWT in the request headers
+                },
+            });
+
+            if (response.ok) {
+                const result = await response.json(); // Log the response for debugging
+                console.log(result); // Log the result for debugging
+                // Update local favorites state
+                if (isFavorite) {
+                    // Remove from favorites
+                    setFavorites(favorites.filter(id => id !== carId));
+                } else {
+                    // Add to favorites
+                    setFavorites([...favorites, carId]);
+                }
+            } else {
+                const errorMessage = await response.text(); // Get error message from response
+                alert(`Hiba történt a kedvencek frissítése során: ${errorMessage}`);
+            }
+
+        } catch (error) {
+            alert('Hálózati hiba történt.');
+        }
+    };
 
     return (
         

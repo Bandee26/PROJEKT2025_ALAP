@@ -32,7 +32,8 @@ const response = await axios.get('http://localhost:8080/termek', {
         setFilteredProducts(fetchedProducts); // Alapértelmezetten minden termék megjelenik
       } catch (err) {
         console.error('Fetch error:', err);
-        setError('Hiba! Nem sikerült betölteni a termékeket. Kérjük, próbálja újra később.'); // Improved error message
+        setError(err.response ? err.response.data.message : 'Hiba! Nem sikerült betölteni a termékeket. Kérjük, próbálja újra később.'); // Provide specific error message from backend
+
 
       }
     };

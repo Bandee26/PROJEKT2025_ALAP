@@ -118,7 +118,37 @@ async function selectProductWhere(whereConditions){
     }
 }
 
+async function addFavorite(userId, carId) {
+    console.log(`Adding favorite for userId: ${userId}, carId: ${carId}`); // Debugging log
+
+    try {
+        const [result] = await pool.query(
+            'UPDATE regisztracio SET kedvencek = JSON_ARRAY_APPEND(kedvencek, "$", ?) WHERE id = ?',
+            [carId, userId]
+        );
+        return result;
+    } catch (error) {
+        console.error('Failed to add favorite:', error.message); // Log the specific error message
+
+        throw new Error('Error adding favorite.');
+    }
+}
+
+async function removeFavorite(userId, carId) {
+    try {
+        const [result] = await pool.query(
+            'UPDATE regisztracio SET kedvencek = JSON_REMOVE(kedvencek, JSON_UNQUOTE(JSON_SEARCH(kedvencek, "one", ?))) WHERE id = ?',
+            [carId, userId]
+        );
+        return result;
+    } catch (error) {
+        console.error('Failed to remove favorite:', error.message); // Log the specific error message
+
+        throw new Error('Error removing favorite.');
+    }
+}
+
 module.exports = {
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
-  loginUser ,updateUserProfile, selectProductWhere
+  loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite
 };

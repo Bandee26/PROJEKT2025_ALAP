@@ -46,4 +46,6 @@ app.use('/protected', verifyToken); // Apply JWT verification middleware to prot
 app.use('/',indexRouter)
 app.use('/users', usersRouter);  // Az API végpontokat a /users prefixszel regisztráljuk
 app.use('/termek', termekRouter);  // A termékek végpontjait is az /termek prefixszel
+app.use('/users', require('./api/favorites')); // Integrate favorites routes
+
 module.exports = app;
