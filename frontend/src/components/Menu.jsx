@@ -176,7 +176,10 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link>
+                        </Nav>
+                        <Nav>
                             <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="custom-dropdown">
+
                                 {!isLoggedIn ? (
                                     <>
                                         <NavDropdown.Item onClick={handleRegisterClick}>
@@ -206,15 +209,7 @@ function Menu({ favorites, products, handleFavoriteToggle }) {
                                 )}
                             </NavDropdown>
                         </Nav>
-                        <Form className="d-flex">
-                            <Form.Control
-                                type="search"
-                                placeholder="Keresés"
-                                className="me-2"
-                                aria-label="Search"
-                            />
-                            <Button variant="outline-primary">Keresés</Button>
-                        </Form>
+
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
