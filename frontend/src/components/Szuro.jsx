@@ -7,6 +7,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 import './Szuro.css'; // Egyedi stílusokhoz
 
 const Szuro = ({ onFilterChange, products }) => {
+  const [searchTerm, setSearchTerm] = useState(''); // New state for search term
+
   const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [modelsByBrand, setModelsByBrand] = useState({});
@@ -72,7 +74,21 @@ const Szuro = ({ onFilterChange, products }) => {
 
   useEffect(() => {
     const filtered = products.filter(product =>
+      (searchTerm === '' || 
+        searchTerm.split(' ').every(term => 
+          product.Marka.toLowerCase().includes(term.toLowerCase()) || 
+          product.Modell.toLowerCase().includes(term.toLowerCase()) || 
+          product.Szin.toLowerCase().includes(term.toLowerCase()) || 
+          product.Motortipus.toLowerCase().includes(term.toLowerCase()) || 
+          product.Hasznalat.toLowerCase().includes(term.toLowerCase()) || 
+          product.Sebessegvalto.toLowerCase().includes(term.toLowerCase())
+        )) && // Check for search term
+
+
+
+
       (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) &&
+
       (selectedModels.length === 0 || selectedModels.includes(product.Modell)) &&
       (selectedColor === '' || product.Szin === selectedColor) &&
       Number(product.Ar) >= priceRange[0] &&
@@ -89,6 +105,8 @@ const Szuro = ({ onFilterChange, products }) => {
       onFilterChange(filtered);
     }
   }, [
+    searchTerm, // Add searchTerm to dependencies for real-time updates
+
     selectedBrands,
     selectedModels,
     selectedColor,
@@ -128,7 +146,19 @@ const Szuro = ({ onFilterChange, products }) => {
       <Card className="szuro-container">
         <Card.Title className="text-center text-light">Szűrő</Card.Title>
 
+        {/* Search input field */}
+        <Form.Group className="mb-3">
+          <Form.Label className="text-light"><strong>Keresés:</strong></Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Keresd meg a termékeket..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Form.Group>
+
         {/* Márkák és modellek checkboxok */}
+
         <Form.Group className="mb-3">
           <Form.Label className="text-light"><strong>Válassz márkát és modellt:</strong></Form.Label>
           {brands.length > 0 ? (

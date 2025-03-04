@@ -17,17 +17,21 @@ router.post('/register', async function(req, res, next) {
   }
 });
 
+const jwt = require('jsonwebtoken'); // Import JWT library
+
 // Bejelentkezés API
 router.post('/login', async function(req, res, next) {
   const { email, password } = req.body;
 
   try {
-      const success = await loginUser(email, password);  // Ellenőrzi a felhasználói adatokat
-      if (success) {
-          res.status(200).json({ success: true, message: 'Sikeres bejelentkezés' });
+      const user = await loginUser(email, password);  // Ellenőrzi a felhasználói adatokat
+      if (user) {
+          const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Generate JWT
+          res.status(200).json({ success: true, token }); // Return token
       } else {
           res.status(401).json({ success: false, message: 'Hibás email vagy jelszó' });
       }
+
   } catch (error) {
       res.status(500).json({ success: false, message: error.message });
   }
