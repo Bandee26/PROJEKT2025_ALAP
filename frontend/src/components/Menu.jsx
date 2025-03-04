@@ -197,8 +197,15 @@ function Menu({ favorites, setFavorites, products }) {
             const result = await response.json();
             if (result.success) {
                 // Update the favorites list only if the server response is successful
-                setFavorites(result.favorites);
-                setValidatedFavorites(result.favorites); // Update validated favorites
+                if (isFavorite) {
+                    // Remove the car from the list of favorites
+                    setFavorites((prevFavorites) => prevFavorites.filter((id) => id !== carId));
+                    setValidatedFavorites((prevFavorites) => prevFavorites.filter((id) => id !== carId));
+                } else {
+                    // Add the car to the list of favorites
+                    setFavorites((prevFavorites) => [...prevFavorites, carId]);
+                    setValidatedFavorites((prevFavorites) => [...prevFavorites, carId]);
+                }
             } else {
                 alert('Hiba történt a kedvenc hozzáadásakor!');
             }
@@ -206,6 +213,8 @@ function Menu({ favorites, setFavorites, products }) {
             alert(`Hálózati hiba történt: ${error.message}`);
         }
     };
+    
+    
     
     
     useEffect(() => {
@@ -409,6 +418,7 @@ function Menu({ favorites, setFavorites, products }) {
         )}
     </Modal.Body>
 </Modal>
+
 
 
 
