@@ -65,7 +65,6 @@ async function loginUser(email, password) {
       console.error('Login failed:', error);
       throw new Error('Hiba történt a bejelentkezés során');
   }
-
 }
 
 // Adatbázis frissítő függvény
@@ -81,7 +80,6 @@ async function updateUserProfile(email, name, phone) {
       throw new Error('Hiba történt a profil frissítésekor');
   }
 }
-
 
 async function selectProductWhere(whereConditions){
   const conditions = []
@@ -148,7 +146,19 @@ async function removeFavorite(userId, carId) {
     }
 }
 
+// Function to get favorites for a user
+async function getFavorites(userId) {
+    try {
+        const query = 'SELECT kedvencek FROM regisztracio WHERE id = ?'; // Adjust the query as per your database schema
+        const [rows] = await pool.query(query, [userId]);
+        return rows.length > 0 ? rows[0].kedvencek : []; // Return the favorites array
+    } catch (error) {
+        console.error('Error fetching favorites from database:', error);
+        throw error; // Rethrow the error for handling in the route
+    }
+}
+
 module.exports = {
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
-  loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite
+  loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites
 };

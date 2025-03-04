@@ -6,7 +6,7 @@ import CustomCard from './Card';
 import Video from './video.jsx'; // Import the Video component
 
 function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
-  
+
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [error, setError] = useState(null);

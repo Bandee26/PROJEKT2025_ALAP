@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { addFavorite, removeFavorite } = require('../db/dboperations'); // Correctly reference the dboperations module
+const { addFavorite, removeFavorite, getFavorites } = require('../db/dboperations'); // Correctly reference the dboperations module
+
 const verifyToken = require('../middleware/verifyToken'); // Import the verifyToken middleware
 
 // Add Favorite
@@ -17,7 +18,6 @@ router.post('/favorites/:carId', verifyToken, async (req, res) => { // Apply the
     } catch (error) {
         console.error('Error adding favorite:', error.message); // Log the specific error message
         res.status(500).json({ success: false, message: 'Error adding favorite.' });
-
     }
 });
 
@@ -31,6 +31,21 @@ router.delete('/favorites/:carId', verifyToken, async (req, res) => { // Apply t
         res.status(200).json({ success: true, message: 'Favorite removed successfully.' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error removing favorite.' });
+    }
+});
+
+// Get Favorites
+router.get('/favorites', verifyToken, async (req, res) => {
+    const userId = req.userId; // Use userId set by the middleware
+
+    try {
+        const favorites = await getFavorites(userId); // Fetch favorites from the database
+        console.log('Fetched favorites:', favorites); // Log the fetched favorites
+
+        res.json({ favorites });
+    } catch (error) {
+        console.error('Error fetching favorites:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
