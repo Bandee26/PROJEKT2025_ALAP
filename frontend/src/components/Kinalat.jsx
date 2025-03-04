@@ -6,24 +6,23 @@ import CustomCard from './Card';
 import Video from './video.jsx'; // Import the Video component
 
 function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
-  
+
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
-
 
   // Termékek lekérése az API-ból
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true); // Set loading to true before fetching
-const token = localStorage.getItem('token'); // Retrieve JWT from local storage
-const response = await axios.get('http://localhost:8080/termek', {
-    headers: {
-        'Authorization': `Bearer ${token}` // Include JWT in the request headers
-    }
-});
+        const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+        const response = await axios.get('http://localhost:8080/termek', {
+          headers: {
+            'Authorization': `Bearer ${token}` // Include JWT in the request headers
+          }
+        });
 
         setLoading(false); // Set loading to false after fetching
 
@@ -33,7 +32,6 @@ const response = await axios.get('http://localhost:8080/termek', {
       } catch (err) {
         console.error('Fetch error:', err);
         setError('Hiba! Nem sikerült betölteni a termékeket. Kérjük, próbálja újra később.'); // Improved error message
-
       }
     };
 
@@ -80,7 +78,9 @@ const response = await axios.get('http://localhost:8080/termek', {
                         style={{ padding: '10px', maxWidth: '350px' }}
                       >
                         <CustomCard
-                          imageSrc={`http://localhost:8080/${auto.Modell}.jpg`}
+                          imageSrc={`/frontend/public/Img/${auto.Rendszam}.1.jpg`} // First image for the car from Img folder
+                          secondImageSrc={`/Img/${auto.Rendszam}.2.jpg`} // Second image for the car from Img folder
+
                           title={`${auto.Marka} ${auto.Modell}`}
                           subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
                           description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
@@ -98,8 +98,7 @@ const response = await axios.get('http://localhost:8080/termek', {
               )}
 
               {loading && <p className="text-center">Betöltés...</p>} {/* Loading message */}
-              {filteredProducts.length === 0 && ( 
-
+              {filteredProducts.length === 0 && (
                 <p className="text-center">Nincs megjeleníthető autó.</p>
               )}
 
