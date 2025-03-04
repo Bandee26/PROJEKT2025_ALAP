@@ -28,7 +28,7 @@
 
 /* Hover effects */
 .image-hover:hover {
-    border-color: #0d6efd;
+    border-color: #ff4501;
     transform: scale(1.02);
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
 }
@@ -43,5 +43,5 @@
     transform: translateY(-5px);
     transition: transform 0.3s ease;
     box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
-    border-color: #0d6efd;
+    border-color: #ff4501;
 }
