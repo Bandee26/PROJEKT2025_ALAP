@@ -34,9 +34,12 @@ function Menu({ favorites, setFavorites, products }) {
     // Kedvencek modal
     const [showFavoritesModal, setShowFavoritesModal] = useState(false);
    
-    const [validatedFavorites, setValidatedFavorites] = useState(Array.isArray(favorites) ? favorites : []);
+    const [validatedFavorites, setValidatedFavorites] = useState([]); // Alapértelmezett érték üres tömb
 
-   
+    useEffect(() => {
+        setValidatedFavorites(Array.isArray(favorites) ? favorites : []); // Ha nem tömb, állítsuk üres tömbre
+    }, [favorites]); // Frissítjük a validatedFavorites-et, amikor a favorites változik
+    
 
     // Modal megnyitása és zárása
     const handleRegisterClick = () => setShowRegisterModal(true);
@@ -106,20 +109,20 @@ function Menu({ favorites, setFavorites, products }) {
                 setUserEmail(loginEmail);
                 setShowLoginModal(false);
                 alert('Sikeres bejelentkezés!');
-    
+
                 // Most, hogy bejelentkezett, kérjük le a kedvenceit
-                const favoritesResponse = await fetch('http://localhost:8080/users/favorites', {
-                    method: 'GET',
+                const favoritesResponse = await fetch('http://localhost:8080/users/favorites', { 
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Add the token to the request
+                        'Authorization': `Bearer ${token}`, // Ensure token is included
                     },
+                    method: 'GET',
                 });
     
                 const favoritesResult = await favoritesResponse.json();
                 if (favoritesResult.success) {
                     setFavorites(favoritesResult.favorites); // Frissítjük a kedvenceket
-
+                    setValidatedFavorites(favoritesResult.favorites); // Sync validated favorites
                 } else {
                     alert('Hiba történt a kedvencek lekérése során');
                 }
@@ -132,8 +135,6 @@ function Menu({ favorites, setFavorites, products }) {
         }
     };
     
-    
-
     // Profil frissítése
     const handleProfileSubmit = async (e) => {
         e.preventDefault();
@@ -176,7 +177,7 @@ function Menu({ favorites, setFavorites, products }) {
         }
     
         const token = localStorage.getItem('token');
-        const isFavorite = validatedFavorites.includes(carId);  // Check if the car is in favorites
+        const isFavorite = validatedFavorites.includes(carId); // Check if the car is in favorites
     
         try {
             const response = await fetch(`http://localhost:8080/users/favorites/${carId}`, {
@@ -195,8 +196,9 @@ function Menu({ favorites, setFavorites, products }) {
     
             const result = await response.json();
             if (result.success) {
-                setFavorites(result.favorites);  // Update the favorites list
-                setValidatedFavorites(result.favorites);  // Sync validated favorites
+                // Update the favorites list only if the server response is successful
+                setFavorites(result.favorites);
+                setValidatedFavorites(result.favorites); // Update validated favorites
             } else {
                 alert('Hiba történt a kedvenc hozzáadásakor!');
             }
@@ -206,21 +208,11 @@ function Menu({ favorites, setFavorites, products }) {
     };
     
     
-    
-    
-    
-    
-    
     useEffect(() => {
         console.log(favorites); // Minden alkalommal kiírja, amikor a favorites változik
     }, [favorites]);
     
-
-    
-
-    
     return (
-        
         <Router>
             <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222' }}>
                 <Container>
@@ -236,7 +228,6 @@ function Menu({ favorites, setFavorites, products }) {
                         </Nav>
                         <Nav>
                             <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="custom-dropdown">
-
                                 {!isLoggedIn ? (
                                     <>
                                         <NavDropdown.Item onClick={handleRegisterClick}>
@@ -255,19 +246,16 @@ function Menu({ favorites, setFavorites, products }) {
                                             Kedvencek
                                         </NavDropdown.Item>
                                         <NavDropdown.Item onClick={() => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    window.location.reload();
-}}>
-    Kijelentkezés
-</NavDropdown.Item>
-                                       
-        
+                                            localStorage.removeItem('token');
+                                            setIsLoggedIn(false);
+                                            window.location.reload();
+                                        }}>
+                                            Kijelentkezés
+                                        </NavDropdown.Item>
                                     </>
                                 )}
                             </NavDropdown>
                         </Nav>
-
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
@@ -395,7 +383,7 @@ function Menu({ favorites, setFavorites, products }) {
         <Modal.Title>Kedvenc autók</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-        {validatedFavorites.length > 0 ? (
+        {Array.isArray(validatedFavorites) && validatedFavorites.length > 0 ? (
             <ul>
                 {validatedFavorites.map((carId) => {
                     const car = products.find((auto) => auto.Rendszam === carId); // Find the car by Rendszam
