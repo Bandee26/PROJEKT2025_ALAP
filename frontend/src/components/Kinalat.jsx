@@ -78,8 +78,8 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                         style={{ padding: '10px', maxWidth: '350px' }}
                       >
                         <CustomCard
-                          imageSrc={`/frontend/public/Img/${auto.Rendszam}.1.jpg`} // First image for the car from Img folder
-                          secondImageSrc={`/Img/${auto.Rendszam}.2.jpg`} // Second image for the car from Img folder
+                          imageSrc={`/Img/${auto.Auto_ID}.1.jpg`} // First image for the car from Img folder
+                          secondImageSrc={`/Img/${auto.Auto_ID}.2.jpg`} // Second image for the car from Img folder
 
                           title={`${auto.Marka} ${auto.Modell}`}
                           subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
