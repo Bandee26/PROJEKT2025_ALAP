@@ -117,33 +117,48 @@ async function selectProductWhere(whereConditions){
 }
 
 async function addFavorite(userId, carId) {
-    console.log(`Adding favorite for userId: ${userId}, carId: ${carId}`); // Debugging log
+  console.log(`Adding favorite for userId: ${userId}, carId: ${carId}`); // Debugging log
 
-    try {
-        const [result] = await pool.query(
-            'UPDATE regisztracio SET kedvencek = JSON_ARRAY_APPEND(kedvencek, "$", ?) WHERE id = ?',
-            [carId, userId]
-        );
-        return result;
-    } catch (error) {
-        console.error('Failed to add favorite:', error.message); // Log the specific error message
+  try {
+      // Frissített kedvencek listája a lekérdezés után
+      const [result] = await pool.query(
+          'UPDATE regisztracio SET kedvencek = JSON_ARRAY_APPEND(kedvencek, "$", ?) WHERE id = ?',
+          [carId, userId]
+      );
 
-        throw new Error('Error adding favorite.');
-    }
+      // Lekérjük a frissített kedvencek listáját
+      const [updatedFavorites] = await pool.query(
+          'SELECT kedvencek FROM regisztracio WHERE id = ?',
+          [userId]
+      );
+
+      // Parse JSON string-tömbbé
+      const parsedFavorites = JSON.parse(updatedFavorites[0].kedvencek);
+
+      return { success: true, favorites: parsedFavorites }; // Visszaadjuk a tömböt, nem a JSON stringet
+  } catch (error) {
+      console.error('Failed to add favorite:', error.message); // Log the specific error message
+      throw new Error('Error adding favorite.');
+  }
 }
 
-async function removeFavorite(userId, carId) {
-    try {
-        const [result] = await pool.query(
-            'UPDATE regisztracio SET kedvencek = JSON_REMOVE(kedvencek, JSON_UNQUOTE(JSON_SEARCH(kedvencek, "one", ?))) WHERE id = ?',
-            [carId, userId]
-        );
-        return result;
-    } catch (error) {
-        console.error('Failed to remove favorite:', error.message); // Log the specific error message
 
-        throw new Error('Error removing favorite.');
-    }
+
+async function removeFavorite(userId, carId) {
+  try {
+      // Eltávolítjuk a kedvencet a listából
+      const [result] = await pool.query(
+          'UPDATE regisztracio SET kedvencek = JSON_REMOVE(kedvencek, JSON_UNQUOTE(JSON_SEARCH(kedvencek, "one", ?))) WHERE id = ?',
+          [carId, userId]
+      );
+
+      // Visszaadjuk a frissített kedvencek listáját
+      const favorites = await getFavorites(userId);
+      return { success: true, favorites }; // Frissített kedvencek visszaadása
+  } catch (error) {
+      console.error('Failed to remove favorite:', error.message); // Log the specific error message
+      throw new Error('Error removing favorite.');
+  }
 }
 
 // Function to get favorites for a user

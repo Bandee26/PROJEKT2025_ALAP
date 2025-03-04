@@ -30,18 +30,13 @@ function Menu({ favorites, setFavorites, products }) {
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [profileName, setProfileName] = useState('');
     const [profilePhone, setProfilePhone] = useState('');
-
+    
     // Kedvencek modal
     const [showFavoritesModal, setShowFavoritesModal] = useState(false);
+   
+    const [validatedFavorites, setValidatedFavorites] = useState(Array.isArray(favorites) ? favorites : []);
 
-    // Márkák kiválasztása
-    const handleBrandToggle = (brand) => {
-        if (selectedBrands.includes(brand)) {
-            setSelectedBrands(selectedBrands.filter((b) => b !== brand));
-        } else {
-            setSelectedBrands([...selectedBrands, brand]);
-        }
-    };
+   
 
     // Modal megnyitása és zárása
     const handleRegisterClick = () => setShowRegisterModal(true);
@@ -78,6 +73,7 @@ function Menu({ favorites, setFavorites, products }) {
             alert('Hálózati hiba történt.');
         }
     };
+    
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -87,13 +83,6 @@ function Menu({ favorites, setFavorites, products }) {
         }
     }, []);
     
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setIsLoggedIn(true);
-            setUserEmail(loginEmail); // Set user email if token exists
-        }
-    }, []);
     
     // Bejelentkezés kezelése
     const handleLoginSubmit = async (e) => {
@@ -113,17 +102,37 @@ function Menu({ favorites, setFavorites, products }) {
             if (result.success) {
                 const token = result.token; // Get the token from the response
                 localStorage.setItem('token', token); // Store JWT in local storage
-                setIsLoggedIn(true); 
-                setUserEmail(loginEmail); 
-                setShowLoginModal(false); 
-                alert('Sikeres bejelentkezés!'); 
+                setIsLoggedIn(true);
+                setUserEmail(loginEmail);
+                setShowLoginModal(false);
+                alert('Sikeres bejelentkezés!');
+    
+                // Most, hogy bejelentkezett, kérjük le a kedvenceit
+                const favoritesResponse = await fetch('http://localhost:8080/users/favorites', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Add the token to the request
+                    },
+                });
+    
+                const favoritesResult = await favoritesResponse.json();
+                if (favoritesResult.success) {
+                    setFavorites(favoritesResult.favorites); // Frissítjük a kedvenceket
+
+                } else {
+                    alert('Hiba történt a kedvencek lekérése során');
+                }
+    
             } else {
                 alert('Helytelen email vagy jelszó.');
             }
         } catch (error) {
             alert('Hálózati hiba történt.');
         }
-    }; // Closing brace for handleLoginSubmit
+    };
+    
+    
 
     // Profil frissítése
     const handleProfileSubmit = async (e) => {
@@ -165,40 +174,51 @@ function Menu({ favorites, setFavorites, products }) {
             alert('Kérjük, jelentkezzen be a kedvencek kezeléséhez.');
             return;
         }
-
-        const token = localStorage.getItem('token'); // Retrieve JWT from local storage
-        const isFavorite = favorites.includes(carId);
-
+    
+        const token = localStorage.getItem('token');
+        const isFavorite = validatedFavorites.includes(carId);  // Check if the car is in favorites
+    
         try {
             const response = await fetch(`http://localhost:8080/users/favorites/${carId}`, {
-                method: isFavorite ? 'DELETE' : 'POST', // Use DELETE to remove, POST to add
+                method: isFavorite ? 'DELETE' : 'POST',  // Toggle between POST (add) and DELETE (remove)
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Include JWT in the request headers
+                    'Authorization': `Bearer ${token}`,
                 },
             });
-
-            if (response.ok) {
-                const result = await response.json(); // Log the response for debugging
-                console.log(result); // Log the result for debugging
-                // Update local favorites state
-                if (isFavorite) {
-                    // Remove from favorites
-                    setFavorites(favorites.filter(id => id !== carId));
-                } else {
-                    // Add to favorites
-                    setFavorites([...favorites, carId]);
-                }
-            } else {
-                const errorMessage = await response.text(); // Get error message from response
-                alert(`Hiba történt a kedvencek frissítése során: ${errorMessage}`);
+    
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                alert(`Hiba történt a kedvenc hozzáadásakor: ${errorMessage}`);
+                return;
             }
-
+    
+            const result = await response.json();
+            if (result.success) {
+                setFavorites(result.favorites);  // Update the favorites list
+                setValidatedFavorites(result.favorites);  // Sync validated favorites
+            } else {
+                alert('Hiba történt a kedvenc hozzáadásakor!');
+            }
         } catch (error) {
-            alert('Hálózati hiba történt.');
+            alert(`Hálózati hiba történt: ${error.message}`);
         }
     };
+    
+    
+    
+    
+    
+    
+    
+    useEffect(() => {
+        console.log(favorites); // Minden alkalommal kiírja, amikor a favorites változik
+    }, [favorites]);
+    
 
+    
+
+    
     return (
         
         <Router>
@@ -234,14 +254,15 @@ function Menu({ favorites, setFavorites, products }) {
                                         <NavDropdown.Item onClick={() => setShowFavoritesModal(true)}>
                                             Kedvencek
                                         </NavDropdown.Item>
-<NavDropdown.Item onClick={() => {
-    localStorage.removeItem('token'); // Clear the token
-    setIsLoggedIn(false); // Update the logged-in state
-    window.location.reload(); // Refresh the page
+                                        <NavDropdown.Item onClick={() => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    window.location.reload();
 }}>
-
-                                            Kijelentkezés
-                                        </NavDropdown.Item>
+    Kijelentkezés
+</NavDropdown.Item>
+                                       
+        
                                     </>
                                 )}
                             </NavDropdown>
@@ -368,29 +389,41 @@ function Menu({ favorites, setFavorites, products }) {
                 </Modal.Body>
             </Modal>
 
-            {/* Kedvencek modal */}
-            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Kedvenc autók</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {favorites.length > 0 ? ( // Ellenőrizzük, hogy van-e kedvenc autó
-                        <ul>
-                            {favorites.map((carId) => {
-                                const car = products.find(auto => auto.Rendszam === carId); // Keresd meg az autót a kedvencek között
-                                return (
-                                    <li key={car.Rendszam}>
-                                        {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
-                                        <Button variant="danger" onClick={() => handleFavoriteToggle(car.Rendszam)} style={{ marginLeft: '20px' }}>Eltávolítás</Button>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    ) : (
-                        <p>Nincsenek kedvenc autók.</p>
-                    )}
-                </Modal.Body>
-            </Modal>
+           {/* Kedvencek modal */}
+           <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
+    <Modal.Header closeButton>
+        <Modal.Title>Kedvenc autók</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        {validatedFavorites.length > 0 ? (
+            <ul>
+                {validatedFavorites.map((carId) => {
+                    const car = products.find((auto) => auto.Rendszam === carId); // Find the car by Rendszam
+                    if (car) {
+                        return (
+                            <li key={car.Rendszam}>
+                                {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
+                                <Button 
+                                    variant="danger" 
+                                    onClick={() => handleFavoriteToggle(car.Rendszam)} // Call handleFavoriteToggle to remove from database
+                                    style={{ marginLeft: '10px' }}
+                                >
+                                    Eltávolítás
+                                </Button>
+                            </li>
+                        );
+                    }
+                    return null; // If car not found, return null
+                })}
+            </ul>
+        ) : (
+            <p>Nincsenek kedvencek.</p> // No favorites found
+        )}
+    </Modal.Body>
+</Modal>
+
+
+
 
             {/* Route-ok definiálása */}
             <Routes>
