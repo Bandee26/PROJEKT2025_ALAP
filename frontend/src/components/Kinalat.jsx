@@ -4,6 +4,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Szuro from './Szuro.jsx';
 import CustomCard from './Card';
 import Video from './video.jsx'; // Import the Video component
+import Slider from 'react-slick'; // Import react-slick for image carousel
+import './KepLapozas.css'; // Import the CSS file for styling the arrows
 
 function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
 
@@ -53,6 +55,18 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     return favorites.includes(autoId); // Check if the car is a favorite
   };
 
+  // React-Slick settings for the image carousel
+  const settings = {
+    dots: true, // Show dots for navigation
+    infinite: true, // Infinite scroll
+    speed: 500, // Speed of slide transition
+    slidesToShow: 1, // Only one image visible at a time
+    slidesToScroll: 1, // Scroll one image at a time
+    arrows: true, // Show arrows for navigation
+    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>, // Left arrow
+    nextArrow: <div className="slick-next custom-arrow">&#8250;</div>, // Right arrow
+  };
+
   return (
     <div className="szin" style={appStyle}>
       {/* Videó háttér */}
@@ -78,9 +92,6 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                         style={{ padding: '10px', maxWidth: '350px' }}
                       >
                         <CustomCard
-                          imageSrc={`/Img/${auto.Auto_ID}.1.jpg`} // First image for the car from Img folder
-                          secondImageSrc={`/Img/${auto.Auto_ID}.2.jpg`} // Second image for the car from Img folder
-
                           title={`${auto.Marka} ${auto.Modell}`}
                           subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
                           description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
@@ -90,7 +101,16 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                           isFavorite={isFavorite(auto.Rendszam)} // Use a function to check if the car is a favorite
                           onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}
                           showFavoriteButton={isLoggedIn} // Ellenőrizd, hogy ez a prop helyesen van beállítva
-                        />
+                        >
+                          <Slider {...settings}>
+                            <div>
+                              <img src={`/Img/${auto.Auto_ID}.1.jpg`} alt={`${auto.Marka} ${auto.Modell} első kép`} style={{ width: '100%' }} />
+                            </div>
+                            <div>
+                              <img src={`/Img/${auto.Auto_ID}.2.jpg`} alt={`${auto.Marka} ${auto.Modell} második kép`} style={{ width: '100%' }} />
+                            </div>
+                          </Slider>
+                        </CustomCard>
                       </Col>
                     ))}
                   </Row>
