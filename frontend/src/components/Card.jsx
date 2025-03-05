@@ -57,6 +57,7 @@ const CustomCard = ({
   return (
     <div className='kartya hover-effect'>
       <Card className='doboz kartya-hover shadow-sm rounded' style={{ width: '18rem' }}>
+        {/* Slider with images */}
         <Slider {...settings}>
           <div>
             <img className='kep image-hover' src={imageSrc1} alt={title} />

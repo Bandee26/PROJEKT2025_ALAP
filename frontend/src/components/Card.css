@@ -3,7 +3,7 @@
     background-color: #222; /* Visszaállítva a sötét hátteret */
 }
 
-/* Dark theme styles for image border and frame */
+/* Kép beállítások a Sliderhez */
 .kep {
     border: 4px solid #333;
     padding: 8px;
@@ -13,7 +13,7 @@
     margin: 8px 0;
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: cover; /* A képek nem torzulnak el */
 }
 
 /* White text styles */
@@ -48,4 +48,14 @@
     transition: transform 0.3s ease;
     box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
     border-color: #ff4501;
+}
+
+/* Slider container */
+.slick-slide {
+    display: flex;
+    justify-content: center;
+}
+
+.slick-prev, .slick-next {
+    z-index: 10; /* Előző és következő gombok előtérben */
 }
