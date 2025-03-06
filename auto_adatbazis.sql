@@ -385,7 +385,7 @@ FROM ((((((((`autok` `a`
     ON ((`a`.`Sebessegvalto_ID` = `sv`.`Sebessegvalto_ID`)))
   JOIN `eladok` `e`
     ON ((`a`.`Elado_ID` = `e`.`Elado_ID`)));
-ORDER BY `a`.`Auto_ID`
+ORDER BY `a`.`Auto_ID'
 --
 -- Create table `jogosultsag`
 --
