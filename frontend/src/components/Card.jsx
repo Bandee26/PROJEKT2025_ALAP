@@ -16,7 +16,8 @@ const CustomCard = ({
   elado,
   isFavorite,
   onFavoriteToggle,
-  showFavoriteButton
+  showFavoriteButton,
+  children
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -58,14 +59,7 @@ const CustomCard = ({
     <div className='kartya hover-effect'>
       <Card className='doboz kartya-hover shadow-sm rounded' style={{ width: '18rem' }}>
         {/* Slider with images */}
-        <Slider {...settings}>
-          <div>
-            <img className='kep image-hover' src={imageSrc1} alt={title} />
-          </div>
-          <div>
-            <img className='kep image-hover' src={imageSrc2} alt={title} />
-          </div>
-        </Slider>
+        {children}
         <Card.Body>
           <Card.Title className='text-center'>{title}</Card.Title>
           <Card.Subtitle className="mb-3 text-muted text-center">{subtitle}</Card.Subtitle>
@@ -91,13 +85,21 @@ const CustomCard = ({
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={modalStyles.body}>
-          <img src={imageSrc1} alt={title} style={modalStyles.image} />
-          <div className="mt-3">
-            <p><strong>Rendszám:</strong> {year}</p>
-            <p><strong>Autó adatai:</strong> {adatok}</p>
-            <p><strong>Eladó adatai:</strong> {elado}</p>
-          </div>
-        </Modal.Body>
+  <Slider {...settings}>
+    <div>
+      <img src={`/frontend//public/Img/${1}.1.jpg`} alt={title} style={modalStyles.image} />
+    </div>
+    <div>
+      <img src={`/frontend//public/Img/${2}.2.jpg`} alt={title} style={modalStyles.image} />
+    </div>
+  </Slider>
+  <div className="mt-3">
+    <p><strong>Rendszám:</strong> {year}</p>
+    <p><strong>Autó adatai:</strong> {adatok}</p>
+    <p><strong>Eladó adatai:</strong> {elado}</p>
+  </div>
+</Modal.Body>
+
       </Modal>
     </div>
   );
