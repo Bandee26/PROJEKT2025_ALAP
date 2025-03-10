@@ -87,7 +87,7 @@ async function selectProductWhere(whereConditions){
 
   const mappings = {
     Marka: {sql: 'Marka LiKE', value: (val) => '%${val}%'},
-    Modell: {sql: 'Modell LiKE', value: (val) => '%${val}%'}
+    Modell: {sql: 'Modell LiKE', value: (val) => '%${val}%' }
   }
 
   console.log("dfgdfsgdfs",whereConditions)
@@ -117,13 +117,13 @@ async function selectProductWhere(whereConditions){
 }
 
 async function addFavorite(userId, carId) {
-
   try {
       // Frissített kedvencek listája a lekérdezés után
       const [result] = await pool.query(
           'UPDATE regisztracio SET kedvencek = JSON_ARRAY_APPEND(kedvencek, "$", ?) WHERE id = ?',
           [carId, userId]
       );
+
 
       // Lekérjük a frissített kedvencek listáját
       const [updatedFavorites] = await pool.query(
@@ -132,16 +132,17 @@ async function addFavorite(userId, carId) {
       );
 
       // Parse JSON string-tömbbé
-      const parsedFavorites = JSON.parse(updatedFavorites[0].kedvencek);
+      const favoritesArray = updatedFavorites.length > 0 && updatedFavorites[0].kedvencek
+          ? JSON.parse(updatedFavorites[0].kedvencek)
+          : [];
 
-      return { success: true, favorites: parsedFavorites }; // Visszaadjuk a tömböt, nem a JSON stringet
+
+      return { success: true, favorites: favoritesArray }; // Visszaadjuk a tömböt, nem a JSON stringet
   } catch (error) {
       console.error('Failed to add favorite:', error.message); // Log the specific error message
       throw new Error('Error adding favorite.');
   }
 }
-
-
 
 async function removeFavorite(userId, carId) {
   try {
