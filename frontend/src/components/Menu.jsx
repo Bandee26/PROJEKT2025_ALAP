@@ -96,7 +96,7 @@ function Menu({ favorites, setFavorites, products }) {
                     });
             
                     const favoritesResult = await favoritesResponse.json();
-                    console.log('Favorites API Response:', favoritesResult); // Log the API response
+                    
             
                     if (favoritesResult.success) {
                         try {
@@ -156,7 +156,6 @@ function Menu({ favorites, setFavorites, products }) {
                 });
     
                 const favoritesResult = await favoritesResponse.json();
-                console.log('Favorites API Response after login:', favoritesResult); // Log the API response
 
                 if (favoritesResult.success) {
                     const parsedFavorites = JSON.parse(favoritesResult.favorites); // Parse the JSON string
@@ -255,7 +254,6 @@ function Menu({ favorites, setFavorites, products }) {
     };
     
     useEffect(() => {
-        console.log(favorites); // Minden alkalommal kiírja, amikor a favorites változik
     }, [favorites]);
     
     return (

@@ -11,7 +11,6 @@ router.post('/favorites/:carId', verifyToken, async (req, res) => {
 
     try {
         const result = await addFavorite(userId, carId);
-        console.log('Favorite added successfully:', result);
         return res.status(200).json({
             success: true,
             message: 'Favorite added successfully.',
@@ -46,9 +45,7 @@ router.get('/favorites', verifyToken, async (req, res) => {
 
     try {
         const favorites = await getFavorites(userId); // Fetch favorites from the database
-        console.log('Fetching favorites for userId:', userId); // Log the userId being used
-
-        console.log('Fetched favorites:', favorites); // Log the fetched favorites
+        
 
         res.json({ success: true, favorites });
 

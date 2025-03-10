@@ -117,7 +117,6 @@ async function selectProductWhere(whereConditions){
 }
 
 async function addFavorite(userId, carId) {
-  console.log(`Adding favorite for userId: ${userId}, carId: ${carId}`); // Debugging log
 
   try {
       // Frissített kedvencek listája a lekérdezés után
@@ -166,7 +165,6 @@ async function getFavorites(userId) {
     try {
         const query = 'SELECT kedvencek FROM regisztracio WHERE id = ?'; // Adjust the query as per your database schema
         const [rows] = await pool.query(query, [userId]);
-        console.log(`Fetching favorites for userId: ${userId}, Result: ${JSON.stringify(rows)}`); // Debugging log
         if (rows.length === 0) {
             throw new Error('No favorites found for this user.'); // More detailed error message
         }
