@@ -404,7 +404,17 @@ function Menu({ favorites, setFavorites, products }) {
                             />
                         </Form.Group>
 
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Adja meg az email címét"
+                                value={userEmail}
+                                onChange={(e) => setUserEmail(e.target.value)}
+                            />
+                        </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicPhone">
+
                             <Form.Label>Telefonszám</Form.Label>
                             <Form.Control
                                 type="tel"
