@@ -12,21 +12,21 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true); // Betöltési állapot hozzáadása
 
   // Termékek lekérése az API-ból
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setLoading(true); // Set loading to true before fetching
-        const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+        setLoading(true); // Betöltés előtt állítsa be az állapotot igazra
+        const token = localStorage.getItem('token'); // JWT lekérése a helyi tárolóból
         const response = await axios.get('http://localhost:8080/termek', {
           headers: {
-            'Authorization': `Bearer ${token}` // Include JWT in the request headers
+            'Authorization': `Bearer ${token}` // JWT hozzáadása a kérés fejlécéhez
           }
         });
 
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false); // Betöltés befejezése után állítsa az állapotot hamisra
 
         const fetchedProducts = response.data.products || [];
         setProducts(fetchedProducts);
@@ -52,34 +52,37 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
   };
 
   const isFavorite = (autoId) => {
-    return favorites.includes(autoId); // Check if the car is a favorite
+    return favorites.includes(autoId); // Ellenőrizze, hogy az autó kedvenc-e
   };
 
   // React-Slick settings for the image carousel
   const settings = {
-    dots: true, // Show dots for navigation
-    infinite: true, // Infinite scroll
-    speed: 500, // Speed of slide transition
-    slidesToShow: 1, // Only one image visible at a time
-    slidesToScroll: 1, // Scroll one image at a time
-    arrows: true, // Show arrows for navigation
-    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>, // Left arrow
-    nextArrow: <div className="slick-next custom-arrow">&#8250;</div>, // Right arrow
+    dots: true, // Pontok megjelenítése a navigációhoz
+    infinite: true, // Végtelen görgetés
+    speed: 500, // A diavetítés sebessége
+    slidesToShow: 1, // Csak egy kép látható egyszerre
+    slidesToScroll: 1, // Egy képet görgetni
+    arrows: true, // Nyilak megjelenítése a navigációhoz
+    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>, // Bal nyíl
+    nextArrow: <div className="slick-next custom-arrow">&#8250;</div>, // Jobb nyíl
   };
 
   return (
     <div className="szin" style={appStyle}>
       {/* Videó háttér */}
+
       <div className="video-hatter">
         <Video />
         <Container className="my-4" style={{ position: 'relative', zIndex: 1 }}>
           <Row className="d-flex justify-content-between kinalat">
             {/* Szűrő oldalsáv */}
+
             <Col xs={12} sm={3} md={3} lg={2}>
               <Szuro onFilterChange={handleFilterChange} products={products} />
             </Col>
 
             {/* Termékek megjelenítése */}
+
             <Col xs={12} sm={9} md={9} lg={10} className="card-container">
               {filteredProducts.length > 0 && (
                 <>
@@ -98,9 +101,9 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                           adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
                           year={`${auto.Rendszam}`}
                           elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
-                          isFavorite={isFavorite(auto.Rendszam)} // Use a function to check if the car is a favorite
+                          isFavorite={isFavorite(auto.Rendszam)} // Használjon egy függvényt az autó kedvencének ellenőrzésére
                           onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}
-                          showFavoriteButton={isLoggedIn} // Ellenőrizd, hogy ez a prop helyesen van beállítva
+                          showFavoriteButton={isLoggedIn} // Ellenőrizze, hogy ez a prop helyesen van beállítva
                         >
                           <Slider {...settings}>
                             <div>
@@ -117,7 +120,8 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                 </>
               )}
 
-              {loading && <p className="text-center">Betöltés...</p>} {/* Loading message */}
+              {loading && <p className="text-center">Betöltés...</p>} {/* Betöltési üzenet */}
+
               {filteredProducts.length === 0 && (
                 <p className="text-center">Nincs megjeleníthető autó.</p>
               )}
