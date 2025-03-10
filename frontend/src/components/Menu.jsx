@@ -83,10 +83,46 @@ function Menu({ favorites, setFavorites, products }) {
         if (token) {
             setIsLoggedIn(true);
             setUserEmail(loginEmail); // Set user email if token exists
+            
+            // Fetch favorites after login
+            const fetchFavorites = async () => {
+                try {
+                    const favoritesResponse = await fetch('http://localhost:8080/users/favorites', { 
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`, // Ensure token is included
+                        },
+                        method: 'GET',
+                    });
+            
+                    const favoritesResult = await favoritesResponse.json();
+                    console.log('Favorites API Response:', favoritesResult); // Log the API response
+            
+                    if (favoritesResult.success) {
+                        try {
+                            const parsedFavorites = JSON.parse(favoritesResult.favorites); // Parse the JSON string
+                            const uniqueFavorites = [...new Set(parsedFavorites)]; // Remove duplicates
+                            setFavorites(uniqueFavorites); // Update favorites
+                            setValidatedFavorites(uniqueFavorites); // Sync validated favorites
+                        } catch (parseError) {
+                            console.error('Error parsing favorites:', parseError);
+                            alert('Hiba történt a kedvencek feldolgozása során.');
+                        }
+                    } else {
+                        console.error('Error fetching favorites:', favoritesResult); // Log the entire response object
+                        alert('Hiba történt a kedvencek lekérése során: ' + (favoritesResult.message || 'Unknown error')); // Show alert with error message
+                    }
+                } catch (error) {
+                    console.error('Error fetching favorites:', error);
+                    alert('Hálózati hiba történt a kedvencek lekérése során.');
+                }
+            };
+            
+
+            fetchFavorites(); // Call the function to fetch favorites
         }
-    }, []);
-    
-    
+    }, []); // Dependency array to run only on mount
+
     // Bejelentkezés kezelése
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
@@ -120,9 +156,13 @@ function Menu({ favorites, setFavorites, products }) {
                 });
     
                 const favoritesResult = await favoritesResponse.json();
+                console.log('Favorites API Response after login:', favoritesResult); // Log the API response
+
                 if (favoritesResult.success) {
-                    setFavorites(favoritesResult.favorites); // Frissítjük a kedvenceket
-                    setValidatedFavorites(favoritesResult.favorites); // Sync validated favorites
+                    const parsedFavorites = JSON.parse(favoritesResult.favorites); // Parse the JSON string
+                    const uniqueFavorites = [...new Set(parsedFavorites)]; // Remove duplicates
+                    setFavorites(uniqueFavorites); // Update favorites
+                    setValidatedFavorites(uniqueFavorites); // Sync validated favorites
                 } else {
                     alert('Hiba történt a kedvencek lekérése során');
                 }
@@ -213,9 +253,6 @@ function Menu({ favorites, setFavorites, products }) {
             alert(`Hálózati hiba történt: ${error.message}`);
         }
     };
-    
-    
-    
     
     useEffect(() => {
         console.log(favorites); // Minden alkalommal kiírja, amikor a favorites változik
@@ -388,40 +425,36 @@ function Menu({ favorites, setFavorites, products }) {
 
            {/* Kedvencek modal */}
            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
-    <Modal.Header closeButton>
-        <Modal.Title>Kedvenc autók</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        {Array.isArray(validatedFavorites) && validatedFavorites.length > 0 ? (
-            <ul>
-                {validatedFavorites.map((carId) => {
-                    const car = products.find((auto) => auto.Rendszam === carId); // Find the car by Rendszam
-                    if (car) {
-                        return (
-                            <li key={car.Rendszam}>
-                                {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
-                                <Button 
-                                    variant="danger" 
-                                    onClick={() => handleFavoriteToggle(car.Rendszam)} // Call handleFavoriteToggle to remove from database
-                                    style={{ marginLeft: '10px' }}
-                                >
-                                    Eltávolítás
-                                </Button>
-                            </li>
-                        );
-                    }
-                    return null; // If car not found, return null
-                })}
-            </ul>
-        ) : (
-            <p>Nincsenek kedvencek.</p> // No favorites found
-        )}
-    </Modal.Body>
-</Modal>
-
-
-
-
+                <Modal.Header closeButton>
+                    <Modal.Title>Kedvenc autók</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {Array.isArray(validatedFavorites) && validatedFavorites.length > 0 ? (
+                        <ul>
+                            {validatedFavorites.map((carId) => {
+                                const car = products.find((auto) => auto.Rendszam === carId); // Find the car by Rendszam
+                                if (car) {
+                                    return (
+                                        <li key={car.Rendszam}>
+                                            {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
+                                            <Button 
+                                                variant="danger" 
+                                                onClick={() => handleFavoriteToggle(car.Rendszam)} // Call handleFavoriteToggle to remove from database
+                                                style={{ marginLeft: '10px' }}
+                                            >
+                                                Eltávolítás
+                                            </Button>
+                                        </li>
+                                    );
+                                }
+                                return null; // If car not found, return null
+                            })}
+                        </ul>
+                    ) : (
+                        <p>Nincsenek kedvencek.</p> // No favorites found
+                    )}
+                </Modal.Body>
+            </Modal>
 
             {/* Route-ok definiálása */}
             <Routes>

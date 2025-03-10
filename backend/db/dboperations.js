@@ -166,11 +166,17 @@ async function getFavorites(userId) {
     try {
         const query = 'SELECT kedvencek FROM regisztracio WHERE id = ?'; // Adjust the query as per your database schema
         const [rows] = await pool.query(query, [userId]);
-        return rows.length > 0 ? rows[0].kedvencek : []; // Return the favorites array
+        console.log(`Fetching favorites for userId: ${userId}, Result: ${JSON.stringify(rows)}`); // Debugging log
+        if (rows.length === 0) {
+            throw new Error('No favorites found for this user.'); // More detailed error message
+        }
+        return rows[0].kedvencek; // Return the favorites array
+
     } catch (error) {
         console.error('Error fetching favorites from database:', error);
-        throw error; // Rethrow the error for handling in the route
+        throw new Error('Failed to fetch favorites.'); // More descriptive error message
     }
+
 }
 
 module.exports = {

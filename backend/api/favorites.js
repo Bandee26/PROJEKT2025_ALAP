@@ -46,11 +46,15 @@ router.get('/favorites', verifyToken, async (req, res) => {
 
     try {
         const favorites = await getFavorites(userId); // Fetch favorites from the database
+        console.log('Fetching favorites for userId:', userId); // Log the userId being used
+
         console.log('Fetched favorites:', favorites); // Log the fetched favorites
 
-        res.json({ favorites });
+        res.json({ success: true, favorites });
+
     } catch (error) {
-        console.error('Error fetching favorites:', error);
+        console.error('Error fetching favorites for userId:', userId, error);
+
         res.status(500).json({ message: 'Internal server error' });
     }
 });
