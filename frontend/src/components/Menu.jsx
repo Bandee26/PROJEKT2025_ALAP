@@ -55,8 +55,14 @@ function Menu({ favorites, setFavorites, products }) {
                     });
                     const result = await response.json();
                     if (result.success) {
-                        setProfileName(result.name); // Set the user's name
-                        setProfilePhone(result.phone); // Set the user's phone
+                        setProfileName(result.profile.nev); // Set the user's name
+
+
+                        setUserEmail(result.profile.email); // Set the user's email
+                        setProfilePhone(result.profile.telefon); // Set the user's phone
+
+
+
                     } else {
                         alert('Hiba történt a profil lekérése során');
                     }

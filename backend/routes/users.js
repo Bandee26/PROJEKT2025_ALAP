@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const { registerUser, loginUser } = require('../db/dboperations');
+const { registerUser, loginUser, getUserProfile } = require('../db/dboperations');
+const verifyToken = require('../middleware/verifyToken'); // Import verifyToken
+
 const { updateUserProfile } = require('../db/dboperations');
 
 // Regisztráció API
@@ -55,5 +57,21 @@ router.post('/updateProfile', async function(req, res, next) {
         res.status(500).json({ success: false, message: error.message });
     }
   });
+
+router.get('/profile', verifyToken, async function(req, res, next) { 
+
+    const userId = req.userId; // Get user ID from the token
+    try {
+        const userProfile = await getUserProfile(userId); // Fetch user profile from the database
+        if (userProfile) {
+            res.status(200).json({ success: true, profile: userProfile });
+        } else {
+            res.status(404).json({ success: false, message: 'Profile not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching profile:', error); // Log errors
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 module.exports = router;

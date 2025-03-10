@@ -177,7 +177,22 @@ async function getFavorites(userId) {
 
 }
 
+async function getUserProfile(userId) {
+    try {
+        const [rows] = await pool.query('SELECT * FROM regisztracio WHERE id = ?', [userId]);
+        if (rows.length > 0) {
+            return rows[0]; // Return the user profile
+        } else {
+            return null; // No profile found
+        }
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        throw new Error('Failed to fetch user profile.');
+    }
+}
+
 module.exports = {
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
-  loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites
+  loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
+  getUserProfile // Export the new function
 };
