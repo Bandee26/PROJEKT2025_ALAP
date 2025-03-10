@@ -39,7 +39,37 @@ function Menu({ favorites, setFavorites, products }) {
     useEffect(() => {
         setValidatedFavorites(Array.isArray(favorites) ? favorites : []); // Ha nem tömb, állítsuk üres tömbre
     }, [favorites]); // Frissítjük a validatedFavorites-et, amikor a favorites változik
-    
+
+    // Fetch user profile data when the profile modal is opened
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const response = await fetch('http://localhost:8080/users/profile', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        setProfileName(result.name); // Set the user's name
+                        setProfilePhone(result.phone); // Set the user's phone
+                    } else {
+                        alert('Hiba történt a profil lekérése során');
+                    }
+                } catch (error) {
+                    alert('Hálózati hiba történt a profil lekérése során');
+                }
+            }
+        };
+
+        if (showProfileModal) {
+            fetchUserProfile(); // Fetch user profile data when modal is opened
+        }
+    }, [showProfileModal]); // Dependency to run when modal is opened
 
     // Modal megnyitása és zárása
     const handleRegisterClick = () => setShowRegisterModal(true);
@@ -76,7 +106,6 @@ function Menu({ favorites, setFavorites, products }) {
             alert('Hálózati hiba történt.');
         }
     };
-    
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -97,7 +126,6 @@ function Menu({ favorites, setFavorites, products }) {
             
                     const favoritesResult = await favoritesResponse.json();
                     
-            
                     if (favoritesResult.success) {
                         try {
                             const parsedFavorites = JSON.parse(favoritesResult.favorites); // Parse the JSON string
@@ -118,7 +146,6 @@ function Menu({ favorites, setFavorites, products }) {
                 }
             };
             
-
             fetchFavorites(); // Call the function to fetch favorites
         }
     }, []); // Dependency array to run only on mount
