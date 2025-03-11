@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CustomCard from './Card'; // Importing the CustomCard component
+import { Col } from 'react-bootstrap'; // Importing Col from react-bootstrap
+import Slider from 'react-slick'; // Importing Slider from react-slick
+
 import './order.css'; // Importing the CSS file for Order component styles
 import { useLocation } from 'react-router-dom';
 
@@ -75,7 +78,19 @@ function Order() { // Remove userId prop
         }
     };
 
-    return (
+    const settings = { // Define settings for the Slider
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>,
+        nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
+    };
+
+    return ( 
+
         <div style={{ textAlign: 'center' }}>
             <h1>Megrendelés</h1>
             {carDetails.length > 0 ? (
@@ -83,17 +98,32 @@ function Order() { // Remove userId prop
                     <h2>Kiválasztott autók:</h2>
                     <div className="card-container">
                         {carDetails.map(car => (
-                            <CustomCard
+                            <Col
                                 key={car.Rendszam}
-                                imageSrc={`http://localhost:8080/${car.Modell}.jpg`} // Assuming image URL format
-                                title={`${car.Marka} ${car.Modell}`}
-                                subtitle={`Évjárat: ${car.Evjarat} | Ár: ${car.Ar} Ft`}
-                                description={`Kilométeróra: ${car.Kilometerora} | Üzemanyag: ${car.Motortipus}`}
-                                adatok={`Km.állás: ${car.Kilometerora} | Motortípus: ${car.Motortipus} | Motorspec.: ${car.Motorspecifikacio} | Sebességváltó: ${car.Sebessegvalto} | Használat: ${car.Hasznalat} | Autó színe: ${car.Szin}`}
-                                year={`${car.Rendszam}`}
-                                elado={`${car.Nev} | Tel.: ${car.Telefon} | Email: ${car.Email}`}
-                            />
+                                xs={12} sm={6} md={4} lg={4}
+                                style={{ padding: '10px', maxWidth: '350px' }}
+                            >
+                                <CustomCard
+                                    autoId={car.Auto_ID}
+                                    title={`${car.Marka} ${car.Modell}`}
+                                    subtitle={`Évjárat: ${car.Evjarat} | Ár: ${car.Ar} Ft`}
+                                    description={`Kilométeróra: ${car.Kilometerora} | Üzemanyag: ${car.Motortipus}`}
+                                    adatok={`Km.állás: ${car.Kilometerora} | Motortípus: ${car.Motortipus} | Motorspec.: ${car.Motorspecifikacio} | Sebességváltó: ${car.Sebessegvalto} | Használat: ${car.Hasznalat} | Autó színe: ${car.Szin}`}
+                                    year={`${car.Rendszam}`}
+                                    elado={`${car.Nev} | Tel.: ${car.Telefon} | Email: ${car.Email}`}
+                                >
+                                    <Slider {...settings}>
+                                        <div>
+                                            <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={`${car.Marka} ${car.Modell} első kép`} style={{ width: '100%' }} />
+                                        </div>
+                                        <div>
+                                            <img src={`/Img/${car.Auto_ID}.2.jpg`} alt={`${car.Marka} ${car.Modell} második kép`} style={{ width: '100%' }} />
+                                        </div>
+                                    </Slider>
+                                </CustomCard>
+                            </Col>
                         ))}
+
                     </div>
                     <button onClick={handleBooking}>Foglalás megerősítése</button>
                 </div>
