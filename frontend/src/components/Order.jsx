@@ -23,7 +23,8 @@ function Order() { // Remove userId prop
 
     const location = useLocation();
     const query = new URLSearchParams(location.search);
-    const selectedCars = query.get('selectedCars') ? JSON.parse(query.get('selectedCars')) : [];
+    const [selectedCars, setSelectedCars] = useState(query.get('selectedCars') ? JSON.parse(query.get('selectedCars')) : []);
+
     
     const [carDetails, setCarDetails] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState(''); // State for payment method
@@ -51,7 +52,23 @@ function Order() { // Remove userId prop
         }
     }, []); // Dependency array to run only on mount
 
+    
+
+    const handleRemoveCar = (carId) => {
+        setCarDetails((prevCarDetails) => prevCarDetails.filter(car => car.Rendszam !== carId)); // Remove the car from carDetails
+        setSelectedCars((prevSelectedCars) => {
+            const updatedSelectedCars = prevSelectedCars.filter(id => id !== carId); // Remove the car from selectedCars
+            // Update the URL with the new selectedCars
+            const newQuery = `?selectedCars=${JSON.stringify(updatedSelectedCars)}`;
+            window.history.replaceState(null, '', newQuery); // Update the URL without reloading
+            return updatedSelectedCars;
+        });
+    };
+
+
     const handleBooking = async () => {
+
+
         if (!paymentMethod) {
             alert('Kérjük, válassza ki a fizetési módot.');
             return; // Exit the function if payment method is not selected
@@ -124,9 +141,12 @@ function Order() { // Remove userId prop
                                         </div>
                                     </Slider>
                                 </CustomCard>
+                                <button onClick={() => handleRemoveCar(car.Rendszam)}>Eltávolítás</button>
+
                             </Col>
                         ))}
                     </div>
+
                     <div>
                         <h3>Fizetési lehetőségek:</h3>
                         <label className="payment-option">
