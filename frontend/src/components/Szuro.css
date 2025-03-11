@@ -1,8 +1,11 @@
-.filter-container {
+.filter-wrapper {
   position: fixed;
   left: 0;
   top: 100px;
   z-index: 1000;
+}
+
+.filter-container {
   transition: transform 0.3s ease;
   height: 90vh;
   overflow-y: auto;
@@ -15,47 +18,11 @@
   transform: translateX(-100%);
 }
 
-.toggle-button {
-  position: fixed;
-  left: 10px;
-  top: 120px;
-  background-color: #444;
-  border: none;
-  border-radius: 50px;
-  padding: 15px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s ease;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-button:hover {
-  background-color: #555;
-}
-
-.toggle-button::after {
-  content: '\25B6'; /* Jobbra mutató nyíl */
-  display: inline-block;
-  color: white;
-  font-size: 20px;
-  transition: transform 0.3s ease;
-}
-
-.filter-container.collapsed + .toggle-button::after {
-  transform: rotate(180deg);
-}
-
 .szuro-container {
   background-color: #333;
   padding: 20px;
   border-radius: 0 8px 8px 0;
   width: 350px;
-  position: relative;
-  transition: transform 0.3s ease;
   min-height: 100vh;
 }
 
@@ -71,7 +38,6 @@
   border-radius: 4px;
 }
 
-/* A közös slider thumb – drag kurzorral */
 .custom-thumb {
   height: 20px;
   width: 20px;
@@ -105,12 +71,34 @@
   color: #999 !important;
 }
 
-.arrow-visible {
-  transform: rotate(0deg);
+.toggle-button {
+  background-color: #444;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-button:hover {
+  background-color: #555;
+}
+
+.toggle-icon {
+  color: white;
+  font-size: 20px;
   transition: transform 0.3s ease;
 }
 
-.arrow-hidden {
+.toggle-icon.visible {
+  transform: rotate(0deg);
+}
+
+.toggle-icon.hidden {
   transform: rotate(180deg);
-  transition: transform 0.3s ease;
 }

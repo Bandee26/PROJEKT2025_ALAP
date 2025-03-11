@@ -4,37 +4,36 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Szuro from './Szuro.jsx';
 import CustomCard from './Card';
 import Video from './video.jsx'; // Import the Video component
-import Menu from './Menu.jsx';
-function Kinalat({ isLoggedIn,setFavorites, handleFavoriteToggle, favorites }) {
+import Slider from 'react-slick'; // Import react-slick for image carousel
+import './KepLapozas.css'; // Import the CSS file for styling the arrows
+
+function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
 
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
-
+  const [loading, setLoading] = useState(true); // Betöltési állapot hozzáadása
 
   // Termékek lekérése az API-ból
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setLoading(true); // Set loading to true before fetching
-const token = localStorage.getItem('token'); // Retrieve JWT from local storage
-const response = await axios.get('http://localhost:8080/termek', {
-    headers: {
-        'Authorization': `Bearer ${token}` // Include JWT in the request headers
-    }
-});
+        setLoading(true); // Betöltés előtt állítsa be az állapotot igazra
+        const token = localStorage.getItem('token'); // JWT lekérése a helyi tárolóból
+        const response = await axios.get('http://localhost:8080/termek', {
+          headers: {
+            'Authorization': `Bearer ${token}` // JWT hozzáadása a kérés fejlécéhez
+          }
+        });
 
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false); // Betöltés befejezése után állítsa az állapotot hamisra
 
         const fetchedProducts = response.data.products || [];
         setProducts(fetchedProducts);
         setFilteredProducts(fetchedProducts); // Alapértelmezetten minden termék megjelenik
       } catch (err) {
         console.error('Fetch error:', err);
-        setError(err.response ? err.response.data.message : 'Hiba! Nem sikerült betölteni a termékeket. Kérjük, próbálja újra később.'); // Provide specific error message from backend
-
-
+        setError('Hiba! Nem sikerült betölteni a termékeket. Kérjük, próbálja újra később.'); // Improved error message
       }
     };
 
@@ -53,22 +52,37 @@ const response = await axios.get('http://localhost:8080/termek', {
   };
 
   const isFavorite = (autoId) => {
-    return favorites.includes(autoId); // Check if the car is a favorite
+    return favorites.includes(autoId); // Ellenőrizze, hogy az autó kedvenc-e
+  };
+
+  // React-Slick settings for the image carousel
+  const settings = {
+    dots: true, // Pontok megjelenítése a navigációhoz
+    infinite: true, // Végtelen görgetés
+    speed: 500, // A diavetítés sebessége
+    slidesToShow: 1, // Csak egy kép látható egyszerre
+    slidesToScroll: 1, // Egy képet görgetni
+    arrows: true, // Nyilak megjelenítése a navigációhoz
+    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>, // Bal nyíl
+    nextArrow: <div className="slick-next custom-arrow">&#8250;</div>, // Jobb nyíl
   };
 
   return (
     <div className="szin" style={appStyle}>
       {/* Videó háttér */}
+
       <div className="video-hatter">
         <Video />
         <Container className="my-4" style={{ position: 'relative', zIndex: 1 }}>
           <Row className="d-flex justify-content-between kinalat">
             {/* Szűrő oldalsáv */}
+
             <Col xs={12} sm={3} md={3} lg={2}>
               <Szuro onFilterChange={handleFilterChange} products={products} />
             </Col>
 
             {/* Termékek megjelenítése */}
+
             <Col xs={12} sm={9} md={9} lg={10} className="card-container">
               {filteredProducts.length > 0 && (
                 <>
@@ -80,18 +94,27 @@ const response = await axios.get('http://localhost:8080/termek', {
                         xs={12} sm={6} md={4} lg={4}
                         style={{ padding: '10px', maxWidth: '350px' }}
                       >
-                       <CustomCard
-  imageSrc={`http://localhost:8080/${auto.Modell}.jpg`}
+                        <CustomCard
+  autoId={auto.Auto_ID}
   title={`${auto.Marka} ${auto.Modell}`}
   subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
   description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
   adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
   year={`${auto.Rendszam}`}
   elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
-  isFavorite={isFavorite(auto.Rendszam)}  // Használjuk a rendszámot itt
-  onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}  // Rendszámot küldünk a kedvencekhez
+  isFavorite={isFavorite(auto.Rendszam)}
+  onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}
   showFavoriteButton={isLoggedIn}
-/>
+>
+  <Slider {...settings}>
+    <div>
+      <img src={`/Img/${auto.Auto_ID}.1.jpg`} alt={`${auto.Marka} ${auto.Modell} első kép`} style={{ width: '100%' }} />
+    </div>
+    <div>
+      <img src={`/Img/${auto.Auto_ID}.2.jpg`} alt={`${auto.Marka} ${auto.Modell} második kép`} style={{ width: '100%' }} />
+    </div>
+  </Slider>
+</CustomCard>
 
                       </Col>
                     ))}
@@ -99,9 +122,9 @@ const response = await axios.get('http://localhost:8080/termek', {
                 </>
               )}
 
-              {loading && <p className="text-center">Betöltés...</p>} {/* Loading message */}
-              {filteredProducts.length === 0 && ( 
+              {loading && <p className="text-center">Betöltés...</p>} {/* Betöltési üzenet */}
 
+              {filteredProducts.length === 0 && (
                 <p className="text-center">Nincs megjeleníthető autó.</p>
               )}
 
