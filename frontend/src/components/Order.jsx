@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import CustomCard from './Card'; // Importing the CustomCard component
+import './order.css'; // Importing the CSS file for Order component styles
+
+
 import { useLocation } from 'react-router-dom';
 
 function Order() {
@@ -33,14 +37,25 @@ function Order() {
             {carDetails.length > 0 ? (
                 <div>
                     <h2>Kiválasztott autók:</h2>
-                    <ul>
+                    <div className="card-container">
+
+
                         {carDetails.map(car => (
-                            <li key={car.Rendszam}>
-                                {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Szin} - ${car.Kilometerora} km - ${car.Motortipus} - ${car.Ar} Ft`}
-                            </li>
+                            <CustomCard
+                                key={car.Rendszam}
+                                imageSrc={`http://localhost:8080/${car.Modell}.jpg`} // Assuming image URL format
+                                title={`${car.Marka} ${car.Modell}`}
+                                subtitle={`Évjárat: ${car.Evjarat} | Ár: ${car.Ar} Ft`}
+                                description={`Kilométeróra: ${car.Kilometerora} | Üzemanyag: ${car.Motortipus}`}
+                                adatok={`Km.állás: ${car.Kilometerora} | Motortípus: ${car.Motortipus} | Motorspec.: ${car.Motorspecifikacio} | Sebességváltó: ${car.Sebessegvalto} | Használat: ${car.Hasznalat} | Autó színe: ${car.Szin}`}
+                                year={`${car.Rendszam}`}
+                                elado={`${car.Nev} | Tel.: ${car.Telefon} | Email: ${car.Email}`}
+                            />
                         ))}
-                    </ul>
+                    </div>
                 </div>
+
+
             ) : (
                 <p>Jelöld be a lefoglalni kívánt autót.</p>
             )}
