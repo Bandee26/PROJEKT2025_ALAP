@@ -7,6 +7,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState, useEffect } from 'react'; // Added useEffect to the import
+import Slider from 'react-slick'; // Import the Slider component
+
 import Logo from './auto.png';
 import './Menu.css';
 import Home from './Home';  // Home komponens importálása
@@ -238,7 +240,19 @@ function Menu({ favorites, setFavorites, products }) {
     }; // Closing brace for handleProfileSubmit
 
     // Handle favorite toggle
-    const handleFavoriteToggle = async (carId) => {
+const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>,
+    nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
+};
+
+const handleFavoriteToggle = async (carId) => {
+
         if (!isLoggedIn) {
             alert('Kérjük, jelentkezzen be a kedvencek kezeléséhez.');
             return;
@@ -472,11 +486,20 @@ function Menu({ favorites, setFavorites, products }) {
                                 if (car) {
                                     return (
                                         <li key={car.Rendszam}>
-                                            <input type="checkbox" value={car.Rendszam} /> {/* Checkbox for selection */}
-                                            <img src={car.KepUrl} alt={`${car.Marka} ${car.Modell}`} style={{ width: '100px', height: 'auto', marginRight: '10px' }} />
+                                            <Slider {...settings}>
+                                                <div>
+                                                    <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={`${car.Marka} ${car.Modell} első kép`} style={{ width: '100%' }} />
+                                                </div>
+                                                <div>
+                                                    <img src={`/Img/${car.Auto_ID}.2.jpg`} alt={`${car.Marka} ${car.Modell} második kép`} style={{ width: '100%' }} />
+                                                </div>
+                                            </Slider>
                                             {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
 
+                                            <input type="checkbox" value={car.Rendszam} style={{ marginTop: '30px' }} /> {/* Checkbox for selection */}
                                             <Button 
+
+
                                                 variant="danger" 
                                                 onClick={() => handleFavoriteToggle(car.Rendszam)} // Call handleFavoriteToggle to remove from database
                                                 style={{ marginLeft: '10px' }}
@@ -493,16 +516,13 @@ function Menu({ favorites, setFavorites, products }) {
                         <p>Nincsenek kedvencek.</p> // No favorites found
                     )}
                     <Button variant="primary" onClick={() => {
-                    const selectedCars = validatedFavorites.filter(carId => document.querySelector(`input[type="checkbox"][value="${carId}"]`).checked);
-                    if (selectedCars.length === 0) {
-                        alert("Jelöld be a lefoglalni kívánt autót.");
-                    } else {
-                        window.location.href = `/order?selectedCars=${JSON.stringify(selectedCars)}`;
-                    }
+                        const selectedCars = validatedFavorites.filter(carId => document.querySelector(`input[type="checkbox"][value="${carId}"]`).checked);
+                        if (selectedCars.length === 0) {
+                            alert("Jelöld be a lefoglalni kívánt autót.");
+                        } else {
+                            window.location.href = `/order?selectedCars=${JSON.stringify(selectedCars)}`;
+                        }
                     }}>
-
-
-
                         Foglalás
                     </Button>
                 </Modal.Body>
