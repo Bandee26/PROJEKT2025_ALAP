@@ -6,8 +6,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import CardCSS from './Card.css';
 
 const CustomCard = ({
-  imageSrc1, // First image source
-  imageSrc2, // Second image source
+  autoId,          // Az autó azonosítója
+  imageSrc1,       // Első kép forrás (opcionális)
+  imageSrc2,       // Második kép forrás (opcionális)
   title,
   subtitle,
   description,
@@ -38,12 +39,11 @@ const CustomCard = ({
     image: {
       width: '100%',
       height: 'auto',
-      maxHeight: '200px', // Add max-height
-      maxWidth: '100%', // Add max-width
+      maxHeight: '80vh',       // Növelt max-height a modalban (80% viewport magasság)
+      objectFit: 'contain',    // Megőrzi a kép arányait, nem vágja le
       border: '2px solid #333',
       borderRadius: '4px'
     }
-
   };
 
   // React-Slick settings for the image carousel
@@ -54,14 +54,18 @@ const CustomCard = ({
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>, // Left arrow
-    nextArrow: <div className="slick-next custom-arrow">&#8250;</div> // Right arrow
+    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>,
+    nextArrow: <div className="slick-next custom-arrow">&#8250;</div>
   };
+
+  // Ha nincs explicit képforrás megadva, akkor az autoId alapján építjük fel az útvonalat
+  const modalImage1 = imageSrc1 || `/Img/${autoId}.1.jpg`;
+  const modalImage2 = imageSrc2 || `/Img/${autoId}.2.jpg`;
 
   return (
     <div className='kartya hover-effect'>
       <Card className='doboz kartya-hover shadow-sm rounded' style={{ width: '18rem' }}>
-        {/* Slider with images */}
+        {/* A gyermek komponens tartalmazza például a slider-t a főoldali képekhez */}
         {children}
         <Card.Body>
           <Card.Title className='text-center'>{title}</Card.Title>
@@ -69,7 +73,9 @@ const CustomCard = ({
           <Card.Text className='card-text text-center'>{description}</Card.Text>
 
           <div className="d-flex justify-content-between mt-3">
-            <Button className="hover-button" variant="primary" onClick={handleShow} style={{backgroundColor: 'orangered'}}>Részletek</Button>
+            <Button className="hover-button" variant="primary" onClick={handleShow} style={{ backgroundColor: 'orangered' }}>
+              Részletek
+            </Button>
             {showFavoriteButton && (
               <Button
                 className="hover-button"
@@ -88,21 +94,20 @@ const CustomCard = ({
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={modalStyles.body}>
-  <Slider {...settings}>
-    <div>
-      <img src={`/frontend//public/Img/${1}.1.jpg`} alt={title} style={modalStyles.image} />
-    </div>
-    <div>
-      <img src={`/frontend//public/Img/${2}.2.jpg`} alt={title} style={modalStyles.image} />
-    </div>
-  </Slider>
-  <div className="mt-3">
-    <p><strong>Rendszám:</strong> {year}</p>
-    <p><strong>Autó adatai:</strong> {adatok}</p>
-    <p><strong>Eladó adatai:</strong> {elado}</p>
-  </div>
-</Modal.Body>
-
+          <Slider {...settings}>
+            <div>
+              <img src={modalImage1} alt={`${title} első kép`} style={modalStyles.image} />
+            </div>
+            <div>
+              <img src={modalImage2} alt={`${title} második kép`} style={modalStyles.image} />
+            </div>
+          </Slider>
+          <div className="mt-3">
+            <p><strong>Rendszám:</strong> {year}</p>
+            <p><strong>Autó adatai:</strong> {adatok}</p>
+            <p><strong>Eladó adatai:</strong> {elado}</p>
+          </div>
+        </Modal.Body>
       </Modal>
     </div>
   );

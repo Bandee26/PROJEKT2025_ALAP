@@ -95,25 +95,27 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                         style={{ padding: '10px', maxWidth: '350px' }}
                       >
                         <CustomCard
-                          title={`${auto.Marka} ${auto.Modell}`}
-                          subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
-                          description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
-                          adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
-                          year={`${auto.Rendszam}`}
-                          elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
-                          isFavorite={isFavorite(auto.Rendszam)} // Használjon egy függvényt az autó kedvencének ellenőrzésére
-                          onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}
-                          showFavoriteButton={isLoggedIn} // Ellenőrizze, hogy ez a prop helyesen van beállítva
-                        >
-                          <Slider {...settings}>
-                            <div>
-                              <img src={`/Img/${auto.Auto_ID}.1.jpg`} alt={`${auto.Marka} ${auto.Modell} első kép`} style={{ width: '100%' }} />
-                            </div>
-                            <div>
-                              <img src={`/Img/${auto.Auto_ID}.2.jpg`} alt={`${auto.Marka} ${auto.Modell} második kép`} style={{ width: '100%' }} />
-                            </div>
-                          </Slider>
-                        </CustomCard>
+  autoId={auto.Auto_ID}
+  title={`${auto.Marka} ${auto.Modell}`}
+  subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
+  description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
+  adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
+  year={`${auto.Rendszam}`}
+  elado={`${auto.Nev} | Tel.: ${auto.Telefon} | Email: ${auto.Email}`}
+  isFavorite={isFavorite(auto.Rendszam)}
+  onFavoriteToggle={() => handleFavoriteToggle(auto.Rendszam)}
+  showFavoriteButton={isLoggedIn}
+>
+  <Slider {...settings}>
+    <div>
+      <img src={`/Img/${auto.Auto_ID}.1.jpg`} alt={`${auto.Marka} ${auto.Modell} első kép`} style={{ width: '100%' }} />
+    </div>
+    <div>
+      <img src={`/Img/${auto.Auto_ID}.2.jpg`} alt={`${auto.Marka} ${auto.Modell} második kép`} style={{ width: '100%' }} />
+    </div>
+  </Slider>
+</CustomCard>
+
                       </Col>
                     ))}
                   </Row>
