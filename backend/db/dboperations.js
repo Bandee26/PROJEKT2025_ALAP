@@ -218,13 +218,14 @@ async function getUserIdByEmail(email) {
     }
 }
 
-async function createBooking(carId, email) {
-    const userId = await getUserIdByEmail(email); // Fetch user ID using email
+async function createBooking(carId, userId) {
+
 
     try {
         const [result] = await pool.query(
             'INSERT INTO foglalas (car_id, user_id) VALUES (?, ?)',
-            [carId, userId]
+            [carId, userId] // Use userId directly from the token
+
         );
         return result;
     } catch (error) {

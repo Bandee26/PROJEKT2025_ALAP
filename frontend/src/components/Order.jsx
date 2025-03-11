@@ -3,7 +3,21 @@ import CustomCard from './Card'; // Importing the CustomCard component
 import './order.css'; // Importing the CSS file for Order component styles
 import { useLocation } from 'react-router-dom';
 
-function Order({ userId }) { // Accept userId as a prop
+function Order() { // Remove userId prop
+    const token = localStorage.getItem('token'); // Get token from local storage
+    let userId = null; // Initialize userId
+    let email = null; // Initialize email
+
+    if (token) {
+        const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode the JWT token
+        if (decodedToken && decodedToken.id) {
+            userId = decodedToken.id; // Extract id from the token
+            email = decodedToken.email; // Extract email from the token if available
+        } else {
+            console.error('Failed to fetch user ID.'); // Log error if id is not found
+        }
+    }
+
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const selectedCars = query.get('selectedCars') ? JSON.parse(query.get('selectedCars')) : [];
@@ -26,14 +40,19 @@ function Order({ userId }) { // Accept userId as a prop
         fetchCarDetails();
     }, []); // Changed to empty dependency array
 
+    useEffect(() => {
+        if (!token) {
+            alert('Kérjük, jelentkezzen be a foglaláshoz.');
+            return; // Exit the function if user is not logged in
+        }
+    }, []); // Dependency array to run only on mount
+
     const handleBooking = async () => {
         const carId = selectedCars.join(','); // Assuming you want to book all selected cars
         if (!userId) {
-            alert('User ID is not defined. Please log in.');
-            return; // Exit the function if userId is not defined
+            alert('Kérjük, jelentkezzen be a foglaláshoz.');
+            return; // Exit the function if user is not logged in
         }
-
-
 
         try {
             const response = await fetch('http://localhost:8080/bookings', {
@@ -41,7 +60,8 @@ function Order({ userId }) { // Accept userId as a prop
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ carId, userId }), // Use userId from props
+                body: JSON.stringify({ carId, userId }), // Use userId for booking
+
             });
             const result = await response.json();
             if (response.ok) {
