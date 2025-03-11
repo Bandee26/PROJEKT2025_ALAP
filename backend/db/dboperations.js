@@ -23,7 +23,8 @@ function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
-async function getCarsByIds(ids) {
+async function getCarsByIds(ids) { // Ensure the function is defined correctly
+
     try {
         const [rows] = await pool.query('SELECT * FROM autorendszer WHERE Rendszam IN (?)', [ids]);
         return rows;
@@ -203,8 +204,22 @@ async function getUserProfile(userId) {
     }
 }
 
-module.exports = {
+async function createBooking(carId, userId) {
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO foglalas (car_id, user_id) VALUES (?, ?)',
+            [carId, userId]
+        );
+        return result;
+    } catch (error) {
+        console.error('Error creating booking:', error);
+        throw new Error('Failed to create booking.');
+    }
+}
+
+module.exports = { // Ensure all functions are exported correctly
+
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
   loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
-  getUserProfile, getCarsByIds // Export the new function
+  getUserProfile, createBooking,getCarsByIds // Export the new function
 };

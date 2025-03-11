@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CustomCard from './Card'; // Importing the CustomCard component
 import './order.css'; // Importing the CSS file for Order component styles
-
-
 import { useLocation } from 'react-router-dom';
 
 function Order() {
@@ -28,18 +26,35 @@ function Order() {
         fetchCarDetails();
     }, []); // Changed to empty dependency array
 
+    const handleBooking = async () => {
+        const userId = 1; // Placeholder for user ID, replace with actual logic if needed
+        const carId = selectedCars.join(','); // Assuming you want to book all selected cars
+        try {
+            const response = await fetch('http://localhost:8080/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ carId, userId }),
+            });
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message); // Show success message
+            } else {
+                alert('Error: ' + result.message); // Show error message
+            }
+        } catch (error) {
+            console.error('Error creating booking:', error);
+        }
+    };
 
     return (
         <div style={{ textAlign: 'center' }}>
             <h1>Megrendelés</h1>
-            <p>Köszönjük a rendelését! Az Ön rendelése feldolgozás alatt áll.</p>
-            <p>Hamarosan felvesszük Önnel a kapcsolatot a részletekkel.</p>
             {carDetails.length > 0 ? (
                 <div>
                     <h2>Kiválasztott autók:</h2>
                     <div className="card-container">
-
-
                         {carDetails.map(car => (
                             <CustomCard
                                 key={car.Rendszam}
@@ -53,9 +68,8 @@ function Order() {
                             />
                         ))}
                     </div>
+                    <button onClick={handleBooking}>Foglalás megerősítése</button>
                 </div>
-
-
             ) : (
                 <p>Jelöld be a lefoglalni kívánt autót.</p>
             )}
