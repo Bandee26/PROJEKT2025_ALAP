@@ -23,7 +23,18 @@ function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
+async function getCarsByIds(ids) {
+    try {
+        const [rows] = await pool.query('SELECT * FROM autorendszer WHERE Rendszam IN (?)', [ids]);
+        return rows;
+    } catch (error) {
+        console.error('Error fetching cars by IDs:', error);
+        throw new Error('Failed to fetch cars.');
+    }
+}
+
 async function selectAutoFromAutorendszer() {
+
   try {
     const [rows] = await pool.query('SELECT * FROM autorendszer');
     return rows;
@@ -195,5 +206,5 @@ async function getUserProfile(userId) {
 module.exports = {
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
   loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
-  getUserProfile // Export the new function
+  getUserProfile, getCarsByIds // Export the new function
 };

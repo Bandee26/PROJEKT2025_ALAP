@@ -44,7 +44,20 @@ function verifyToken(req, res, next) {
 app.use('/protected', verifyToken); // Apply JWT verification middleware to protected routes
 
 app.use('/',indexRouter)
+app.get('/cars', async (req, res) => {
+    const ids = req.query.ids.split(','); // Get the IDs from the query string
+    try {
+        const cars = await require('./db/dboperations').getCarsByIds(ids);
+        res.json({ cars });
+    } catch (error) {
+        console.error('Error fetching cars:', error); // Log the error for debugging
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 app.use('/users', usersRouter);  // Az API végpontokat a /users prefixszel regisztráljuk
+
 app.use('/termek', termekRouter);  // A termékek végpontjait is az /termek prefixszel
 app.use('/users', require('./api/favorites')); // Integrate favorites routes
 

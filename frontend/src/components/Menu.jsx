@@ -11,6 +11,7 @@ import Logo from './auto.png';
 import './Menu.css';
 import Home from './Home';  // Home komponens importálása
 import Kinalat from './Kinalat';  // Kínálat komponens importálása
+import Order from './Order'; // Order component import
 
 function Menu({ favorites, setFavorites, products }) {
     const [selectedBrands, setSelectedBrands] = useState([]);
@@ -491,7 +492,17 @@ function Menu({ favorites, setFavorites, products }) {
                     ) : (
                         <p>Nincsenek kedvencek.</p> // No favorites found
                     )}
-                    <Button variant="primary" onClick={() => {/* Logic to navigate to booking page */}}>
+                    <Button variant="primary" onClick={() => {
+                    const selectedCars = validatedFavorites.filter(carId => document.querySelector(`input[type="checkbox"][value="${carId}"]`).checked);
+                    if (selectedCars.length === 0) {
+                        alert("Jelöld be a lefoglalni kívánt autót.");
+                    } else {
+                        window.location.href = `/order?selectedCars=${JSON.stringify(selectedCars)}`;
+                    }
+                    }}>
+
+
+
                         Foglalás
                     </Button>
                 </Modal.Body>
@@ -499,6 +510,7 @@ function Menu({ favorites, setFavorites, products }) {
 
             {/* Route-ok definiálása */}
             <Routes>
+                <Route path="/order" element={<Order />} /> {/* New route for order page */}
                 <Route path="/" element={<Home />} />
                 <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} handleFavoriteToggle={handleFavoriteToggle} favorites={favorites} />} />
             </Routes>
