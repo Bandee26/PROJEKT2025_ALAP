@@ -38,9 +38,12 @@ const CustomCard = ({
     image: {
       width: '100%',
       height: 'auto',
+      maxHeight: '200px', // Add max-height
+      maxWidth: '100%', // Add max-width
       border: '2px solid #333',
       borderRadius: '4px'
     }
+
   };
 
   // React-Slick settings for the image carousel
