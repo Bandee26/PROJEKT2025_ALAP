@@ -204,7 +204,23 @@ async function getUserProfile(userId) {
     }
 }
 
-async function createBooking(carId, userId) {
+async function getUserIdByEmail(email) {
+    try {
+        const [rows] = await pool.query('SELECT id FROM regisztracio WHERE email = ?', [email]);
+        if (rows.length > 0) {
+            return rows[0].id; // Return the user ID
+        } else {
+            throw new Error('User not found');
+        }
+    } catch (error) {
+        console.error('Error fetching user ID:', error);
+        throw new Error('Failed to fetch user ID.');
+    }
+}
+
+async function createBooking(carId, email) {
+    const userId = await getUserIdByEmail(email); // Fetch user ID using email
+
     try {
         const [result] = await pool.query(
             'INSERT INTO foglalas (car_id, user_id) VALUES (?, ?)',

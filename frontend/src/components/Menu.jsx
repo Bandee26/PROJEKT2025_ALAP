@@ -510,7 +510,8 @@ function Menu({ favorites, setFavorites, products }) {
 
             {/* Route-ok definiálása */}
             <Routes>
-                <Route path="/order" element={<Order />} /> {/* New route for order page */}
+                <Route path="/order" element={<Order userId={userEmail} />} /> {/* New route for order page */}
+
                 <Route path="/" element={<Home />} />
                 <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} handleFavoriteToggle={handleFavoriteToggle} favorites={favorites} />} />
             </Routes>

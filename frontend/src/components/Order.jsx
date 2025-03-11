@@ -3,7 +3,7 @@ import CustomCard from './Card'; // Importing the CustomCard component
 import './order.css'; // Importing the CSS file for Order component styles
 import { useLocation } from 'react-router-dom';
 
-function Order() {
+function Order({ userId }) { // Accept userId as a prop
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const selectedCars = query.get('selectedCars') ? JSON.parse(query.get('selectedCars')) : [];
@@ -27,15 +27,21 @@ function Order() {
     }, []); // Changed to empty dependency array
 
     const handleBooking = async () => {
-        const userId = 1; // Placeholder for user ID, replace with actual logic if needed
         const carId = selectedCars.join(','); // Assuming you want to book all selected cars
+        if (!userId) {
+            alert('User ID is not defined. Please log in.');
+            return; // Exit the function if userId is not defined
+        }
+
+
+
         try {
             const response = await fetch('http://localhost:8080/bookings', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ carId, userId }),
+                body: JSON.stringify({ carId, userId }), // Use userId from props
             });
             const result = await response.json();
             if (response.ok) {
