@@ -67,7 +67,8 @@ function Order() { // Remove userId prop
             if (response.ok) {
                 alert(result.message); // Show success message
             } else {
-                alert('Error: ' + result.message); // Show error message
+            alert(result.message); // Show error message as an alert
+
             }
         } catch (error) {
             console.error('Error creating booking:', error);

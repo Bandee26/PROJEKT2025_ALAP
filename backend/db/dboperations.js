@@ -219,16 +219,22 @@ async function getUserIdByEmail(email) {
 }
 
 async function createBooking(carId, userId) {
-
+    // Check if the car is already booked
+    const [existingBooking] = await pool.query('SELECT * FROM foglalas WHERE car_id = ?', [carId]);
+    if (existingBooking.length > 0) {
+        throw new Error(`The car with ID ${carId} is already booked.`);
+    }
 
     try {
         const [result] = await pool.query(
             'INSERT INTO foglalas (car_id, user_id) VALUES (?, ?)',
             [carId, userId] // Use userId directly from the token
-
         );
-        return result;
+        return result.insertId; // Return the insertId after a successful insertion
+
     } catch (error) {
+        console.error('Error creating booking:', error);
+
         console.error('Error creating booking:', error);
         throw new Error('Failed to create booking.');
     }
