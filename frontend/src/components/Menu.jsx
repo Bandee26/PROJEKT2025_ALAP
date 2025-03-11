@@ -11,6 +11,7 @@ import Logo from './auto.png';
 import './Menu.css';
 import Home from './Home';  // Home komponens importálása
 import Kinalat from './Kinalat';  // Kínálat komponens importálása
+import Order from './Order'; // Order component import
 
 function Menu({ favorites, setFavorites, products }) {
     const [selectedBrands, setSelectedBrands] = useState([]);
@@ -56,13 +57,8 @@ function Menu({ favorites, setFavorites, products }) {
                     const result = await response.json();
                     if (result.success) {
                         setProfileName(result.profile.nev); // Set the user's name
-
-
                         setUserEmail(result.profile.email); // Set the user's email
                         setProfilePhone(result.profile.telefon); // Set the user's phone
-
-
-
                     } else {
                         alert('Hiba történt a profil lekérése során');
                     }
@@ -447,7 +443,6 @@ function Menu({ favorites, setFavorites, products }) {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicPhone">
-
                             <Form.Label>Telefonszám</Form.Label>
                             <Form.Control
                                 type="tel"
@@ -465,7 +460,7 @@ function Menu({ favorites, setFavorites, products }) {
             </Modal>
 
            {/* Kedvencek modal */}
-           <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)}>
+            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Kedvenc autók</Modal.Title>
                 </Modal.Header>
@@ -477,7 +472,10 @@ function Menu({ favorites, setFavorites, products }) {
                                 if (car) {
                                     return (
                                         <li key={car.Rendszam}>
+                                            <input type="checkbox" value={car.Rendszam} /> {/* Checkbox for selection */}
+                                            <img src={car.KepUrl} alt={`${car.Marka} ${car.Modell}`} style={{ width: '100px', height: 'auto', marginRight: '10px' }} />
                                             {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
+
                                             <Button 
                                                 variant="danger" 
                                                 onClick={() => handleFavoriteToggle(car.Rendszam)} // Call handleFavoriteToggle to remove from database
@@ -494,11 +492,26 @@ function Menu({ favorites, setFavorites, products }) {
                     ) : (
                         <p>Nincsenek kedvencek.</p> // No favorites found
                     )}
+                    <Button variant="primary" onClick={() => {
+                    const selectedCars = validatedFavorites.filter(carId => document.querySelector(`input[type="checkbox"][value="${carId}"]`).checked);
+                    if (selectedCars.length === 0) {
+                        alert("Jelöld be a lefoglalni kívánt autót.");
+                    } else {
+                        window.location.href = `/order?selectedCars=${JSON.stringify(selectedCars)}`;
+                    }
+                    }}>
+
+
+
+                        Foglalás
+                    </Button>
                 </Modal.Body>
             </Modal>
 
             {/* Route-ok definiálása */}
             <Routes>
+                <Route path="/order" element={<Order userId={userEmail} />} /> {/* New route for order page */}
+
                 <Route path="/" element={<Home />} />
                 <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} handleFavoriteToggle={handleFavoriteToggle} favorites={favorites} />} />
             </Routes>

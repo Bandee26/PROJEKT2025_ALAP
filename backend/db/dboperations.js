@@ -23,7 +23,19 @@ function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
+async function getCarsByIds(ids) { // Ensure the function is defined correctly
+
+    try {
+        const [rows] = await pool.query('SELECT * FROM autorendszer WHERE Rendszam IN (?)', [ids]);
+        return rows;
+    } catch (error) {
+        console.error('Error fetching cars by IDs:', error);
+        throw new Error('Failed to fetch cars.');
+    }
+}
+
 async function selectAutoFromAutorendszer() {
+
   try {
     const [rows] = await pool.query('SELECT * FROM autorendszer');
     return rows;
@@ -87,7 +99,7 @@ async function selectProductWhere(whereConditions){
 
   const mappings = {
     Marka: {sql: 'Marka LiKE', value: (val) => '%${val}%'},
-    Modell: {sql: 'Modell LiKE', value: (val) => '%${val}%'}
+    Modell: {sql: 'Modell LiKE', value: (val) => '%${val}%' }
   }
 
   console.log("dfgdfsgdfs",whereConditions)
@@ -117,13 +129,13 @@ async function selectProductWhere(whereConditions){
 }
 
 async function addFavorite(userId, carId) {
-
   try {
       // Frissített kedvencek listája a lekérdezés után
       const [result] = await pool.query(
           'UPDATE regisztracio SET kedvencek = JSON_ARRAY_APPEND(kedvencek, "$", ?) WHERE id = ?',
           [carId, userId]
       );
+
 
       // Lekérjük a frissített kedvencek listáját
       const [updatedFavorites] = await pool.query(
@@ -132,16 +144,17 @@ async function addFavorite(userId, carId) {
       );
 
       // Parse JSON string-tömbbé
-      const parsedFavorites = JSON.parse(updatedFavorites[0].kedvencek);
+      const favoritesArray = updatedFavorites.length > 0 && updatedFavorites[0].kedvencek
+          ? JSON.parse(updatedFavorites[0].kedvencek)
+          : [];
 
-      return { success: true, favorites: parsedFavorites }; // Visszaadjuk a tömböt, nem a JSON stringet
+
+      return { success: true, favorites: favoritesArray }; // Visszaadjuk a tömböt, nem a JSON stringet
   } catch (error) {
       console.error('Failed to add favorite:', error.message); // Log the specific error message
       throw new Error('Error adding favorite.');
   }
 }
-
-
 
 async function removeFavorite(userId, carId) {
   try {
@@ -191,8 +204,45 @@ async function getUserProfile(userId) {
     }
 }
 
-module.exports = {
+async function getUserIdByEmail(email) {
+    try {
+        const [rows] = await pool.query('SELECT id FROM regisztracio WHERE email = ?', [email]);
+        if (rows.length > 0) {
+            return rows[0].id; // Return the user ID
+        } else {
+            throw new Error('User not found');
+        }
+    } catch (error) {
+        console.error('Error fetching user ID:', error);
+        throw new Error('Failed to fetch user ID.');
+    }
+}
+
+async function createBooking(carId, userId) {
+    // Check if the car is already booked
+    const [existingBooking] = await pool.query('SELECT * FROM foglalas WHERE car_id = ?', [carId]);
+    if (existingBooking.length > 0) {
+        throw new Error(`The car with ID ${carId} is already booked.`);
+    }
+
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO foglalas (car_id, user_id) VALUES (?, ?)',
+            [carId, userId] // Use userId directly from the token
+        );
+        return result.insertId; // Return the insertId after a successful insertion
+
+    } catch (error) {
+        console.error('Error creating booking:', error);
+
+        console.error('Error creating booking:', error);
+        throw new Error('Failed to create booking.');
+    }
+}
+
+module.exports = { // Ensure all functions are exported correctly
+
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
   loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
-  getUserProfile // Export the new function
+  getUserProfile, createBooking,getCarsByIds // Export the new function
 };
