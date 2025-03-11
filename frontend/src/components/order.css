@@ -8,3 +8,7 @@
 .text-center {
     text-align: center;
 }
+
+.payment-option {
+    margin-right: 20px; /* Adjust the spacing as needed */
+}

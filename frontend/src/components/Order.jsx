@@ -26,6 +26,7 @@ function Order() { // Remove userId prop
     const selectedCars = query.get('selectedCars') ? JSON.parse(query.get('selectedCars')) : [];
     
     const [carDetails, setCarDetails] = useState([]);
+    const [paymentMethod, setPaymentMethod] = useState(''); // State for payment method
 
     useEffect(() => {
         const fetchCarDetails = async () => {
@@ -51,6 +52,11 @@ function Order() { // Remove userId prop
     }, []); // Dependency array to run only on mount
 
     const handleBooking = async () => {
+        if (!paymentMethod) {
+            alert('Kérjük, válassza ki a fizetési módot.');
+            return; // Exit the function if payment method is not selected
+        }
+
         const carId = selectedCars.join(','); // Assuming you want to book all selected cars
         if (!userId) {
             alert('Kérjük, jelentkezzen be a foglaláshoz.');
@@ -63,15 +69,13 @@ function Order() { // Remove userId prop
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ carId, userId }), // Use userId for booking
-
+                body: JSON.stringify({ carId, userId, paymentMethod }), // Include payment method in booking
             });
             const result = await response.json();
             if (response.ok) {
                 alert(result.message); // Show success message
             } else {
-            alert(result.message); // Show error message as an alert
-
+                alert(result.message); // Show error message as an alert
             }
         } catch (error) {
             console.error('Error creating booking:', error);
@@ -90,7 +94,6 @@ function Order() { // Remove userId prop
     };
 
     return ( 
-
         <div style={{ textAlign: 'center' }}>
             <h1>Megrendelés</h1>
             {carDetails.length > 0 ? (
@@ -123,7 +126,27 @@ function Order() { // Remove userId prop
                                 </CustomCard>
                             </Col>
                         ))}
-
+                    </div>
+                    <div>
+                        <h3>Fizetési lehetőségek:</h3>
+                        <label className="payment-option">
+                            <input 
+                                type="radio" 
+                                value="cash" 
+                                name="paymentMethod" 
+                                onChange={(e) => setPaymentMethod(e.target.value)} 
+                            />
+                            Készpénzes fizetés a helyszínen
+                        </label>
+                        <label className="payment-option">
+                            <input 
+                                type="radio" 
+                                value="card" 
+                                name="paymentMethod" 
+                                onChange={(e) => setPaymentMethod(e.target.value)} 
+                            />
+                            Bankkártyás fizetés a helyszínen
+                        </label>
                     </div>
                     <button onClick={handleBooking}>Foglalás megerősítése</button>
                 </div>
