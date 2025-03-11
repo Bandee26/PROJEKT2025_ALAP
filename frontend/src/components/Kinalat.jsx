@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSpring, animated } from 'react-spring'; // Import react-spring for animations
+
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import Szuro from './Szuro.jsx';
@@ -8,6 +10,15 @@ import Slider from 'react-slick'; // Import react-slick for image carousel
 import './KepLapozas.css'; // Import the CSS file for styling the arrows
 
 function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
+  const [isFilterOpen, setIsFilterOpen] = useState(false); // State to track filter visibility
+  const filterWidth = 150; // Example width of the filter in pixels
+
+  // Animation for the card container based on filter state
+  const cardStyle = useSpring({
+    marginLeft: isFilterOpen ? filterWidth / 2 : 0, // Shift cards based on filter state
+    config: { tension: 200, friction: 20 },
+  });
+
 
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -83,16 +94,25 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
 
             {/* Termékek megjelenítése */}
 
-            <Col xs={12} sm={9} md={9} lg={10} className="card-container">
+            <Col xs={12} sm={9} md={9} lg={10} className="card-container" style={cardStyle}>
+
               {filteredProducts.length > 0 && (
                 <>
                   <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
-                  <Row className="d-flex justify-content-start g-4">
+<Row className="d-flex justify-content-center g-7">
+
+
+
+
                     {filteredProducts.map((auto) => (
                       <Col
                         key={auto.Rendszam}
                         xs={12} sm={6} md={4} lg={4}
-                        style={{ padding: '10px', maxWidth: '350px' }}
+                        style={{ padding: '0px', maxWidth: '350px', marginLeft: '30px' }}
+
+
+
+
                       >
                         <CustomCard
   autoId={auto.Auto_ID}
