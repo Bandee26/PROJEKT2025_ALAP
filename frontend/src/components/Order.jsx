@@ -25,7 +25,6 @@ function Order() { // Remove userId prop
     const query = new URLSearchParams(location.search);
     const [selectedCars, setSelectedCars] = useState(query.get('selectedCars') ? JSON.parse(query.get('selectedCars')) : []);
 
-    
     const [carDetails, setCarDetails] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState(''); // State for payment method
 
@@ -52,8 +51,6 @@ function Order() { // Remove userId prop
         }
     }, []); // Dependency array to run only on mount
 
-    
-
     const handleRemoveCar = (carId) => {
         setCarDetails((prevCarDetails) => prevCarDetails.filter(car => car.Rendszam !== carId)); // Remove the car from carDetails
         setSelectedCars((prevSelectedCars) => {
@@ -65,10 +62,7 @@ function Order() { // Remove userId prop
         });
     };
 
-
     const handleBooking = async () => {
-
-
         if (!paymentMethod) {
             alert('Kérjük, válassza ki a fizetési módot.');
             return; // Exit the function if payment method is not selected
@@ -110,6 +104,11 @@ function Order() { // Remove userId prop
         nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
     };
 
+    // Function to format numbers with dots as thousands separators
+    const formatPrice = (price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Format the price
+    };
+
     return ( 
         <div style={{ textAlign: 'center' }}>
             <h1>Megrendelés</h1>
@@ -126,7 +125,7 @@ function Order() { // Remove userId prop
                                 <CustomCard
                                     autoId={car.Auto_ID}
                                     title={`${car.Marka} ${car.Modell}`}
-                                    subtitle={`Évjárat: ${car.Evjarat} | Ár: ${car.Ar} Ft`}
+                                    subtitle={`Évjárat: ${car.Evjarat} | Ár: ${formatPrice(car.Ar)} Ft`} // Format price here
                                     description={`Kilométeróra: ${car.Kilometerora} | Üzemanyag: ${car.Motortipus}`}
                                     adatok={`Km.állás: ${car.Kilometerora} | Motortípus: ${car.Motortipus} | Motorspec.: ${car.Motorspecifikacio} | Sebességváltó: ${car.Sebessegvalto} | Használat: ${car.Hasznalat} | Autó színe: ${car.Szin}`}
                                     year={`${car.Rendszam}`}
@@ -142,13 +141,16 @@ function Order() { // Remove userId prop
                                     </Slider>
                                 </CustomCard>
                                 <button onClick={() => handleRemoveCar(car.Rendszam)}>Eltávolítás</button>
-
                             </Col>
                         ))}
                     </div>
 
                     <div>
-                        <h3>Fizetési lehetőségek:</h3>
+                    <h3>Fizetési lehetőségek:</h3>
+                    {carDetails.length > 0 && carDetails[0].Ar && (
+                        <p>A kiválasztott autó ára: {formatPrice(Math.round(carDetails[0].Ar * 0.1))} Ft</p>
+                    )}
+
                         <label className="payment-option">
                             <input 
                                 type="radio" 

@@ -496,7 +496,8 @@ const handleFavoriteToggle = async (carId) => {
                                             </Slider>
                                             {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
 
-                                            <input type="checkbox" value={car.Rendszam} style={{ marginTop: '30px' }} /> {/* Checkbox for selection */}
+                                            <input type="radio" name="favoriteCar" value={car.Rendszam} style={{ marginTop: '30px' }} /> {/* Radio button for selection */}
+
                                             <Button 
 
 
@@ -516,7 +517,8 @@ const handleFavoriteToggle = async (carId) => {
                         <p>Nincsenek kedvencek.</p> // No favorites found
                     )}
                     <Button variant="primary" onClick={() => {
-                        const selectedCars = validatedFavorites.filter(carId => document.querySelector(`input[type="checkbox"][value="${carId}"]`).checked);
+                    const selectedCars = validatedFavorites.filter(carId => document.querySelector(`input[type="radio"][value="${carId}"]`).checked);
+
                         if (selectedCars.length === 0) {
                             alert("Jelöld be a lefoglalni kívánt autót.");
                         } else {
