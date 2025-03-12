@@ -109,8 +109,9 @@ function Order() { // Remove userId prop
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Format the price
     };
 
-    return ( 
-        <div style={{ textAlign: 'center' }}>
+return ( 
+        <div className="order-background" style={{ textAlign: 'center' }}>
+
             <h1>Megrendelés</h1>
             {carDetails.length > 0 ? (
                 <div>

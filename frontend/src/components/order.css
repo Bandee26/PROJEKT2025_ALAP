@@ -12,3 +12,9 @@
 .payment-option {
     margin-right: 20px; /* Adjust the spacing as needed */
 }
+
+/* Add background color for the order page */
+.order-background {
+    background-color: lightgrey; /* Set the background color to light grey */
+    padding: 20px; /* Optional: Add some padding for better spacing */
+}
