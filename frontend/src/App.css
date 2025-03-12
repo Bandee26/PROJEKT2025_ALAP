@@ -96,11 +96,12 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center; /* Kártyák középre igazítása */
-  gap: 20px; /* Nagyobb távolság a kártyák között */
+  gap: 30px; /* Nagyobb távolság a kártyák között */
+
 
   /* Scrollbar testreszabása */
   --sb-track-color: #222;
-  --sb-thumb-color: #006aff;
+  --sb-thumb-color: #FFA500;
   --sb-size: 20px;
 }
 
