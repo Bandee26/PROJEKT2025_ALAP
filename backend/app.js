@@ -64,10 +64,19 @@ app.post('/bookings', async (req, res) => {
     const { carId, userId } = req.body; // Assuming userId is passed in the request body
     try {
         const result = await require('./db/dboperations').createBooking(carId, userId);
+        const userProfile = await require('./db/dboperations').getUserProfile(userId); // Retrieve user profile
+        console.log('User profile retrieved:', userProfile); // Log the user profile for debugging
+
+        console.log('Sending email to:', userProfile.email); // Log the email address
+        await require('./utils/emailService').sendConfirmationEmail(userProfile.email, result.insertId); // Send confirmation email
+        console.log('Email sent successfully'); // Log success message
+
+
         res.status(201).json({ message: 'Sikeres foglalás!', bookingId: result.insertId });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+
 });
 
 app.use('/users', usersRouter);  // Az API végpontokat a /users prefixszel regisztráljuk
