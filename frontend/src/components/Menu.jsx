@@ -251,7 +251,12 @@ const settings = {
     nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
 };
 
+const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Format the price
+}
+
 const handleFavoriteToggle = async (carId) => {
+
 
         if (!isLoggedIn) {
             alert('Kérjük, jelentkezzen be a kedvencek kezeléséhez.');
@@ -494,7 +499,10 @@ const handleFavoriteToggle = async (carId) => {
                                                     <img src={`/Img/${car.Auto_ID}.2.jpg`} alt={`${car.Marka} ${car.Modell} második kép`} style={{ width: '100%' }} />
                                                 </div>
                                             </Slider>
-                                            {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${car.Ar} Ft`}
+                                            {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${formatPrice(car.Ar)} Ft`}
+
+
+
 
                                             <input type="radio" name="favoriteCar" value={car.Rendszam} style={{ marginTop: '30px' }} /> {/* Radio button for selection */}
 
