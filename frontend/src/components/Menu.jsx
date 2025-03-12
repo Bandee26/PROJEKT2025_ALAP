@@ -504,17 +504,24 @@ const handleFavoriteToggle = async (carId) => {
 
 
 
-                                            <input type="radio" name="favoriteCar" value={car.Rendszam} style={{ marginTop: '30px' }} /> {/* Radio button for selection */}
-
+     
                                             <Button 
-
-
                                                 variant="danger" 
                                                 onClick={() => handleFavoriteToggle(car.Rendszam)} // Call handleFavoriteToggle to remove from database
                                                 style={{ marginLeft: '10px' }}
                                             >
                                                 Eltávolítás
                                             </Button>
+                                            <Button 
+                                                variant="primary" 
+                                                onClick={() => {
+                                                    window.location.href = `/order?selectedCars=${JSON.stringify([car.Rendszam])}`;
+                                                }} 
+                                                style={{ marginLeft: '10px' }}
+                                            >
+                                                Foglalás
+                                            </Button>
+
                                         </li>
                                     );
                                 }
@@ -524,17 +531,7 @@ const handleFavoriteToggle = async (carId) => {
                     ) : (
                         <p>Nincsenek kedvencek.</p> // No favorites found
                     )}
-                    <Button variant="primary" onClick={() => {
-                    const selectedCars = validatedFavorites.filter(carId => document.querySelector(`input[type="radio"][value="${carId}"]`).checked);
-
-                        if (selectedCars.length === 0) {
-                            alert("Jelöld be a lefoglalni kívánt autót.");
-                        } else {
-                            window.location.href = `/order?selectedCars=${JSON.stringify(selectedCars)}`;
-                        }
-                    }}>
-                        Foglalás
-                    </Button>
+                    
                 </Modal.Body>
             </Modal>
 
