@@ -1,6 +1,6 @@
 .image-container {
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Kép kiléphet a kártyából */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,13 +9,17 @@
 }
 
 .car-image {
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, z-index 0.3s ease-in-out;
   width: 100%;
   height: auto;
+  position: relative;
+  z-index: 1; /* Alapállapot: háttérben */
 }
 
-.car-image.hovered {
-  width: 120%;  /* A kép szélesebb lesz, így kilép a keretből */
-  height: auto;  /* Magassága arányosan változik */
-  transform: translateX(-10%);  /* Kicsit balra mozgatja, hogy középen maradjon */
+.image-container:hover .car-image {
+  position: absolute; /* Kiemeljük az eredeti helyéről */
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2); /* Középen marad, de kétszeresére nő */
+  z-index: 10; /* Előtérbe hozzuk */
 }
