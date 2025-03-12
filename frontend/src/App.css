@@ -88,15 +88,24 @@ body {
 /* Kártyákat tartalmazó konténer */
 .card-container {
   max-height: 900px;
-  width: 1600px; /* Szélesebb konténer */
+  width: 2000px; /* Szélesebb konténer */
+
+
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: 10px;
   margin: 0 auto; /* Középre helyezés */
+  margin-left: 50px; /* Shift right when filter is open */
+
+  margin-left: 50px; /* Shift right when filter is open */
+
   display: flex;
   flex-wrap: wrap;
   justify-content: center; /* Kártyák középre igazítása */
-  gap: 30px; /* Nagyobb távolság a kártyák között */
+  margin: 120px; /* Increased margin for cards */
+
+  gap: 20px; /* Nagyobb távolság a kártyák között */
+
 
 
   /* Scrollbar testreszabása */
@@ -130,9 +139,9 @@ body {
 .card {
   background-color: #222;
   border-radius: 12px;
-  padding: 15px;
+  padding: 10px;
   transition: all 0.3s ease;
-  width: 300px; /* Egységes kártyaszélesség */
+  width: 400px; /* Increased card width */
   text-align: center;
 }
 

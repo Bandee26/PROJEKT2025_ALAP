@@ -108,7 +108,7 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                       <Col
                         key={auto.Rendszam}
                         xs={12} sm={6} md={4} lg={4}
-                        style={{ padding: '0px', maxWidth: '350px', marginLeft: '30px' }}
+                        style={{ padding: '0px', maxWidth: '350px', marginLeft: '70px' }}
 
 
 
