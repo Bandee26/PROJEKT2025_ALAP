@@ -24,7 +24,6 @@ function hashPassword(password) {
 }
 
 async function getCarsByIds(ids) { // Ensure the function is defined correctly
-
     try {
         const [rows] = await pool.query('SELECT * FROM autorendszer WHERE Rendszam IN (?)', [ids]);
         return rows;
@@ -35,7 +34,6 @@ async function getCarsByIds(ids) { // Ensure the function is defined correctly
 }
 
 async function selectAutoFromAutorendszer() {
-
   try {
     const [rows] = await pool.query('SELECT * FROM autorendszer');
     return rows;
@@ -136,7 +134,6 @@ async function addFavorite(userId, carId) {
           [carId, userId]
       );
 
-
       // Lekérjük a frissített kedvencek listáját
       const [updatedFavorites] = await pool.query(
           'SELECT kedvencek FROM regisztracio WHERE id = ?',
@@ -147,7 +144,6 @@ async function addFavorite(userId, carId) {
       const favoritesArray = updatedFavorites.length > 0 && updatedFavorites[0].kedvencek
           ? JSON.parse(updatedFavorites[0].kedvencek)
           : [];
-
 
       return { success: true, favorites: favoritesArray }; // Visszaadjuk a tömböt, nem a JSON stringet
   } catch (error) {
@@ -187,7 +183,6 @@ async function getFavorites(userId) {
         console.error('Error fetching favorites from database:', error);
         throw new Error('Failed to fetch favorites.'); // More descriptive error message
     }
-
 }
 
 async function getUserProfile(userId) {
@@ -233,15 +228,12 @@ async function createBooking(carId, userId) {
         return result.insertId; // Return the insertId after a successful insertion
 
     } catch (error) {
-        console.error('Error creating booking:', error);
-
-        console.error('Error creating booking:', error);
+        console.error('Error creating booking:', error); // Log the error
         throw new Error('Failed to create booking.');
     }
 }
 
 module.exports = { // Ensure all functions are exported correctly
-
   selectAutoFromAutorendszer, selectProductPerPage , registerUser,
   loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
   getUserProfile, createBooking,getCarsByIds // Export the new function
