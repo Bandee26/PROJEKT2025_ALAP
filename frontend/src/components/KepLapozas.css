@@ -1,37 +1,28 @@
 .custom-arrow {
-    font-size: 30px;
-    color: #fff;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background-color: rgba(0, 0, 0, 0.5); /* Nyíl háttér színe */
-    border-radius: 50%;
-    padding: 10px;
-  }
-  
-  .slick-prev.custom-arrow {
-    left: 10px; /* Bal oldali nyíl pozíciója */
-  }
-  
-  .slick-next.custom-arrow {
-    right: 10px; /* Jobb oldali nyíl pozíciója */
-  }
-  
-  .slick-prev, .slick-next {
-    display: block;
-    height: 40px;
-    width: 40px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 50%;
-    text-align: center;
-    line-height: 40px;
-    font-size: 20px;
-    color: white;
-    z-index: 10;
-  }
-  
-  .slick-prev:hover, .slick-next:hover {
-    background-color: rgba(0, 0, 0, 0.6); /* Hover állapot */
-  }
-  
+  font-size: 28px;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: rgba(128, 128, 128, 0.7); /* alap szürke */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.slick-prev.custom-arrow {
+  left: 10px;
+}
+
+.slick-next.custom-arrow {
+  right: 10px;
+}
+
+.custom-arrow:hover {
+  background-color: orangered; /* hover esetén narancs */
+  transform: translateY(-50%) scale(1.1); /* enyhe nagyítás hoverkor */
+}

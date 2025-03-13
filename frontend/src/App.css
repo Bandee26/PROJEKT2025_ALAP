@@ -43,7 +43,6 @@
 }
 
 body {
-  /*background-image: url('/assets/film.jpg'); */
   background-size: cover;
 }
 
@@ -88,15 +87,30 @@ body {
 
 /* Kártyákat tartalmazó konténer */
 .card-container {
-  max-height: 900px; /* Meghatározhatod, hogy mekkora legyen a konténer magassága */
-  width: 1400px;
-  overflow-y: auto; /* Vertikális görgetés engedélyezése */
+  max-height: 900px;
+  width: 2000px; /* Szélesebb konténer */
+
+
+  overflow-y: auto;
   overflow-x: hidden;
   border-radius: 10px;
+  margin: 0 auto; /* Középre helyezés */
+  margin-left: 50px; /* Shift right when filter is open */
 
-  /* Scrollbar testreszabása a index.css alapján */
-  --sb-track-color: #222;  /* Világos szürke */
-  --sb-thumb-color: #006aff;  /* Világos kék */
+  margin-left: 50px; /* Shift right when filter is open */
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Kártyák középre igazítása */
+  margin: 120px; /* Increased margin for cards */
+
+  gap: 20px; /* Nagyobb távolság a kártyák között */
+
+
+
+  /* Scrollbar testreszabása */
+  --sb-track-color: #222;
+  --sb-thumb-color: #FFA500;
   --sb-size: 20px;
 }
 
@@ -111,7 +125,7 @@ body {
 
 .card-container::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 1px;
+  border-radius: 10px;
   border: 2px solid #232E33;
 }
 
@@ -119,4 +133,60 @@ body {
   .card-container {
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
+}
+
+/* Kártyák beállításai */
+.card {
+  background-color: #222;
+  border-radius: 12px;
+  padding: 10px;
+  transition: all 0.3s ease;
+  width: 400px; /* Increased card width */
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+  border-color: #ff4501;
+}
+
+/* Nyíl stílusok a lapozáshoz */
+.custom-arrow {
+  font-size: 30px;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.slick-prev.custom-arrow {
+  left: 10px;
+}
+
+.slick-next.custom-arrow {
+  right: 10px;
+}
+
+.slick-prev, .slick-next {
+  display: block;
+  height: 40px;
+  width: 40px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 20px;
+  color: white;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.slick-prev:hover, .slick-next:hover {
+  background-color: #ff4501; /* Hover állapot narancssárga */
 }

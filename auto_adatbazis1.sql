@@ -6,17 +6,17 @@
 -- Client version: 4.1
 --
 
--- 
+--
 -- Disable foreign keys
--- 
+--
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 
--- 
+--
 -- Set SQL mode
--- 
+--
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- 
+--
 -- Set character set the client will use to send SQL statements to the server
 --
 SET NAMES 'utf8mb4';

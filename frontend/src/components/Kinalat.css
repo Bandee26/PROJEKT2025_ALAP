@@ -1,14 +1,25 @@
-.video-hatter {
-    position: absolute; /* A videót pozicionáljuk az oldal tetejére */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; /* Kitölti az egész szülőelemet */
-    z-index: -1; /* A videó háttérként jelenik meg */
-  }
-  
-  .kinalat-container {
-    position: relative; /* A tartalom nem fogja kitakarni a videót */
-    z-index: 1; /* A tartalom a videó felett legyen */
-  }
-  
+.image-container {
+  position: relative;
+  overflow: visible; /* Kép kiléphet a kártyából */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+
+.car-image {
+  transition: transform 0.3s ease-in-out, z-index 0.3s ease-in-out;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 1; /* Alapállapot: háttérben */
+}
+
+.image-container:hover .car-image {
+  position: absolute; /* Kiemeljük az eredeti helyéről */
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2); /* Középen marad, de kétszeresére nő */
+  z-index: 10; /* Előtérbe hozzuk */
+}

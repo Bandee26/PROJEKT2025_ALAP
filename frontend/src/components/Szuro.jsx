@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useWindowScroll } from 'react-use';
+
 import ReactSlider from 'react-slider';
 import axios from 'axios';
 import { Card, Form, Row, Col, Button } from 'react-bootstrap';
@@ -25,6 +27,7 @@ const Szuro = ({ onFilterChange, products }) => {
   const [selectedTransmission, setSelectedTransmission] = useState('');
   const [maxKm, setMaxKm] = useState(1000000);
 
+  const { y } = useWindowScroll();
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
@@ -57,8 +60,8 @@ const Szuro = ({ onFilterChange, products }) => {
 
         setBrands(fetchedBrands);
         setModelsByBrand(Object.fromEntries(
-          Object.entries(fetchedModelsByBrand).map(([brand, models]) => [brand, [...models]])
-        ));
+          Object.entries(fetchedModelsByBrand).map(([brand, models]) => [brand, [...models]]))
+        );
         setColors(fetchedColors);
         setEngineTypes(fetchedEngineTypes);
         setUsageTypes(fetchedUsageTypes);
@@ -137,7 +140,7 @@ const Szuro = ({ onFilterChange, products }) => {
 
   return (
     <div className="filter-wrapper">
-      <div className={`filter-container ${isVisible ? '' : 'collapsed'}`}>
+      <div className={`filter-container ${isVisible ? '' : 'collapsed'}`} style={{ position: 'sticky', top: '0' }}>
         <Card className="szuro-container">
           <Card.Title className="text-center text-light">Szűrő</Card.Title>
           <Form.Group className="mb-3">
@@ -147,6 +150,7 @@ const Szuro = ({ onFilterChange, products }) => {
               placeholder="Keresd meg a termékeket..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ width: '100%' }}
             />
           </Form.Group>
           <Form.Group className="mb-3">
