@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSpring, animated } from 'react-spring';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import Szuro from './Szuro.jsx';
@@ -15,31 +14,56 @@ const formatPrice = (price) => {
 function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [hoveredImage, setHoveredImage] = useState(null); // Új állapot a hover kezelésére
+  const [hoveredImage, setHoveredImage] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true); // Ha nincs több adat, ne töltsön be újabb oldalt
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8080/termek', {
-          headers: { 'Authorization': `Bearer ${token}` }
+        const response = await axios.get(`http://localhost:8080/termek/${page}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
         });
 
-        setLoading(false);
         const fetchedProducts = response.data.products || [];
-        setProducts(fetchedProducts);
-        setFilteredProducts(fetchedProducts);
+        
+        if (fetchedProducts.length === 0) {
+          setHasMore(false); // Ha nincs több termék, ne töltsön be újabb adatokat
+        } else {
+          setProducts((prevProducts) => [...prevProducts, ...fetchedProducts]); // Hozzáfűzés a meglévő adatokhoz
+          setFilteredProducts((prevFiltered) => [...prevFiltered, ...fetchedProducts]); // Frissítés a szűrt listára is
+        }
+
+        setLoading(false);
       } catch (err) {
         console.error('Fetch error:', err);
         setError('Hiba! Nem sikerült betölteni a termékeket.');
+        setLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [page]); // Ha a page változik, új adatok betöltése
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 10
+      ) {
+        if (!loading && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loading, hasMore]);
 
   const handleFilterChange = (filtered) => {
     setFilteredProducts(filtered);
@@ -114,7 +138,7 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
               )}
 
               {loading && <p className="text-center">Betöltés...</p>}
-              {filteredProducts.length === 0 && <p className="text-center">Nincs megjeleníthető autó.</p>}
+              {!loading && filteredProducts.length === 0 && <p className="text-center">Nincs megjeleníthető autó.</p>}
               {error && <p className="text-danger text-center">{error}</p>}
             </Col>
           </Row>
