@@ -34,24 +34,15 @@ async function getCarsByIds(ids) { // Ensure the function is defined correctly
     }
 }
 
-async function selectAutoFromAutorendszer(pageNo=1) {
+async function selectAutoFromAutorendszer() {
 
-  /*try {
+  try {
     const [rows] = await pool.query('SELECT * FROM autorendszer');
     return rows;
   } catch (error) {
     console.error("Database query failed:", error);
     throw new Error('Hiba történt az adatbázis lekérdezésében');
-  }*/
-    try {
-        const [elements] = await pool.query(
-            'SELECT * FROM autorendszer ORDER BY Auto_ID LIMIT ?, 25', 
-            [(pageNo - 1) * 25]
-        );
-        return elements;
-    } catch (error) {
-        throw error;
-    }
+  }
 }
 
 // Regisztráció függvény
