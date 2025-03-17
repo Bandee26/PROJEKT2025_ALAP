@@ -104,7 +104,8 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                         <CustomCard
                           autoId={auto.Auto_ID}
                           title={`${auto.Marka} ${auto.Modell}`}
-                          subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${auto.Ar} Ft`}
+subtitle={`Évjárat: ${auto.Evjarat} | Ár: ${formatPrice(auto.Ar)} Ft`}
+
                           description={`Kilométeróra: ${auto.Kilometerora} | Üzemanyag: ${auto.Motortipus}`}
                           adatok={`Km.állás: ${auto.Kilometerora} | Motortípus: ${auto.Motortipus} | Motorspec.: ${auto.Motorspecifikacio} | Sebességváltó: ${auto.Sebessegvalto} | Használat: ${auto.Hasznalat} | Autó színe: ${auto.Szin}`}
                           year={`${auto.Rendszam}`}
