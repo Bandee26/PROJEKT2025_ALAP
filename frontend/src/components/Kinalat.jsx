@@ -41,7 +41,7 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
   const headerSpring = useSpring({
     from: { transform: 'translateX(-150%)' },
     to: { transform: 'translateX(0%)' },
-    config: { duration: 1200 }
+    config: { duration: 1500 }
   });
 
   const settings = {
