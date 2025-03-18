@@ -20,26 +20,26 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     return new Intl.NumberFormat('hu-HU').format(price);
   };
 
+  const fetchProducts = async (offset = 0) => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:8080/termek?limit=25&offset=${offset}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      setLoading(false);
+      const fetchedProducts = response.data.products || [];
+      setProducts(fetchedProducts);
+      setFilteredProducts(fetchedProducts);
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError('Hiba! Nem sikerült betölteni a termékeket.');
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8080/termek', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        setLoading(false);
-        const fetchedProducts = response.data.products || [];
-        setProducts(fetchedProducts);
-        setFilteredProducts(fetchedProducts);
-      } catch (err) {
-        console.error('Fetch error:', err);
-        setError('Hiba! Nem sikerült betölteni a termékeket.');
-      }
-    };
-
-    fetchProducts();
+    fetchProducts(0);
   }, []);
 
   const handleFilterChange = (filtered) => {
@@ -116,6 +116,10 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
 
               {loading && <p className="text-center">Betöltés...</p>}
               {filteredProducts.length === 0 && <p className="text-center">Nincs megjeleníthető autó.</p>}
+              <button onClick={() => fetchProducts(filteredProducts.length)} className="btn btn-primary mt-3">
+                További Kocsik
+              </button>
+
               {error && <p className="text-danger text-center">{error}</p>}
             </Col>
           </Row>

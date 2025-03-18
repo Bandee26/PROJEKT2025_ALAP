@@ -9,8 +9,8 @@ let pool = sql.createPool(config);
 async function selectProductPerPage(pageNo) {
   try {
       const [elements] = await pool.query(
-          'SELECT * FROM autorendszer ORDER BY Evjarat LIMIT ?, 20', 
-          [(pageNo - 1) * 20]
+          'SELECT * FROM autorendszer ORDER BY Evjarat LIMIT ?, 25', 
+          [(pageNo - 1) * 25]
       );
       return elements;
   } catch (error) {
@@ -34,10 +34,12 @@ async function getCarsByIds(ids) { // Ensure the function is defined correctly
     }
 }
 
-async function selectAutoFromAutorendszer() {
+async function selectAutoFromAutorendszer(limit, offset) {
+
 
   try {
-    const [rows] = await pool.query('SELECT * FROM autorendszer');
+    const [rows] = await pool.query('SELECT * FROM autorendszer LIMIT ? OFFSET ?', [limit, offset]);
+
     return rows;
   } catch (error) {
     console.error("Database query failed:", error);
