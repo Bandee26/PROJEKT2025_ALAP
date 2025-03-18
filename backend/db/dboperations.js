@@ -223,7 +223,8 @@ async function getUserIdByEmail(email) {
     }
 }
 
-async function createBooking(carId, userId) {
+async function createBooking(carId, userId, paymentMethod) {
+
     // Check if the car is already booked
     const [existingBooking] = await pool.query('SELECT * FROM foglalas WHERE car_id = ?', [carId]);
     if (existingBooking.length > 0) {
@@ -232,8 +233,9 @@ async function createBooking(carId, userId) {
 
     try {
         const [result] = await pool.query(
-            'INSERT INTO foglalas (car_id, user_id) VALUES (?, ?)',
-            [carId, userId] // Use userId directly from the token
+            'INSERT INTO foglalas (car_id, user_id, fizmod) VALUES (?, ?, ?)',
+            [carId, userId, paymentMethod] // Include payment method
+
         );
         return result.insertId; // Return the insertId after a successful insertion
 

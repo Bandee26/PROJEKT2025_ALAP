@@ -61,9 +61,11 @@ app.get('/cars', async (req, res) => {
 
 
 app.post('/bookings', async (req, res) => {
-    const { carId, userId } = req.body; // Assuming userId is passed in the request body
+    const { carId, userId, paymentMethod } = req.body; // Assuming userId and paymentMethod are passed in the request body
+
     try {
-        const result = await require('./db/dboperations').createBooking(carId, userId);
+        const result = await require('./db/dboperations').createBooking(carId, userId, paymentMethod);
+
         console.log('Booking created with ID:', result.insertId); // Log the booking ID
         const userProfile = await require('./db/dboperations').getUserProfile(userId); // Retrieve user profile
         const carDetails = await require('./db/dboperations').getCarsByIds([carId]); // Fetch car details

@@ -9,7 +9,14 @@ const CreditCardModal = ({ isOpen, onClose, onSubmit }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit({ cardNumber, expirationDate, cardholderName, cvv }); // Include CVV in submission
+        onSubmit({ 
+            cardNumber, 
+            expirationDate, 
+            cardholderName, 
+            cvv, 
+            paymentMethod: { cardNumber, expirationDate, cardholderName, cvv } // Send payment method
+        }); // Include CVV in submission
+
         onClose(); // Close the modal after submission
     };
 
