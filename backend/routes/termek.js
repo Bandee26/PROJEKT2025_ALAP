@@ -33,9 +33,7 @@ router.get('/page/:pageNo', (req, res) =>{
 
 router.post('/filter', async (req, res) => {
   try{
-    console.log(req.body)
     const JS = req.body
-    console.log(JS)
     const adat = await Db.selectProductWhere(JS)
     res.json(adat)
   }

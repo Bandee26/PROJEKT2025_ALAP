@@ -71,13 +71,10 @@ app.post('/bookings', async (req, res) => {
         const carDetails = await require('./db/dboperations').getCarsByIds([carId]); // Fetch car details
         const car = carDetails[0]; // Assuming we get the first car details
 
-        console.log('User profile retrieved:', userProfile); // Log the user profile for debugging
 
-        console.log('Sending email to:', userProfile.email); // Log the email address
         await require('./utils/emailService').sendConfirmationEmail(userProfile.email, car.Rendszam, car.Tipus, car.Modell, car.Evjarat); // Send confirmation email with car details
 
 
-        console.log('Email sent successfully'); // Log success message
 
 
         res.status(201).json({ message: 'Sikeres foglalás!', bookingId: result.insertId });
