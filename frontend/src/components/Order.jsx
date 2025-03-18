@@ -90,7 +90,9 @@ body: JSON.stringify({ carId, userId, paymentMethod, creditCardDetails }), // In
             });
             const result = await response.json();
             if (response.ok) {
-                alert(result.message); // Show success message
+            alert(result.message); // Show success message
+            window.location.href = '/kinalat'; // Redirect to the offer page
+
             } else {
                 alert(result.message); // Show error message as an alert
             }
