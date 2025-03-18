@@ -8,10 +8,13 @@ const CreditCardModal = ({ isOpen, onClose, onSubmit }) => {
     const [cvv, setCvv] = useState(''); // State for CVV code
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit({ 
-            cardNumber, 
-            expirationDate, 
+        const formattedExpirationDate = `${expirationDate.slice(0, 2)}/${expirationDate.slice(2)}`; // Format expiration date
+
+        e.preventDefault(); 
+
+        onSubmit({
+            cardNumber,
+            expirationDate: formattedExpirationDate, // Use formatted expiration date
             cardholderName, 
             cvv, 
             paymentMethod: { cardNumber, expirationDate, cardholderName, cvv } // Send payment method
@@ -25,10 +28,10 @@ const CreditCardModal = ({ isOpen, onClose, onSubmit }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2>Bankkártya adatok</h2>
+                <h2>Foglalás megerősítése </h2>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label>Kártyaszám:</label>
+                        <label>Bankkártya száma:</label>
                         <input 
                             type="text" 
                             value={cardNumber} 
@@ -42,7 +45,17 @@ const CreditCardModal = ({ isOpen, onClose, onSubmit }) => {
                         <input 
                             type="text" 
                             value={expirationDate} 
-                            onChange={(e) => setExpirationDate(e.target.value)} 
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
+                                if (value.length > 4) return; // Limit to 4 digits
+                                if (value.length >= 2) {
+                                    const month = value.slice(0, 2);
+                                    if (parseInt(month) > 12) return; // Limit month to 12
+                                    setExpirationDate(`${month}/${value.slice(2)}`); // Format as MM/YY
+                                } else {
+                                    setExpirationDate(value); // Set raw value
+                                }
+                            }} 
                             placeholder="MM/YY" 
                             required 
                         />
@@ -51,14 +64,17 @@ const CreditCardModal = ({ isOpen, onClose, onSubmit }) => {
                         <label>CVV:</label>
                     </div>
                     <div>
-                        <input 
-                            type="text" 
-                            value={cvv} 
-                            onChange={(e) => setCvv(e.target.value)} 
-                            placeholder="XXX" 
-                            required 
+                        <input
+                            type="text"
+                            value={cvv}
+                            onChange={(e) => {
+                                if (e.target.value.length <= 3) {
+                                    setCvv(e.target.value); // Limit CVV to 3 characters
+                                }
+                            }}
+                            placeholder="XXX"
+                            required
                         />
-
                     </div>
                     
                     <div>
