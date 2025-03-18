@@ -75,9 +75,11 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
               {filteredProducts.length > 0 && (
                 <>
                   <h1 className="text-center mb-4">Jelenlegi kínálatunk</h1>
-                  <Row className="d-flex justify-content-center g-7">
+                  <Row className="d-flex justify-content-center g-7" style={{ flexWrap: 'wrap' }}>
+
                     {filteredProducts.map((auto) => (
-                      <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={4} style={{ padding: '0px', maxWidth: '350px', marginLeft: '70px' }}>
+                      <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={4} style={{ padding: '0px', maxWidth: '350px', margin: '10px' }}>
+
                         <CustomCard
                           autoId={auto.Auto_ID}
                           title={`${auto.Marka} ${auto.Modell}`}

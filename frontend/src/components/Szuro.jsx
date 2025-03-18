@@ -75,7 +75,19 @@ const Szuro = ({ onFilterChange, products }) => {
   }, []);
 
   useEffect(() => {
-    const filtered = products.filter(product =>
+    const filtered = products.filter(product => 
+      (searchTerm === '' || 
+      searchTerm.split(' ').every(term => 
+        product.Marka.toLowerCase().includes(term.toLowerCase()) ||
+        product.Modell.toLowerCase().includes(term.toLowerCase()) ||
+        product.Szin.toLowerCase().includes(term.toLowerCase()) ||
+        product.Motortipus.toLowerCase().includes(term.toLowerCase()) ||
+        product.Hasznalat.toLowerCase().includes(term.toLowerCase()) ||
+        product.Sebessegvalto.toLowerCase().includes(term.toLowerCase())
+      )) &&
+
+
+
       (searchTerm === '' ||
         searchTerm.split(' ').every(term =>
           product.Marka.toLowerCase().includes(term.toLowerCase()) ||
@@ -85,17 +97,44 @@ const Szuro = ({ onFilterChange, products }) => {
           product.Hasznalat.toLowerCase().includes(term.toLowerCase()) ||
           product.Sebessegvalto.toLowerCase().includes(term.toLowerCase())
         )) &&
-      (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) &&
+      (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) && 
       (selectedModels.length === 0 || selectedModels.includes(product.Modell)) &&
-      (selectedColor === '' || product.Szin === selectedColor) &&
+
+      (selectedModels.length === 0 || selectedModels.includes(product.Modell)) &&
+
+      (selectedModels.length === 0 || selectedModels.includes(product.Modell)) &&
+
+      (selectedModels.length === 0 || selectedModels.includes(product.Modell)) &&
+      (selectedColor === '' || product.Szin === selectedColor) && 
+      Number(product.Ar) >= priceRange[0] &&
+
+      Number(product.Ar) >= priceRange[0] &&
+
+      Number(product.Ar) >= priceRange[0] &&
+
       Number(product.Ar) >= priceRange[0] &&
       Number(product.Ar) <= priceRange[1] &&
-      (selectedEngineType === '' || product.Motortipus === selectedEngineType) &&
+      (selectedEngineType === '' || product.Motortipus === selectedEngineType) && 
       (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
-      (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) &&
+
+      (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
+
+      (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
+
+      (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
+      (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) && 
       Number(product.Evjarat) >= yearRange[0] &&
-      Number(product.Evjarat) <= yearRange[1] &&
+
+      Number(product.Evjarat) >= yearRange[0] &&
+
+      Number(product.Evjarat) >= yearRange[0] &&
+
+      Number(product.Evjarat) >= yearRange[0] && 
+      Number(product.Evjarat) <= yearRange[1] && 
       Number(product.Kilometerora) <= maxKm
+
+
+
     );
 
     if (onFilterChange) {
