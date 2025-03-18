@@ -7,12 +7,43 @@ const CreditCardModal = ({ isOpen, onClose, onSubmit }) => {
     const [cardholderName, setCardholderName] = useState('');
     const [cvv, setCvv] = useState(''); // State for CVV code
 
-    const handleSubmit = (e) => {
+const validateCardNumber = (number) => {
+    // Remove non-digit characters
+    const sanitizedNumber = number.replace(/\D/g, '');
+    // Check if the length is between 13 and 19 digits
+    if (sanitizedNumber.length < 13 || sanitizedNumber.length > 19) {
+        return false;
+    }
+    // Luhn algorithm for card number validation
+    let sum = 0;
+    let alternate = false;
+    for (let i = sanitizedNumber.length - 1; i >= 0; i--) {
+        let n = parseInt(sanitizedNumber.charAt(i), 10);
+        if (alternate) {
+            n *= 2;
+            if (n > 9) n -= 9;
+        }
+        sum += n;
+        alternate = !alternate;
+    }
+    return sum % 10 === 0;
+};
+
+const handleSubmit = (e) => {
+    e.preventDefault(); 
+
+    if (!validateCardNumber(cardNumber)) {
+        alert("Kérjük, adjon meg egy érvényes bankkártya számot."); // Alert for invalid card number
+        return; // Prevent submission if card number is invalid
+    }
+
         const formattedExpirationDate = `${expirationDate.slice(0, 2)}/${expirationDate.slice(2)}`; // Format expiration date
 
         e.preventDefault(); 
 
         onSubmit({
+            // Include the card number validation check
+
             cardNumber,
             expirationDate: formattedExpirationDate, // Use formatted expiration date
             cardholderName, 

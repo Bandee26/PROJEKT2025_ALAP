@@ -85,7 +85,8 @@ function Order() { // Remove userId prop
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ carId, userId, paymentMethod }), // Include payment method in booking
+body: JSON.stringify({ carId, userId, paymentMethod, creditCardDetails }), // Include payment method and credit card details in booking
+
             });
             const result = await response.json();
             if (response.ok) {
