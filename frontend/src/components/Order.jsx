@@ -160,7 +160,7 @@ return (
                         <label className="payment-option">
                             <input 
                                 type="radio" 
-                                value="cash" 
+                                value="Készpénz a helyszinen" 
                                 name="paymentMethod" 
                                 onChange={(e) => setPaymentMethod(e.target.value)} 
                             />
@@ -169,7 +169,7 @@ return (
                         <label className="payment-option">
                             <input 
                                 type="radio" 
-                                value="card" 
+                                value="Bankkártya" 
                                 name="paymentMethod" 
                                 onChange={(e) => setPaymentMethod(e.target.value)} 
                             />
