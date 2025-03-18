@@ -177,7 +177,8 @@ return (
                         </label>
                     </div>
                     <button onClick={() => {
-                        if (paymentMethod === 'card') {
+                        if (paymentMethod === 'Bankkártya') {
+
                             setIsModalOpen(true); // Open modal for credit card details
                         } else {
                             handleBooking(); // Proceed with booking if cash payment
