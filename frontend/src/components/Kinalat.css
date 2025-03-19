@@ -1,25 +1,48 @@
-.image-container {
+/* Konténer az animációhoz */
+.animation-container {
   position: relative;
-  overflow: visible; /* Kép kiléphet a kártyából */
+  margin-bottom: 20px;
+}
+
+/* Flex konténer, amelyben a kocsi és a szöveg egymás mellett vannak */
+.animation-wrapper {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 150px;
   width: 100%;
-  height: auto;
 }
 
+/* A "Jelenlegi kínálatunk" szöveg – középre igazítva, a kártyák fölött, most a kocsi jobb oldalán */
+.kinalat-title {
+  color: #f8f9fa;
+  font-size: 2.5rem;
+  margin: 0;
+  margin-left: 40px;  /* A kocsi és a szöveg közötti távolság */
+}
+
+/* A vontatókocsi képe, amelyet animálunk */
+.car-animation {
+  width: 100px;  /* Igény szerint módosítható */
+  flex-shrink: 0;
+}
+
+/* A vontatókocsi kép stílusa és fel-le mozgása */
 .car-image {
-  transition: transform 0.3s ease-in-out, z-index 0.3s ease-in-out;
-  width: 100%;
-  height: auto;
-  position: relative;
-  z-index: 1; /* Alapállapot: háttérben */
+  width: 180px;
+  height: 220px;
+  animation: upDown 1s ease-in-out infinite;
+  padding-right: 40px;
 }
 
-.image-container:hover .car-image {
-  position: absolute; /* Kiemeljük az eredeti helyéről */
-  top: 50%; 
-  left: 50%;
-  transform: translate(-50%, -50%) scale(2); /* Középen marad, de kétszeresére nő */
-  z-index: 10; /* Előtérbe hozzuk */
+@keyframes upDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
