@@ -37,11 +37,11 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     }
   };
 
-  // Egy animált konténer, amely balról csúszik be lassan, majd középre áll
+  // Animált konténer, amely jobbról csúszik be lassan, majd középre áll
   const headerSpring = useSpring({
-    from: { transform: 'translateX(-150%)' },
+    from: { transform: 'translateX(150%)' },
     to: { transform: 'translateX(0%)' },
-    config: { duration: 1500 }
+    config: { duration: 3000 }
   });
 
   const settings = {
@@ -60,14 +60,14 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
       <div className="video-hatter">
         <Video />
         <Container className="my-4" style={{ position: 'relative', zIndex: 1 }}>
-          {/* Animált header: a szöveg és a vontatókocsi együtt */}
+          {/* Animált header: a kocsi és a szöveg együtt, a kocsi a bal oldalon */}
           <Row className="d-flex justify-content-center animation-container">
             <Col xs={12} style={{ position: 'relative' }}>
               <animated.div style={headerSpring} className="animation-wrapper">
-                <h1 className="kinalat-title">Jelenlegi kínálatunk</h1>
                 <div className="car-animation">
                   <img src="/img/wrecker.png" alt="Vontatókocsi" className="car-image" />
                 </div>
+                <h1 className="kinalat-title">Jelenlegi kínálatunk</h1>
               </animated.div>
             </Col>
           </Row>

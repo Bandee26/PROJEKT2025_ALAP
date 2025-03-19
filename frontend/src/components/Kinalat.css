@@ -4,7 +4,7 @@
   margin-bottom: 20px;
 }
 
-/* Flex konténer, amelyben a szöveg és a vontatókocsi egymás mellett vannak */
+/* Flex konténer, amelyben a kocsi és a szöveg egymás mellett vannak */
 .animation-wrapper {
   display: flex;
   align-items: center;
@@ -13,12 +13,12 @@
   width: 100%;
 }
 
-/* A "Jelenlegi kínálatunk" szöveg – középre igazítva, a kártyák fölött */
+/* A "Jelenlegi kínálatunk" szöveg – középre igazítva, a kártyák fölött, most a kocsi jobb oldalán */
 .kinalat-title {
   color: #f8f9fa;
   font-size: 2.5rem;
   margin: 0;
-  margin-right: 10px;  /* A szöveg és a kocsi közötti távolság */
+  margin-left: 10px;  /* A kocsi és a szöveg közötti távolság */
 }
 
 /* A vontatókocsi képe, amelyet animálunk */
@@ -27,8 +27,21 @@
   flex-shrink: 0;
 }
 
-/* A vontatókocsi kép stílusa */
+/* A vontatókocsi kép stílusa és fel-le mozgása */
 .car-image {
   width: 100%;
   height: auto;
+  animation: upDown 2s ease-in-out infinite;
+}
+
+@keyframes upDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
