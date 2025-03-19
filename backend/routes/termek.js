@@ -5,10 +5,13 @@ var router = express.Router();
 var Db = require('../db/dboperations');
 
 /* GET autorendszer */
-router.get('/:pageNo', async function(req, res, next) {
+router.get('/', async function(req, res, next) {
+  const limit = parseInt(req.query.limit) || 25; // Default to 25
+  const offset = parseInt(req.query.offset) || 0; // Default to 0
+
   try {
-    let oldal = Number(req.params.pageNo)
-    const products = await Db.selectAutoFromAutorendszer(oldal);  // Lekérdezés az autorendszer nézetből
+    const products = await Db.selectAutoFromAutorendszer(limit, offset);  // Lekérdezés az autorendszer nézetből
+
     res.json({ products: products });  // JSON válasz
   } catch (error) {
     res.status(500).send('Szerver hiba!'); // Hibaüzenet visszaküldése

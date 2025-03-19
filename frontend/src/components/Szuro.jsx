@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useWindowScroll } from 'react-use';
-
 import ReactSlider from 'react-slider';
 import axios from 'axios';
 import { Card, Form, Row, Col, Button } from 'react-bootstrap';
@@ -26,13 +25,18 @@ const Szuro = ({ onFilterChange, products }) => {
   const [transmissions, setTransmissions] = useState([]);
   const [selectedTransmission, setSelectedTransmission] = useState('');
   const [maxKm, setMaxKm] = useState(1000000);
+  
+  // New state variables for min and max values
+  const [minYear, setMinYear] = useState(1990);
+  const [maxYear, setMaxYear] = useState(2025);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(100000000);
 
   const { y } = useWindowScroll();
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
 
-  // Közös slider thumb
   const renderCarThumb = (props, state) => (
     <div {...props}>
       <img src={carIcon} alt="car" className="slider-car" />
@@ -44,6 +48,24 @@ const Szuro = ({ onFilterChange, products }) => {
       try {
         const response = await axios.get('http://localhost:8080/termek');
         const fetchedProducts = response.data.products || [];
+        
+        // Extract min and max price and year
+        const prices = fetchedProducts.map(product => Number(product.Ar));
+        const years = fetchedProducts.map(product => Number(product.Evjarat));
+        
+        const minPrice = Math.min(...prices); // Calculate min price
+        const maxPrice = Math.max(...prices); // Calculate max price
+        const minYear = Math.min(...years); // Calculate min year
+        const maxYear = Math.max(...years); // Calculate max year
+
+        // Update state with min and max values
+        setMinPrice(minPrice);
+        setMaxPrice(maxPrice);
+        setMinYear(minYear);
+        setMaxYear(maxYear);
+        setPriceRange([minPrice, maxPrice]);
+        setYearRange([minYear, maxYear]);
+
         const fetchedBrands = [...new Set(fetchedProducts.map(product => product.Marka))];
         const fetchedModelsByBrand = {};
         const fetchedColors = [...new Set(fetchedProducts.map(product => product.Szin))];
@@ -75,26 +97,26 @@ const Szuro = ({ onFilterChange, products }) => {
   }, []);
 
   useEffect(() => {
-    const filtered = products.filter(product =>
-      (searchTerm === '' ||
-        searchTerm.split(' ').every(term =>
-          product.Marka.toLowerCase().includes(term.toLowerCase()) ||
-          product.Modell.toLowerCase().includes(term.toLowerCase()) ||
-          product.Szin.toLowerCase().includes(term.toLowerCase()) ||
-          product.Motortipus.toLowerCase().includes(term.toLowerCase()) ||
-          product.Hasznalat.toLowerCase().includes(term.toLowerCase()) ||
-          product.Sebessegvalto.toLowerCase().includes(term.toLowerCase())
-        )) &&
-      (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) &&
-      (selectedModels.length === 0 || selectedModels.includes(product.Modell)) &&
-      (selectedColor === '' || product.Szin === selectedColor) &&
-      Number(product.Ar) >= priceRange[0] &&
+    const filtered = products.filter(product => 
+      (searchTerm === '' || 
+      searchTerm.split(' ').every(term => 
+        product.Marka.toLowerCase().includes(term.toLowerCase()) ||
+        product.Modell.toLowerCase().includes(term.toLowerCase()) ||
+        product.Szin.toLowerCase().includes(term.toLowerCase()) ||
+        product.Motortipus.toLowerCase().includes(term.toLowerCase()) ||
+        product.Hasznalat.toLowerCase().includes(term.toLowerCase()) ||
+        product.Sebessegvalto.toLowerCase().includes(term.toLowerCase())
+      )) &&
+      (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) && 
+      (selectedModels.length === 0 || selectedModels.includes(product.Modell)) && 
+      (selectedColor === '' || product.Szin === selectedColor) && 
+      Number(product.Ar) >= priceRange[0] && 
       Number(product.Ar) <= priceRange[1] &&
-      (selectedEngineType === '' || product.Motortipus === selectedEngineType) &&
-      (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
-      (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) &&
-      Number(product.Evjarat) >= yearRange[0] &&
-      Number(product.Evjarat) <= yearRange[1] &&
+      (selectedEngineType === '' || product.Motortipus === selectedEngineType) && 
+      (selectedUsageType === '' || product.Hasznalat === selectedUsageType) && 
+      (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) && 
+      Number(product.Evjarat) >= yearRange[0] && 
+      Number(product.Evjarat) <= yearRange[1] && 
       Number(product.Kilometerora) <= maxKm
     );
 
@@ -129,7 +151,6 @@ const Szuro = ({ onFilterChange, products }) => {
     );
   };
 
-  // Az arrow pozíciója az isVisible állapottól függően (animált left)
   const arrowStyle = {
     position: 'fixed',
     top: '120px',
@@ -177,7 +198,7 @@ const Szuro = ({ onFilterChange, products }) => {
                         checked={selectedModels.includes(model)}
                         className="text-light ms-4"
                       />
-                    ))}
+                    ))} 
                   </div>
                 </div>
               ))
@@ -185,50 +206,51 @@ const Szuro = ({ onFilterChange, products }) => {
               <p className="text-muted">Márkák és modellek betöltése...</p>
             )}
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label className="text-light"><strong>Évjárat:</strong></Form.Label>
-            <ReactSlider
-              min={1990}
-              max={2025}
-              step={1}
-              value={yearRange}
-              onChange={setYearRange}
-              pearling
-              minDistance={1}
-              className="custom-slider"
-              thumbClassName="custom-thumb"
-              trackClassName="slider-track"
-              renderThumb={renderCarThumb}
-            />
-            <Row className="mt-2">
-              <Col><small className="text-light">Min: {yearRange[0]}</small></Col>
-              <Col className="text-end"><small className="text-light">Max: {yearRange[1]}</small></Col>
-            </Row>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label className="text-light"><strong>Ár szűrő:</strong></Form.Label>
-            <ReactSlider
-              min={0}
-              max={100000000}
-              step={100}
-              value={priceRange}
-              onChange={setPriceRange}
-              className="custom-slider"
-              thumbClassName="custom-thumb"
-              trackClassName="slider-track"
-              renderThumb={renderCarThumb}
-            />
-            <Row className="mt-2">
-              <Col><small className="text-light">{priceRange[0]} Ft</small></Col>
-              <Col className="text-end"><small className="text-light">{priceRange[1]} Ft</small></Col>
-            </Row>
-          </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className="text-light"><strong>Évjárat:</strong></Form.Label>
+              <ReactSlider
+                min={minYear}
+                max={maxYear}
+                step={1}
+                value={yearRange}
+                onChange={setYearRange}
+                pearling
+                minDistance={1}
+                className="custom-slider"
+                thumbClassName="custom-thumb"
+                trackClassName="slider-track"
+                renderThumb={renderCarThumb}
+              />
+              <Row className="mt-2">
+                <Col><small className="text-light">Min: {yearRange[0]}</small></Col>
+                <Col className="text-end"><small className="text-light">Max: {yearRange[1]}</small></Col>
+              </Row>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className="text-light"><strong>Ár szűrő:</strong></Form.Label>
+              <ReactSlider
+                min={minPrice}
+                max={maxPrice}
+                step={100000}
+                value={priceRange}
+                onChange={setPriceRange}
+                className="custom-slider"
+                thumbClassName="custom-thumb"
+                trackClassName="slider-track"
+                renderThumb={renderCarThumb}
+              />
+              <Row className="mt-2">
+                <Col><small className="text-light">{priceRange[0].toLocaleString()} Ft</small></Col>
+                <Col className="text-end"><small className="text-light">{priceRange[1].toLocaleString()} Ft</small></Col>
+              </Row>
+            </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label className="text-light"><strong>Max futott km:</strong></Form.Label>
             <ReactSlider
               min={0}
               max={1000000}
-              step={1000}
+              step={30000}
               value={maxKm}
               onChange={setMaxKm}
               className="custom-slider"
