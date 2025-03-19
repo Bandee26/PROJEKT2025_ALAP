@@ -10,7 +10,6 @@ router.post('/register', async function(req, res, next) {
   const { email, password, nev, telefon } = req.body;
 
   try {
-      console.log('Received registration request with:', req.body);  // Logoljuk, mi érkezett
       await registerUser(email, password, nev, telefon);
       res.status(200).json({ success: true, message: 'Sikeres regisztráció' });
   } catch (error) {
@@ -43,7 +42,6 @@ router.post('/login', async function(req, res, next) {
 router.post('/updateProfile', async function(req, res, next) {
     const { email, name, phone } = req.body;
   
-    console.log('Received update profile request with:', req.body);  // Log what was received
   
     try {
         const success = await updateUserProfile(email, name, phone);  // Pass the email to the update function
