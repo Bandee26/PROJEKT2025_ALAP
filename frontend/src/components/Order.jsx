@@ -92,7 +92,7 @@ body: JSON.stringify({ carId, userId, paymentMethod, creditCardDetails }), // In
             if (response.ok) {
             alert(result.message); // Show success message
             // Redirect to the Kinalat page and pass car details
-            window.location.href = `/kinalat?carDetails=${JSON.stringify(result.car)}`; // Redirect to the offer page with car details
+            window.location.href = `/kinalat`; // Redirect to the offer page with car details
 
 
             } else {

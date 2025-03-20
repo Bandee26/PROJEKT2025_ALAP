@@ -69,7 +69,6 @@ app.post('/bookings', async (req, res) => {
         const userProfile = await require('./db/dboperations').getUserProfile(userId); // Retrieve user profile
         const carDetails = await require('./db/dboperations').getCarsByIds([carId]); // Fetch car details
         const car = carDetails[0]; // Assuming we get the first car details
-        console.log('Car details:', car); // Log car details for debugging
 
         await require('./utils/emailService').sendConfirmationEmail(userProfile.email, car.Rendszam, car, { Nev: car.Nev, Telefon: car.Telefon, Email: car.Email }); // Send confirmation email with car details and seller info
 

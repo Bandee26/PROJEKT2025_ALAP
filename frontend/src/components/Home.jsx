@@ -12,8 +12,8 @@ const Home = () => {
         <div className="image-slide" />
       </div>
       <div className="content">
-        <h1>Welcome to the Home Page!</h1>
-        <p>Itt lesznek a kezdőoldal tartalmai.</p>
+        <h1>Üdvözöllek a B&K autókereskedés hivatalos oldalán!</h1>
+        <p></p>
       </div>
     </div>
   );
