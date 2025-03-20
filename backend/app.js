@@ -66,18 +66,14 @@ app.post('/bookings', async (req, res) => {
     try {
         const result = await require('./db/dboperations').createBooking(carId, userId, paymentMethod);
 
-        console.log('Booking created with ID:', result.insertId); // Log the booking ID
         const userProfile = await require('./db/dboperations').getUserProfile(userId); // Retrieve user profile
         const carDetails = await require('./db/dboperations').getCarsByIds([carId]); // Fetch car details
         const car = carDetails[0]; // Assuming we get the first car details
 
+        await require('./utils/emailService').sendConfirmationEmail(userProfile.email, car.Rendszam, car, { Nev: car.Nev, Telefon: car.Telefon, Email: car.Email }); // Send confirmation email with car details and seller info
 
-        await require('./utils/emailService').sendConfirmationEmail(userProfile.email, car.Rendszam, car.Tipus, car.Modell, car.Evjarat); // Send confirmation email with car details
+        res.status(201).json({ message: 'Sikeres foglalás!', bookingId: result.insertId, car });
 
-
-
-
-        res.status(201).json({ message: 'Sikeres foglalás!', bookingId: result.insertId });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
