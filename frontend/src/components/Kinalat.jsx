@@ -23,12 +23,14 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     fetchProducts(0);
   }, []);
 
-  const fetchProducts = async (offset = 0) => {
+  const fetchProducts = async () => {
+
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:8080/termek?limit=25&offset=${offset}`,
+        `http://localhost:8080/termek`,
+
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
       setLoading(false);
@@ -118,9 +120,7 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                   {loading ? <p className="text-center">Betöltés...</p> : <p className="text-center">Nincs megjeleníthető autó.</p>}
                 </>
               )}
-              <button onClick={() => fetchProducts(filteredProducts.length)} className="btn btn-primary mt-3">
-                További Kocsik
-              </button>
+
               {error && <p className="text-danger text-center">{error}</p>}
             </Col>
           </Row>

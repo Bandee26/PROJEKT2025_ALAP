@@ -37,7 +37,8 @@ async function selectAutoFromAutorendszer(limit, offset) {
 
 
   try {
-    const [rows] = await pool.query('SELECT * FROM autorendszer LIMIT ? OFFSET ?', [limit, offset]);
+    const [rows] = await pool.query('SELECT * FROM autorendszer'); // Fetch all cars without limits
+
 
     return rows;
   } catch (error) {
