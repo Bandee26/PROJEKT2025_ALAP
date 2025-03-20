@@ -1,20 +1,54 @@
-.card-container {
+/* Order component styles */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
+    align-items: center;
 }
 
-.text-center {
-    text-align: center;
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
 }
 
-.payment-option {
-    margin-right: 20px; /* Adjust the spacing as needed */
+.modal-content h2 {
+    margin: 0 0 15px;
 }
 
-/* Add background color for the order page */
-.order-background {
-    background-color: lightgrey; /* Set the background color to light grey */
-    padding: 20px; /* Optional: Add some padding for better spacing */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content label {
+    margin-bottom: 5px;
+}
+
+.modal-content input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modal-content button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
 }

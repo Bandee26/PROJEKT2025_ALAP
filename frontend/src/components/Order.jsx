@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import CreditCardModal from './CreditCardModal'; // Importing the CreditCardModal component
+
 import CustomCard from './Card'; // Importing the CustomCard component
 import { Col } from 'react-bootstrap'; // Importing Col from react-bootstrap
 import Slider from 'react-slick'; // Importing Slider from react-slick
@@ -27,6 +29,9 @@ function Order() { // Remove userId prop
 
     const [carDetails, setCarDetails] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState(''); // State for payment method
+    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+    const [creditCardDetails, setCreditCardDetails] = useState(null); // State for credit card details
+
 
     useEffect(() => {
         const fetchCarDetails = async () => {
@@ -80,11 +85,16 @@ function Order() { // Remove userId prop
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ carId, userId, paymentMethod }), // Include payment method in booking
+body: JSON.stringify({ carId, userId, paymentMethod, creditCardDetails }), // Include payment method and credit card details in booking
+
             });
             const result = await response.json();
             if (response.ok) {
-                alert(result.message); // Show success message
+            alert(result.message); // Show success message
+            // Redirect to the Kinalat page and pass car details
+            window.location.href = `/kinalat`; // Redirect to the offer page with car details
+
+
             } else {
                 alert(result.message); // Show error message as an alert
             }
@@ -155,7 +165,7 @@ return (
                         <label className="payment-option">
                             <input 
                                 type="radio" 
-                                value="cash" 
+                                value="Készpénz a helyszinen" 
                                 name="paymentMethod" 
                                 onChange={(e) => setPaymentMethod(e.target.value)} 
                             />
@@ -164,14 +174,31 @@ return (
                         <label className="payment-option">
                             <input 
                                 type="radio" 
-                                value="card" 
+                                value="Bankkártya" 
                                 name="paymentMethod" 
                                 onChange={(e) => setPaymentMethod(e.target.value)} 
                             />
-                            Bankkártyás fizetés a helyszínen
+                            Bankkártyás fizetés.
                         </label>
                     </div>
-                    <button onClick={handleBooking}>Foglalás megerősítése</button>
+                    <button onClick={() => {
+                        if (paymentMethod === 'Bankkártya') {
+
+                            setIsModalOpen(true); // Open modal for credit card details
+                        } else {
+                            handleBooking(); // Proceed with booking if cash payment
+                        }
+                    }}>Foglalás megerősítése</button>
+
+                    <CreditCardModal 
+                        isOpen={isModalOpen} 
+                        onClose={() => setIsModalOpen(false)} 
+                        onSubmit={(details) => {
+                            setCreditCardDetails(details); // Set credit card details
+                            handleBooking(); // Proceed with booking
+                        }} 
+                    />
+
                 </div>
             ) : (
                 <p>Jelöld be a lefoglalni kívánt autót.</p>
