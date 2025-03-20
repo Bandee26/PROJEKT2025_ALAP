@@ -33,11 +33,11 @@ async function getCarsByIds(ids) { // Ensure the function is defined correctly
     }
 }
 
-async function selectAutoFromAutorendszer(limit, offset) {
+async function selectAutoFromAutorendszer() {
 
 
   try {
-    const [rows] = await pool.query('SELECT * FROM autorendszer LIMIT ? OFFSET ?', [limit, offset]);
+    const [rows] = await pool.query('SELECT * FROM autorendszer', []);
 
     return rows;
   } catch (error) {
