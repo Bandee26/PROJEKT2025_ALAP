@@ -11,13 +11,21 @@ const transporter = nodemailer.createTransport({
 });
 
 // Function to send confirmation email
-const sendConfirmationEmail = async (to, bookingId) => {
+const sendConfirmationEmail = async (to, bookingId, carDetails, userDetails) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: to,
         subject: 'Sikeres foglaló!',
-text: `A foglalása sikeresen megtörtént! A lefoglalt autó rendszáma: ${bookingId}`,
-
+        text: `A foglalása sikeresen megtörtént! 
+                A lefoglalt autó rendszáma: ${bookingId}. 
+                Autó típusa: ${carDetails.Tipus}, 
+                Modell: ${carDetails.Modell}, 
+                Évjárat: ${carDetails.Evjarat}. 
+                
+                Felhasználói adatok: 
+                Név: ${userDetails.Nev}, 
+                Telefon: ${userDetails.Telefon}, 
+                Email: ${userDetails.Email}`,
     };
 
     try {
