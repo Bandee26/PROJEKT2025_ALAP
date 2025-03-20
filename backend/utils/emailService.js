@@ -15,17 +15,18 @@ const sendConfirmationEmail = async (to, bookingId, carDetails, userDetails) => 
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: to,
-        subject: 'Sikeres foglaló!',
+        subject: 'Sikeres foglalás!',
         text: `A foglalása sikeresen megtörtént! 
                 A lefoglalt autó rendszáma: ${bookingId}. 
                 Autó típusa: ${carDetails.Tipus}, 
                 Modell: ${carDetails.Modell}, 
                 Évjárat: ${carDetails.Evjarat}. 
                 
-                Felhasználói adatok: 
-                Név: ${userDetails.Nev}, 
-                Telefon: ${userDetails.Telefon}, 
-                Email: ${userDetails.Email}`,
+                Eladó adatai: 
+                Név: ${carDetails.Nev}, 
+                Telefon: ${carDetails.Telefon}, 
+                Email: ${carDetails.Email}`,
+
     };
 
     try {
