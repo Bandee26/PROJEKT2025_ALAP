@@ -306,7 +306,9 @@ const handleFavoriteToggle = async (carId) => {
     
     return (
         <Router>
-            <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222' }}>
+<Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222', overflowX: 'auto', flexDirection: 'column' }}>
+
+
                 <Container>
                     <Navbar.Brand href="/">
                         <img src={Logo} style={{ width: "40px", height: "40px", marginRight: '20px' }} alt="Logo" />
@@ -314,7 +316,9 @@ const handleFavoriteToggle = async (carId) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
+<Nav className="me-auto" style={{ flexWrap: 'wrap' }}>
+
+
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link>
                         </Nav>
@@ -491,7 +495,8 @@ const handleFavoriteToggle = async (carId) => {
                                 if (car) {
                                     return (
                                         <li key={car.Rendszam}>
-                                            <Slider {...settings}>
+<Slider {...settings} style={{ display: 'block', width: '100%' }}>
+
                                                 <div>
                                                     <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={`${car.Marka} ${car.Modell} első kép`} style={{ width: '100%' }} />
                                                 </div>

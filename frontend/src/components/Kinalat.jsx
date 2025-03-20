@@ -80,14 +80,20 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
 
           {/* Termékek listázása */}
           <Row className="d-flex justify-content-between kinalat">
-            <Col xs={12} sm={3} md={3} lg={2}>
+<Col xs={12} sm={12} md={12} lg={2}>
+
+
               <Szuro onFilterChange={filtered => setFilteredProducts(filtered)} products={products} />
             </Col>
-            <Col xs={12} sm={9} md={9} lg={10} className="card-container">
+<Col xs={12} sm={12} md={12} lg={10} className="card-container">
+
+
               {filteredProducts.length > 0 ? (
                 <Row className="d-flex justify-content-center g-7" style={{ flexWrap: 'wrap' }}>
                   {filteredProducts.map((auto) => (
-                    <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={4} style={{ padding: '0px', maxWidth: '350px', margin: '10px' }}>
+<Col key={auto.Rendszam} xs={12} sm={12} md={6} lg={4} style={{ padding: '0px', maxWidth: '100%', margin: '10px' }}>
+
+
                       <CustomCard
                         autoId={auto.Auto_ID}
                         title={`${auto.Marka} ${auto.Modell}`}
@@ -103,11 +109,12 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                         <Slider {...settings}>
                           {[1, 2].map((index) => (
                             <div key={index}>
-                              <img
-                                src={`/Img/${auto.Auto_ID}.${index}.jpg`}
-                                alt={`${auto.Marka} ${auto.Modell} kép ${index}`}
-                                style={{ width: '100%', transition: 'transform 0.3s ease' }}
-                              />
+<img
+  src={`/Img/${auto.Auto_ID}.${index}.jpg`}
+  alt={`${auto.Marka} ${auto.Modell} kép ${index}`}
+  style={{ width: '100%', height: 'auto', transition: 'transform 0.3s ease' }}
+/>
+
                             </div>
                           ))}
                         </Slider>
