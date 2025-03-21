@@ -65,7 +65,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   z-index: 2;
   animation: floatZoom 7s ease-in-out infinite;
 }
@@ -97,4 +97,9 @@
 .content p {
   font-size: 1.5rem;
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Új stílus a "B&K" résznek */
+.orange-text {
+  color: orange;
 }
