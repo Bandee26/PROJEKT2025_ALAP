@@ -1,33 +1,41 @@
+/* Alapértelmezett menü stílusok */
+.fixed-menu {
+    background-color: #222;
+    overflow-x: hidden; /* Csak vízszintes görgetés tiltva */
+    min-height: 80px; /* Alapértelmezett magasság */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navigációs elemek stílusa */
 .fixed-menu .nav-link,
 .fixed-menu .navbar-brand,
 .fixed-menu .dropdown-item {
     color: rgb(255, 255, 255) !important;
-    background-color: transparent; /* Alap háttér átlátszó */
-    position: relative; /* Fontos a :before pseudo elemhez */
+    background-color: transparent;
+    position: relative;
     overflow: hidden;
-    transition: color 0.3s ease; /* Szín átmenet */
+    transition: color 0.3s ease;
 }
 
-/* Hover effekt */
 .fixed-menu .nav-link:hover,
 .fixed-menu .navbar-brand:hover,
 .fixed-menu .dropdown-item:hover {
     color: #fff;
 }
 
-/* Pseudo elem (előtag) hozzáadása hoverhez */
+/* Hover effekt pseudo elem */
 .fixed-menu .nav-link:before,
 .fixed-menu .navbar-brand:before,
 .fixed-menu .dropdown-item:before {
     content: "";
     position: absolute;
-    inset: calc(100% - 3px) 0 0 0; /* 3px = vastagság */
-    background: #ce4f20; /* Szín */
+    inset: calc(100% - 3px) 0 0 0;
+    background: #ce4f20;
     scale: 0 1;
     transition: .3s, translate 0s .3s;
 }
 
-/* Hover alatt terjed a pseudo elem */
 .fixed-menu .nav-link:hover:before,
 .fixed-menu .navbar-brand:hover:before,
 .fixed-menu .dropdown-item:hover:before {
@@ -36,7 +44,6 @@
     transition: .3s;
 }
 
-/* Ha bármelyik elem fölött hover van, a többi elem is aktiválódik */
 .fixed-menu .nav-link:hover ~ .nav-link:before,
 .fixed-menu .navbar-brand:hover ~ .navbar-brand:before,
 .fixed-menu .dropdown-item:hover ~ .dropdown-item:before {
@@ -51,6 +58,30 @@
     transition: .2s .2s, scale 0s .4s;
 }
 
-.fixed-menu .custom-dropdown .dropdown-menu {
-    background-color: #222 !important; /* New background color for dropdown */
+/* Dropdown stílus és animáció */
+.custom-dropdown .dropdown-menu {
+    background-color: #222 !important;
+    animation: slideDown 0.3s ease-out;
+    transform-origin: top;
+    border: none;
+    /* Eredeti esetben a dropdown abszolút pozícióban van, de ez megakadályozza, hogy a sáv növekedjen */
+    position: absolute;
+}
+
+/* Amikor a dropdown megnyílik (a .show osztállyal), állítsuk statikussá a pozíciót, így a navigációs sáv magassága megnő */
+.custom-dropdown.show .dropdown-menu {
+    position: static;
+    display: block;
+}
+
+/* Slide down animáció kulcsképkockái */
+@keyframes slideDown {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

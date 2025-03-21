@@ -45,7 +45,7 @@ code {
   box-shadow: 0px 0px 120px 0px rgba(133, 20, 20, 0.9); /* Világos szürke árnyék */
   width: 250px;
   margin-top: 20px;
-  margin-left: 20px;
+  margin-left: 170px;
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Simulációs animáció */
 }
 
@@ -70,5 +70,5 @@ code {
 }
 
 .kinalat {
-  width: 1300px;
+  width: 1200px;
 }

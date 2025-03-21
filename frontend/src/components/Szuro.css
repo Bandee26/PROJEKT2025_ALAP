@@ -7,12 +7,16 @@
 
 .filter-container {
   transition: transform 0.3s ease;
-  height: 90vh;
+  height: 90vh; /* Set a fixed height for scrolling */
   overflow-y: auto;
-  width: 380px;
+  width: 100%; /* Changed from fixed width to 100% for responsiveness */
+  max-width: 380px; /* Added max-width to maintain a limit */
   background-color: #333;
   border-radius: 0 8px 8px 0;
 }
+
+
+
 
 /* Custom scrollbar styles */
 .filter-container::-webkit-scrollbar {
@@ -40,15 +44,19 @@
   background-color: #333;
   padding: 20px;
   border-radius: 0 8px 8px 0;
-  width: 350px;
-  min-height: 100vh;
+  width: 100%; /* Changed from fixed width to 100% for responsiveness */
+  max-width: 350px; /* Added max-width to maintain a limit */
+  min-height: auto; /* Changed min-height to auto for better responsiveness */
 }
+
+
 
 .custom-slider {
   height: 8px;
-  margin: 10px 0;
+  margin: 15px 0; /* Increased margin for better spacing */
   position: relative;
 }
+
 
 .slider-track {
   background: #666;
