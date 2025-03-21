@@ -49,7 +49,7 @@
 
 /* A kínálat rész keskenyítése és a kártyák jobbra tolása */
 .card-container {
-  width: 60%;              /* Kicsit keskenyebb, mint teljes szélesség */
+  width: 100%;              /* Kicsit keskenyebb, mint teljes szélesség */
   margin-left: auto;       /* A bal oldali margó automatikusan kitölti a helyet */
   margin-right: 30px;       /* A jobb oldali margó növelve a további jobbra toláshoz */
 }
