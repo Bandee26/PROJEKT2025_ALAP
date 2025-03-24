@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Importáld a szükséges komponenseket
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -6,21 +6,21 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useState, useEffect } from 'react'; // Added useEffect to the import
-import Slider from 'react-slick'; // Import the Slider component
+import { useState, useEffect } from 'react';
+import Slider from 'react-slick';
 
 import Logo from './auto.png';
 import './Menu.css';
-import Home from './Home';  // Home komponens importálása
-import Kinalat from './Kinalat';  // Kínálat komponens importálása
-import Order from './Order'; // Order component import
+import Home from './Home';
+import Kinalat from './Kinalat';
+import Order from './Order';
 
 function Menu({ favorites, setFavorites, products }) {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); 
-    const [userEmail, setUserEmail] = useState(localStorage.getItem('token') ? '' : ''); // Retrieve email if logged in
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userEmail, setUserEmail] = useState(localStorage.getItem('token') ? '' : '');
 
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
@@ -33,15 +33,13 @@ function Menu({ favorites, setFavorites, products }) {
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [profileName, setProfileName] = useState('');
     const [profilePhone, setProfilePhone] = useState('');
-    
     // Kedvencek modal
     const [showFavoritesModal, setShowFavoritesModal] = useState(false);
-   
-    const [validatedFavorites, setValidatedFavorites] = useState([]); // Alapértelmezett érték üres tömb
+    const [validatedFavorites, setValidatedFavorites] = useState([]);
 
     useEffect(() => {
-        setValidatedFavorites(Array.isArray(favorites) ? favorites : []); // Ha nem tömb, állítsuk üres tömbre
-    }, [favorites]); // Frissítjük a validatedFavorites-et, amikor a favorites változik
+        setValidatedFavorites(Array.isArray(favorites) ? favorites : []);
+    }, [favorites]);
 
     // Fetch user profile data when the profile modal is opened
     useEffect(() => {
@@ -58,9 +56,9 @@ function Menu({ favorites, setFavorites, products }) {
                     });
                     const result = await response.json();
                     if (result.success) {
-                        setProfileName(result.profile.nev); // Set the user's name
-                        setUserEmail(result.profile.email); // Set the user's email
-                        setProfilePhone(result.profile.telefon); // Set the user's phone
+                        setProfileName(result.profile.nev);
+                        setUserEmail(result.profile.email);
+                        setProfilePhone(result.profile.telefon);
                     } else {
                         alert('Hiba történt a profil lekérése során');
                     }
@@ -71,9 +69,9 @@ function Menu({ favorites, setFavorites, products }) {
         };
 
         if (showProfileModal) {
-            fetchUserProfile(); // Fetch user profile data when modal is opened
+            fetchUserProfile();
         }
-    }, [showProfileModal]); // Dependency to run when modal is opened
+    }, [showProfileModal]);
 
     // Modal megnyitása és zárása
     const handleRegisterClick = () => setShowRegisterModal(true);
@@ -87,7 +85,7 @@ function Menu({ favorites, setFavorites, products }) {
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/users/register', { 
+            const response = await fetch('http://localhost:8080/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -115,44 +113,42 @@ function Menu({ favorites, setFavorites, products }) {
         const token = localStorage.getItem('token');
         if (token) {
             setIsLoggedIn(true);
-            setUserEmail(loginEmail); // Set user email if token exists
-            
+            setUserEmail(loginEmail);
+
             // Fetch favorites after login
             const fetchFavorites = async () => {
                 try {
-                    const favoritesResponse = await fetch('http://localhost:8080/users/favorites', { 
+                    const favoritesResponse = await fetch('http://localhost:8080/users/favorites', {
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`, // Ensure token is included
+                            'Authorization': `Bearer ${token}`,
                         },
                         method: 'GET',
                     });
-            
                     const favoritesResult = await favoritesResponse.json();
-                    
                     if (favoritesResult.success) {
                         try {
-                            const parsedFavorites = JSON.parse(favoritesResult.favorites); // Parse the JSON string
-                            const uniqueFavorites = [...new Set(parsedFavorites)]; // Remove duplicates
-                            setFavorites(uniqueFavorites); // Update favorites
-                            setValidatedFavorites(uniqueFavorites); // Sync validated favorites
+                            const parsedFavorites = JSON.parse(favoritesResult.favorites);
+                            const uniqueFavorites = [...new Set(parsedFavorites)];
+                            setFavorites(uniqueFavorites);
+                            setValidatedFavorites(uniqueFavorites);
                         } catch (parseError) {
                             console.error('Error parsing favorites:', parseError);
                             alert('Hiba történt a kedvencek feldolgozása során.');
                         }
                     } else {
-                        console.error('Error fetching favorites:', favoritesResult); // Log the entire response object
-                        alert('Hiba történt a kedvencek lekérése során: ' + (favoritesResult.message || 'Unknown error')); // Show alert with error message
+                        console.error('Error fetching favorites:', favoritesResult);
+                        alert('Hiba történt a kedvencek lekérése során: ' + (favoritesResult.message || 'Unknown error'));
                     }
                 } catch (error) {
                     console.error('Error fetching favorites:', error);
                     alert('Hálózati hiba történt a kedvencek lekérése során.');
                 }
             };
-            
-            fetchFavorites(); // Call the function to fetch favorites
+
+            fetchFavorites();
         }
-    }, []); // Dependency array to run only on mount
+    }, []);
 
     // Bejelentkezés kezelése
     const handleLoginSubmit = async (e) => {
@@ -170,33 +166,30 @@ function Menu({ favorites, setFavorites, products }) {
             });
             const result = await response.json();
             if (result.success) {
-                const token = result.token; // Get the token from the response
-                localStorage.setItem('token', token); // Store JWT in local storage
+                const token = result.token;
+                localStorage.setItem('token', token);
                 setIsLoggedIn(true);
                 setUserEmail(loginEmail);
                 setShowLoginModal(false);
                 alert('Sikeres bejelentkezés!');
 
-                // Most, hogy bejelentkezett, kérjük le a kedvenceit
-                const favoritesResponse = await fetch('http://localhost:8080/users/favorites', { 
+                // Now fetch favorites
+                const favoritesResponse = await fetch('http://localhost:8080/users/favorites', {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Ensure token is included
+                        'Authorization': `Bearer ${token}`,
                     },
                     method: 'GET',
                 });
-    
                 const favoritesResult = await favoritesResponse.json();
-
                 if (favoritesResult.success) {
-                    const parsedFavorites = JSON.parse(favoritesResult.favorites); // Parse the JSON string
-                    const uniqueFavorites = [...new Set(parsedFavorites)]; // Remove duplicates
-                    setFavorites(uniqueFavorites); // Update favorites
-                    setValidatedFavorites(uniqueFavorites); // Sync validated favorites
+                    const parsedFavorites = JSON.parse(favoritesResult.favorites);
+                    const uniqueFavorites = [...new Set(parsedFavorites)];
+                    setFavorites(uniqueFavorites);
+                    setValidatedFavorites(uniqueFavorites);
                 } else {
                     alert('Hiba történt a kedvencek lekérése során');
                 }
-    
             } else {
                 alert('Helytelen email vagy jelszó.');
             }
@@ -204,7 +197,7 @@ function Menu({ favorites, setFavorites, products }) {
             alert('Hálózati hiba történt.');
         }
     };
-    
+
     // Profil frissítése
     const handleProfileSubmit = async (e) => {
         e.preventDefault();
@@ -212,17 +205,16 @@ function Menu({ favorites, setFavorites, products }) {
             alert('Minden mezőt ki kell tölteni!');
             return;
         }
-
         try {
-            const token = localStorage.getItem('token'); // Retrieve JWT from local storage
+            const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:8080/users/updateProfile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Include JWT in the request headers
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    email: userEmail, // Send the user's email
+                    email: userEmail,
                     name: profileName,
                     phone: profilePhone,
                 }),
@@ -237,59 +229,50 @@ function Menu({ favorites, setFavorites, products }) {
         } catch (error) {
             alert('Hálózati hiba történt');
         }
-    }; // Closing brace for handleProfileSubmit
+    };
 
-    // Handle favorite toggle
-const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>,
-    nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
-};
+    // Slider settings for favorites modal
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>,
+        nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
+    };
 
-const formatPrice = (price) => {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Format the price
-}
+    const formatPrice = (price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
 
-const handleFavoriteToggle = async (carId) => {
-
-
+    const handleFavoriteToggle = async (carId) => {
         if (!isLoggedIn) {
             alert('Kérjük, jelentkezzen be a kedvencek kezeléséhez.');
             return;
         }
-    
         const token = localStorage.getItem('token');
-        const isFavorite = validatedFavorites.includes(carId); // Check if the car is in favorites
-    
+        const isFavorite = validatedFavorites.includes(carId);
         try {
             const response = await fetch(`http://localhost:8080/users/favorites/${carId}`, {
-                method: isFavorite ? 'DELETE' : 'POST',  // Toggle between POST (add) and DELETE (remove)
+                method: isFavorite ? 'DELETE' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
             });
-    
             if (!response.ok) {
                 const errorMessage = await response.text();
                 alert(`Hiba történt a kedvenc hozzáadásakor: ${errorMessage}`);
                 return;
             }
-    
             const result = await response.json();
             if (result.success) {
-                // Update the favorites list only if the server response is successful
                 if (isFavorite) {
-                    // Remove the car from the list of favorites
                     setFavorites((prevFavorites) => prevFavorites.filter((id) => id !== carId));
                     setValidatedFavorites((prevFavorites) => prevFavorites.filter((id) => id !== carId));
                 } else {
-                    // Add the car to the list of favorites
                     setFavorites((prevFavorites) => [...prevFavorites, carId]);
                     setValidatedFavorites((prevFavorites) => [...prevFavorites, carId]);
                 }
@@ -300,26 +283,25 @@ const handleFavoriteToggle = async (carId) => {
             alert(`Hálózati hiba történt: ${error.message}`);
         }
     };
-    
-    useEffect(() => {
-    }, [favorites]);
-    
+
+    useEffect(() => {}, [favorites]);
+
     return (
         <Router>
-            <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222' }}>
+            <Navbar expand="lg" className="fixed-menu" style={{ backgroundColor: '#222', flexDirection: 'column' }}>
                 <Container>
-                    <Navbar.Brand href="/">
+                    <Navbar.Brand as={Link} to="/">
                         <img src={Logo} style={{ width: "40px", height: "40px", marginRight: '20px' }} alt="Logo" />
                         B&K Autókereskedés
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
+                        <Nav className="me-auto" style={{ flexWrap: 'wrap' }}>
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/kinalat">Kínálat</Nav.Link>
                         </Nav>
                         <Nav>
-                            <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="custom-dropdown">
+                            <NavDropdown title="Felhasználóknak" id="basic-nav-dropdown" className="custom-dropdown" drop="down">
                                 {!isLoggedIn ? (
                                     <>
                                         <NavDropdown.Item onClick={handleRegisterClick}>
@@ -478,7 +460,7 @@ const handleFavoriteToggle = async (carId) => {
                 </Modal.Body>
             </Modal>
 
-           {/* Kedvencek modal */}
+            {/* Kedvencek modal */}
             <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Kedvenc autók</Modal.Title>
@@ -487,11 +469,11 @@ const handleFavoriteToggle = async (carId) => {
                     {Array.isArray(validatedFavorites) && validatedFavorites.length > 0 ? (
                         <ul>
                             {validatedFavorites.map((carId) => {
-                                const car = products.find((auto) => auto.Rendszam === carId); // Find the car by Rendszam
+                                const car = products.find((auto) => auto.Rendszam === carId);
                                 if (car) {
                                     return (
                                         <li key={car.Rendszam}>
-                                            <Slider {...settings}>
+                                            <Slider {...settings} style={{ display: 'block', width: '100%' }}>
                                                 <div>
                                                     <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={`${car.Marka} ${car.Modell} első kép`} style={{ width: '100%' }} />
                                                 </div>
@@ -500,14 +482,9 @@ const handleFavoriteToggle = async (carId) => {
                                                 </div>
                                             </Slider>
                                             {`${car.Marka} ${car.Modell} (${car.Evjarat}) - ${formatPrice(car.Ar)} Ft`}
-
-
-
-
-     
                                             <Button 
                                                 variant="danger" 
-                                                onClick={() => handleFavoriteToggle(car.Rendszam)} // Call handleFavoriteToggle to remove from database
+                                                onClick={() => handleFavoriteToggle(car.Rendszam)}
                                                 style={{ marginLeft: '10px' }}
                                             >
                                                 Eltávolítás
@@ -521,24 +498,21 @@ const handleFavoriteToggle = async (carId) => {
                                             >
                                                 Foglalás
                                             </Button>
-
                                         </li>
                                     );
                                 }
-                                return null; // If car not found, return null
+                                return null;
                             })}
                         </ul>
                     ) : (
-                        <p>Nincsenek kedvencek.</p> // No favorites found
+                        <p>Nincsenek kedvencek.</p>
                     )}
-                    
                 </Modal.Body>
             </Modal>
 
             {/* Route-ok definiálása */}
             <Routes>
-                <Route path="/order" element={<Order userId={userEmail} />} /> {/* New route for order page */}
-
+                <Route path="/order" element={<Order userId={userEmail} />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} handleFavoriteToggle={handleFavoriteToggle} favorites={favorites} />} />
             </Routes>

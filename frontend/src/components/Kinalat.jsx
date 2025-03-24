@@ -10,7 +10,7 @@ import './KepLapozas.css';
 import './Kinalat.css';
 
 const formatPrice = (price) => {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Format the price
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Formázza az árat
 }
 
 function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
@@ -23,12 +23,12 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     fetchProducts(0);
   }, []);
 
-  const fetchProducts = async (offset = 0) => {
+  const fetchProducts = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:8080/termek?limit=25&offset=${offset}`,
+        `http://localhost:8080/termek`,
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
       setLoading(false);
@@ -41,13 +41,14 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     }
   };
 
-  // Animált konténer, amely jobbról csúszik be lassan, majd középre áll
+  // Animált konténer: jobbról csúszik be és középre áll
   const headerSpring = useSpring({
     from: { transform: 'translateX(150%)' },
     to: { transform: 'translateX(0%)' },
     config: { duration: 3200 }
   });
 
+  // Slider beállítások, reszponzív módosítással
   const settings = {
     dots: true,
     infinite: true,
@@ -55,6 +56,15 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
+    responsive: [
+      {
+        breakpoint: 576,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
     prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>,
     nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
   };
@@ -64,7 +74,7 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
       <div className="video-hatter">
         <Video />
         <Container className="my-4" style={{ position: 'relative', zIndex: 1 }}>
-          {/* Animált header: a kocsi és a szöveg együtt, a kocsi a bal oldalon */}
+          {/* Animált header */}
           <Row className="d-flex justify-content-center animation-container">
             <Col xs={12} style={{ position: 'relative' }}>
               <animated.div style={headerSpring} className="animation-wrapper">
@@ -75,17 +85,17 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
               </animated.div>
             </Col>
           </Row>
-
           {/* Termékek listázása */}
           <Row className="d-flex justify-content-between kinalat">
-            <Col xs={12} sm={3} md={3} lg={2}>
+            <Col xs={12} sm={12} md={12} lg={2}>
               <Szuro onFilterChange={filtered => setFilteredProducts(filtered)} products={products} />
             </Col>
-            <Col xs={12} sm={9} md={9} lg={10} className="card-container">
+            {/* Mobilon kisebb szélességű kínálat rész */}
+            <Col xs={10} sm={12} md={12} lg={10} className="card-container" style={{ margin: '0 auto' }}>
               {filteredProducts.length > 0 ? (
                 <Row className="d-flex justify-content-center g-7" style={{ flexWrap: 'wrap' }}>
                   {filteredProducts.map((auto) => (
-                    <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={4} style={{ padding: '0px', maxWidth: '350px', margin: '10px' }}>
+                    <Col key={auto.Rendszam} xs={12} sm={12} md={6} lg={4} style={{ padding: '0px', maxWidth: '100%', margin: '10px' }}>
                       <CustomCard
                         autoId={auto.Auto_ID}
                         title={`${auto.Marka} ${auto.Modell}`}
@@ -104,7 +114,7 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                               <img
                                 src={`/Img/${auto.Auto_ID}.${index}.jpg`}
                                 alt={`${auto.Marka} ${auto.Modell} kép ${index}`}
-                                style={{ width: '100%', transition: 'transform 0.3s ease' }}
+                                style={{ width: '100%', height: 'auto', transition: 'transform 0.3s ease' }}
                               />
                             </div>
                           ))}
@@ -118,9 +128,6 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                   {loading ? <p className="text-center">Betöltés...</p> : <p className="text-center">Nincs megjeleníthető autó.</p>}
                 </>
               )}
-              <button onClick={() => fetchProducts(filteredProducts.length)} className="btn btn-primary mt-3">
-                További Kocsik
-              </button>
               {error && <p className="text-danger text-center">{error}</p>}
             </Col>
           </Row>
