@@ -102,4 +102,5 @@
 /* Új stílus a "B&K" résznek */
 .orange-text {
   color: orange;
+  text-decoration: underline;
 }
