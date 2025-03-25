@@ -32,7 +32,6 @@
 }
 .car-image1 {
     width: 180px;
-    animation: upDown 4s ease-in-out infinite;
     height: 220px;
     padding-right: 40px;
     margin: 2px;
