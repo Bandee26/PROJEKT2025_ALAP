@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-
 function Reservations() {
     const [reservations, setReservations] = useState([]);
+    const [carDetails, setCarDetails] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -10,7 +10,6 @@ function Reservations() {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-
                     const response = await fetch('http://localhost:8080/reservations', {
                         method: 'GET',
                         headers: {
@@ -21,6 +20,13 @@ function Reservations() {
                     const result = await response.json();
                     if (result.success) {
                         setReservations(result.reservations);
+                        // Fetch car details based on the car IDs from reservations
+                        const carIds = result.reservations.map(reservation => reservation.car_id);
+                        const carResponse = await fetch(`http://localhost:8080/cars?ids=${carIds.join(',')}`);
+                        const carResult = await carResponse.json();
+                        if (carResult.cars) {
+                            setCarDetails(carResult.cars);
+                        }
                     } else {
                         alert('Hiba történt a foglalások lekérése során');
                     }
@@ -46,11 +52,15 @@ function Reservations() {
             ) : (
                 <ul>
                     {reservations.length > 0 ? (
-                        reservations.map((reservation) => (
-                            <li key={reservation.id}>
-                               A lefoglalt autó rendszáma: {reservation.car_id} | Foglalás dátuma: {reservation.order_date}  | Fizetési mód:  {reservation.fizmod}
-                            </li>
-                        ))
+                        reservations.map((reservation) => {
+                            const car = carDetails.find(car => car.Rendszam === reservation.car_id);
+                            return (
+                                <li key={reservation.id}>
+                                    A lefoglalt autó rendszáma: {reservation.car_id} | Foglalás dátuma: {reservation.order_date} | Fizetési mód: {reservation.fizmod}
+                                    {car && <img src={`public/Img/${car.Auto_ID}.1`} alt={car.Rendszam} />}
+                                </li>
+                            );
+                        })
                     ) : (
                         <p>Nincsenek foglalásai.</p>
                     )}
@@ -59,6 +69,5 @@ function Reservations() {
         </div>
     );
 }
-
 
 export default Reservations;
