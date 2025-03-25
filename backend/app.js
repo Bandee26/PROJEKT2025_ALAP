@@ -80,7 +80,19 @@ app.post('/bookings', async (req, res) => {
 
 });
 
+app.get('/reservations', verifyToken, async (req, res) => {
+    try {
+        const userId = req.userId; // Get user ID from the request
+        const reservations = await require('./db/dboperations').getUserReservations(userId); // Fetch reservations for the user
+        res.json({ success: true, reservations });
+    } catch (error) {
+        console.error('Error fetching reservations:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 app.use('/users', usersRouter);  // Az API végpontokat a /users prefixszel regisztráljuk
+
 
 
 app.use('/termek', termekRouter);  // A termékek végpontjait is az /termek prefixszel

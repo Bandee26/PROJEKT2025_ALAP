@@ -239,8 +239,19 @@ async function createBooking(carId, userId, paymentMethod) {
     }
 }
 
+async function getUserReservations(userId) {
+    try {
+        const [rows] = await pool.query('SELECT * FROM foglalas WHERE user_id = ?', [userId]);
+        return rows; // Return the reservations for the user
+    } catch (error) {
+        console.error('Error fetching user reservations:', error);
+        throw new Error('Failed to fetch user reservations.');
+    }
+}
+
 module.exports = { // Ensure all functions are exported correctly
-  selectAutoFromAutorendszer, selectProductPerPage , registerUser,
-  loginUser ,updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
-  getUserProfile, createBooking,getCarsByIds // Export the new function
+    selectAutoFromAutorendszer, selectProductPerPage, registerUser,
+    loginUser, updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
+    getUserProfile, createBooking, getCarsByIds, getUserReservations // Export the new function
 };
+
