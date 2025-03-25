@@ -7,7 +7,7 @@ const Nagyitottkep = ({ isOpen, onClose, imageSrc }) => {
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
-                <img src={imageSrc} alt="Enlarged Car" />
+                <img src={imageSrc} alt="Nagy kép az autóról" />
                 <button onClick={onClose}>Bezárás</button>
             </div>
         </div>
