@@ -69,7 +69,7 @@ function Reservations() {
                                             <img 
                                                 src={`/Img/${car.Auto_ID}.1.jpg`} 
                                                 alt={car.Rendszam} 
-                                                className="car-image" 
+                                                className="car-image1" 
                                                 onClick={() => { 
                                                     setSelectedImage(`/Img/${car.Auto_ID}.1.jpg`); 
                                                     setIsModalOpen(true); 
@@ -78,7 +78,7 @@ function Reservations() {
                                             <img 
                                                 src={`/Img/${car.Auto_ID}.2.jpg`} 
                                                 alt={`${car.Rendszam} Second View`} 
-                                                className="car-image" 
+                                                className="car-image1" 
                                                 onClick={() => { 
                                                     setSelectedImage(`/Img/${car.Auto_ID}.2.jpg`); 
                                                     setIsModalOpen(true); 
@@ -99,7 +99,7 @@ function Reservations() {
                     )}</div>
                 </ul>
             )}
-            <Nagyitottkep isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} imageSrc={selectedImage} /> {/* Modal for enlarged image */}
+            <Nagyitottkep isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} imageSrc={selectedImage} /> 
                 
         </div>
     );
