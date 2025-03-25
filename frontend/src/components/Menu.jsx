@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Reservations from './Reservations';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -319,7 +320,11 @@ function Menu({ favorites, setFavorites, products }) {
                                         <NavDropdown.Item onClick={() => setShowFavoritesModal(true)}>
                                             Kedvencek
                                         </NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/foglalas">
+                                            Foglalások
+                                        </NavDropdown.Item>
                                         <NavDropdown.Item onClick={() => {
+
                                             localStorage.removeItem('token');
                                             setIsLoggedIn(false);
                                             window.location.reload();
@@ -514,10 +519,13 @@ function Menu({ favorites, setFavorites, products }) {
             <Routes>
                 <Route path="/order" element={<Order userId={userEmail} />} />
                 <Route path="/" element={<Home />} />
+                <Route path="/foglalas" element={<Reservations />} />
+
                 <Route path="/kinalat" element={<Kinalat isLoggedIn={isLoggedIn} handleFavoriteToggle={handleFavoriteToggle} favorites={favorites} />} />
             </Routes>
         </Router>
     );
+
 }
 
 export default Menu;
