@@ -466,7 +466,7 @@ function Menu({ favorites, setFavorites, products }) {
             </Modal>
 
             {/* Kedvencek modal */}
-            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)} centered>
+            <Modal show={showFavoritesModal} onHide={() => setShowFavoritesModal(false)} centered style={{  textAlign: 'center' }}>
                 <Modal.Header closeButton>
                     <Modal.Title>Kedvenc autók</Modal.Title>
                 </Modal.Header>

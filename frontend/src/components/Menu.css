@@ -57,7 +57,9 @@
     translate: 100% 0;
     transition: .2s .2s, scale 0s .4s;
 }
-
+.modal-text {
+    color: black; /* Set modal text color to black */
+}
 /* Dropdown stílus és animáció */
 .custom-dropdown .dropdown-menu {
     background-color: #222 !important;
