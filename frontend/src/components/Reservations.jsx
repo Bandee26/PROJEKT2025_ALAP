@@ -50,18 +50,42 @@ function Reservations() {
 
     return (
         <div>
-            <h1>Foglalások</h1>
+            <h1 style={{ textAlign: 'center' }}>Foglalások</h1>
+
             {loading ? (
                 <p>Töltés...</p>
             ) : (
-                <ul>
-                    {reservations.length > 0 ? (
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+
+                    <div className="reservation-container">
+                        {reservations.length > 0 ? (
+
                         reservations.map((reservation) => {
                             const car = carDetails.find(car => car.Rendszam === reservation.car_id);
                             return (
                                 <li key={reservation.id} className="reservation-item">
-                                    {car && <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={car.Rendszam} className="car-image" onClick={() => { setSelectedImage(`/Img/${car.Auto_ID}.1.jpg`); setIsModalOpen(true); }} />} {/* Open modal on click */}
-
+                                    {car && (
+                                        <div className="car-images">
+                                            <img 
+                                                src={`/Img/${car.Auto_ID}.1.jpg`} 
+                                                alt={car.Rendszam} 
+                                                className="car-image" 
+                                                onClick={() => { 
+                                                    setSelectedImage(`/Img/${car.Auto_ID}.1.jpg`); 
+                                                    setIsModalOpen(true); 
+                                                }} 
+                                            />
+                                            <img 
+                                                src={`/Img/${car.Auto_ID}.2.jpg`} 
+                                                alt={`${car.Rendszam} Second View`} 
+                                                className="car-image" 
+                                                onClick={() => { 
+                                                    setSelectedImage(`/Img/${car.Auto_ID}.2.jpg`); 
+                                                    setIsModalOpen(true); 
+                                                }} 
+                                            />
+                                        </div>
+                                    )}
                                     <div className="reservation-details">
                                         <p>A lefoglalt autó rendszáma: <strong>{reservation.car_id}</strong></p>
                                         <p>Foglalás dátuma: <strong>{reservation.order_date}</strong></p>
@@ -72,10 +96,11 @@ function Reservations() {
                         })
                     ) : (
                         <p>Nincsenek foglalásai.</p>
-                    )}
+                    )}</div>
                 </ul>
             )}
             <Nagyitottkep isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} imageSrc={selectedImage} /> {/* Modal for enlarged image */}
+                
         </div>
     );
 }
