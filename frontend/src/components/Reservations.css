@@ -37,3 +37,8 @@
     padding-right: 40px;
     margin: 2px;
   }
+
+  .car-image1:hover {
+    animation-play-state: paused;
+    border-radius: 30px;
+  }
