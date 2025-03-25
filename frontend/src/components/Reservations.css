@@ -1,0 +1,18 @@
+/* Reservations.css */
+
+.reservation-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reservation-item img {
+    width: 100px; /* Set a fixed width for images */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Rounded corners */
+    margin-right: 15px; /* Space between image and text */
+}
+
+.reservation-details {
+    font-size: 16px; /* Adjust font size */
+}

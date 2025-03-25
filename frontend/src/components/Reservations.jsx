@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import Nagyitottkep from './nagyitottkep'; // Import the modal component
+import './Reservations.css'; // Import the new CSS file
 
 function Reservations() {
     const [reservations, setReservations] = useState([]);
     const [carDetails, setCarDetails] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+    const [selectedImage, setSelectedImage] = useState(''); // State to hold the selected image source
 
     useEffect(() => {
         const fetchReservations = async () => {
@@ -55,9 +59,14 @@ function Reservations() {
                         reservations.map((reservation) => {
                             const car = carDetails.find(car => car.Rendszam === reservation.car_id);
                             return (
-                                <li key={reservation.id}>
-                                    A lefoglalt autó rendszáma: {reservation.car_id} | Foglalás dátuma: {reservation.order_date} | Fizetési mód: {reservation.fizmod}
-                                    {car && <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={car.Rendszam} />}
+                                <li key={reservation.id} className="reservation-item">
+                                    {car && <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={car.Rendszam} className="car-image" onClick={() => { setSelectedImage(`/Img/${car.Auto_ID}.1.jpg`); setIsModalOpen(true); }} />} {/* Open modal on click */}
+
+                                    <div className="reservation-details">
+                                        <p>A lefoglalt autó rendszáma: <strong>{reservation.car_id}</strong></p>
+                                        <p>Foglalás dátuma: <strong>{reservation.order_date}</strong></p>
+                                        <p>Fizetési mód: <strong>{reservation.fizmod}</strong></p>
+                                    </div>
                                 </li>
                             );
                         })
@@ -66,6 +75,7 @@ function Reservations() {
                     )}
                 </ul>
             )}
+            <Nagyitottkep isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} imageSrc={selectedImage} /> {/* Modal for enlarged image */}
         </div>
     );
 }
