@@ -57,7 +57,7 @@ function Reservations() {
                             return (
                                 <li key={reservation.id}>
                                     A lefoglalt autó rendszáma: {reservation.car_id} | Foglalás dátuma: {reservation.order_date} | Fizetési mód: {reservation.fizmod}
-                                    {car && <img src={`public/Img/${car.Auto_ID}.1`} alt={car.Rendszam} />}
+                                    {car && <img src={`/Img/${car.Auto_ID}.1.jpg`} alt={car.Rendszam} />}
                                 </li>
                             );
                         })
