@@ -75,7 +75,18 @@
     position: static;
     display: block;
 }
+.favorites-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjust spacing between items */
+    ;
+}
 
+.favorite-car {
+    width: calc(60% - 110px); /* Two items per row with some margin */
+    margin-bottom: 20px; /* Space between rows */
+
+}
 /* Slide down animáció kulcsképkockái */
 @keyframes slideDown {
     from {

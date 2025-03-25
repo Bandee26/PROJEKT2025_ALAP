@@ -472,11 +472,12 @@ function Menu({ favorites, setFavorites, products }) {
                 </Modal.Header>
                 <Modal.Body>
                     {Array.isArray(validatedFavorites) && validatedFavorites.length > 0 ? (
-                        <ul>
+                        <div className="favorites-grid">
                             {validatedFavorites.map((carId) => {
                                 const car = products.find((auto) => auto.Rendszam === carId);
                                 if (car) {
                                     return (
+                                        <div className="favorite-car" key={car.Rendszam}>
                                         <li key={car.Rendszam}>
                                             <Slider {...settings} style={{ display: 'block', width: '100%' }}>
                                                 <div>
@@ -504,11 +505,14 @@ function Menu({ favorites, setFavorites, products }) {
                                                 Foglalás
                                             </Button>
                                         </li>
+                                        </div>
+
                                     );
                                 }
                                 return null;
                             })}
-                        </ul>
+                        </div>
+
                     ) : (
                         <p>Nincsenek kedvencek.</p>
                     )}
