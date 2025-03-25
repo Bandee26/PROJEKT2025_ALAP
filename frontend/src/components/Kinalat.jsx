@@ -64,6 +64,20 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
           slidesToScroll: 1,
         },
       },
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
     ],
     prevArrow: <div className="slick-prev custom-arrow">&#8249;</div>,
     nextArrow: <div className="slick-next custom-arrow">&#8250;</div>,
@@ -87,15 +101,14 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
           </Row>
           {/* Termékek listázása */}
           <Row className="d-flex justify-content-between kinalat">
-            <Col xs={12} sm={12} md={12} lg={2}>
+            <Col xs={12} sm={12} md={12} lg={3}>
               <Szuro onFilterChange={filtered => setFilteredProducts(filtered)} products={products} />
             </Col>
-            {/* Mobilon kisebb szélességű kínálat rész */}
-            <Col xs={10} sm={12} md={12} lg={10} className="card-container" style={{ margin: '0 auto' }}>
+            <Col xs={12} sm={12} md={12} lg={9} className="card-container" style={{ margin: '0 auto' }}>
               {filteredProducts.length > 0 ? (
-                <Row className="d-flex justify-content-center g-7" style={{ flexWrap: 'wrap' }}>
+                <Row className="d-flex justify-content-center g-4" style={{ flexWrap: 'wrap' }}>
                   {filteredProducts.map((auto) => (
-                    <Col key={auto.Rendszam} xs={12} sm={12} md={6} lg={4} style={{ padding: '0px', maxWidth: '100%', margin: '10px' }}>
+                    <Col key={auto.Rendszam} xs={12} sm={6} md={4} lg={4} style={{ padding: '0px', margin: '10px' }}>
                       <CustomCard
                         autoId={auto.Auto_ID}
                         title={`${auto.Marka} ${auto.Modell}`}
@@ -124,9 +137,7 @@ function Kinalat({ isLoggedIn, handleFavoriteToggle, favorites }) {
                   ))}
                 </Row>
               ) : (
-                <>
-                  {loading ? <p className="text-center">Betöltés...</p> : <p className="text-center">Nincs megjeleníthető autó.</p>}
-                </>
+                <>{loading ? <p className="text-center">Betöltés...</p> : <p className="text-center">Nincs megjeleníthető autó.</p>}</>
               )}
               {error && <p className="text-danger text-center">{error}</p>}
             </Col>
