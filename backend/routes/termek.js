@@ -19,10 +19,16 @@ router.get('/', async function(req, res, next) {
   }
 });
 
-router.get('/page/:pageNo', (req, res) =>{
-  let oldal = Number(req.params.pageNo)
-  Db.selectProductPerPage(oldal)
-    .then(adat => res.json(adat))
+router.get('/betolt', (req, res) => {
+  const page = Number(req.query.page) || 1; // Get the page number from query, default to 1
+  const limit = 25; // Number of products to load
+  const offset = (page - 1) * limit; // Calculate offset for pagination
+
+
+  Db.selectProductPerPage(page) // Adjust this to use the new pagination logic
+
+    .then(products => res.json(products))
+
     .catch(error => res.send(error))
 })
 
@@ -30,7 +36,8 @@ router.post('/filter', async (req, res) => {
   try{
     const JS = req.body
     const adat = await Db.selectProductWhere(JS)
-    res.json(adat)
+    res.status(500).send('Szerver hiba!'); // Handle errors
+
   }
   catch(error)
   {
