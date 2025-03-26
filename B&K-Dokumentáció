@@ -1,0 +1,58 @@
+# B&K Projekt Dokumentáció
+
+## Projekt Áttekintés
+A B&K projekt egy webalkalmazás, amely lehetővé teszi a felhasználók számára, hogy különböző kritériumok alapján szűrjék és megtekinthessék az autólistákat. Az alkalmazás célja, hogy egyszerűsíti a felhasználók számára az autók keresését és szűrését, lehetővé téve számukra, hogy a számukra legmegfelelőbb autókat találják meg. A célközönség magában foglalja az autóvásárlókat, kereskedőket és mindenkit, aki érdeklődik az autók iránt.
+
+## Fájl Leírások
+
+### 1. `Kinalat.jsx`
+- **Cél**: Fő komponens az aktuális autólisták megjelenítésére.
+- **Kulcsfunkciók**:
+  - Autóadatok lekérése a háttérből.
+  - Szűrt autólisták megjelenítése a felhasználó által kiválasztott kritériumok alapján.
+  - Az URL frissítése a szűrőparaméterekkel a könnyű megosztás érdekében.
+- **Részletes Leírás**:
+  - A `Kinalat` komponens felelős az autólisták megjelenítéséért. A `fetchProducts` függvény lekéri az autóadatokat a háttér API-ból, és beállítja a `products` és `filteredProducts` állapotokat. A `onFilterChange` függvény frissíti a szűrt autókat és az URL-t a kiválasztott szűrők alapján.
+
+### 2. `Szuro.jsx`
+- **Cél**: Szűrő komponens a keresési kritériumok kiválasztására.
+- **Kulcsfunkciók**:
+  - Lehetővé teszi a felhasználók számára, hogy autókat szűrjenek márka, modell, árkategória és egyéb attribútumok alapján.
+  - A kiválasztott szűrőket visszajelzi a `Kinalat` komponensnek.
+- **Részletes Leírás**:
+  - A `Szuro` komponens tartalmazza a szűrőopciókat, mint például a márkák és modellek kiválasztása, árkategória, és egyéb jellemzők. A felhasználói interakciók alapján frissíti a szűrőket, és értesíti a `Kinalat` komponenst a változásokról.
+
+### 3. `Kinalat.css`
+- **Cél**: Stílusok a `Kinalat` komponenshez.
+- **Kulcsfunkciók**: 
+  - CSS szabályokat tartalmaz a megjelenéshez, színekhez és reszponzív dizájnhoz.
+- **Részletes Leírás**:
+  - A CSS fájl tartalmazza a szükséges stílusokat a `Kinalat` komponenshez, beleértve a színek, betűtípusok és elrendezések beállításait. A reszponzív dizájn biztosítja, hogy az alkalmazás különböző eszközökön is jól nézzen ki.
+
+## Hozzájárulások
+- **Fejlesztő 1**: A fő szűrési logika megvalósítása a `Kinalat.jsx` fájlban. Kihívások: A szűrési logika optimalizálása a teljesítmény érdekében.
+- **Fejlesztő 2**: A felhasználói felület komponenseinek és stílusainak tervezése a `Kinalat.css` és `Szuro.jsx` fájlokban. Kihívások: A dizájn reszponzívvá tétele.
+- **Fejlesztő 3**: A háttér API beállítása az autóadatok lekérésére. Kihívások: Az API teljesítményének javítása és a hibakezelés megvalósítása.
+
+## Telepítési Útmutató
+1. Klónozd a repót.
+2. Telepítsd a függőségeket az `npm install` paranccsal.
+3. Indítsd el a fejlesztői szervert az `npm start` paranccsal.
+4. Nyisd meg a böngészőt és navigálj a `http://localhost:3000` címre.
+
+## Használat
+- Navigálj az alkalmazásba a böngésződben.
+- Használj szűrőopciókat az autók keresésére a preferenciáid alapján.
+- Az autók listáját a kiválasztott szűrők alapján frissítjük.
+
+## Jövőbeli Fejlesztések
+- Felhasználói hitelesítés megvalósítása a kedvenc autók mentéséhez.
+- További szűrési lehetőségek hozzáadása, mint például futott kilométer és motortípus.
+- A felhasználói élmény javítása érdekében a dizájn frissítése.
+
+## Tesztelés és Minőségbiztosítás
+- A projekt során automatizált teszteket használtunk a funkciók ellenőrzésére.
+- A tesztelési keretrendszer lehetővé teszi a hibák gyors azonosítását és javítását.
+
+## Telepítés
+- A projekt telepítése különböző környezetekbe (fejlesztés, tesztelés, éles) a CI/CD folyamatok segítségével történik.
