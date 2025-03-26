@@ -94,3 +94,66 @@
 .slick-next::before {
     display: none;
 }
+
+/* Reszponzivitás beállítása */
+@media (max-width: 768px) {
+    /* A képek kisebbek mobil nézetben */
+    .kep {
+        height: 150px; /* Csökkentett magasság */
+    }
+
+    /* A kártya szövegek kisebbek legyenek */
+    .card-title,
+    .card-subtitle,
+    .card-text {
+        font-size: 1rem; /* Kisebb szöveg méret */
+    }
+
+    .hover-button {
+        font-size: 0.8rem; /* Kisebb gombok */
+    }
+
+    /* A slider nyilak kisebbek mobilon */
+    .slick-prev, .slick-next {
+        width: 40px;
+        height: 40px;
+        font-size: 20px; /* Kisebb nyilak */
+    }
+
+    .slick-prev {
+        left: -45px; /* Bal oldali nyíl pozíciója */
+    }
+
+    .slick-next {
+        right: -45px; /* Jobb oldali nyíl pozíciója */
+    }
+}
+
+@media (max-width: 576px) {
+    /* A képek még kisebbek */
+    .kep {
+        height: 120px;
+    }
+
+    /* A kártyák és szövegek teljesen kisebbek */
+    .card-title,
+    .card-subtitle,
+    .card-text {
+        font-size: 0.9rem; /* További csökkentett szöveg méret */
+    }
+
+    .hover-button {
+        font-size: 0.7rem; /* Még kisebb gombok */
+    }
+
+    .slick-prev, .slick-next {
+        width: 35px;
+        height: 35px;
+        font-size: 18px; /* Még kisebb nyilak */
+    }
+
+    /* Kártyák középre igazítása */
+    .card-body {
+        padding: 8px;
+    }
+}

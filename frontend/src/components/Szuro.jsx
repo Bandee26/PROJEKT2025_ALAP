@@ -3,18 +3,23 @@ import { useWindowScroll } from 'react-use';
 import ReactSlider from 'react-slider';
 import axios from 'axios';
 import { Card, Form, Row, Col, Button } from 'react-bootstrap';
-import carIcon from './auto.png';
+import { useNavigate, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { FaArrowLeft } from 'react-icons/fa';
+import carIcon from './auto.png';
 import './Szuro.css';
 
 const Szuro = ({ onFilterChange, products }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Állapotok a szűrőkhöz
   const [searchTerm, setSearchTerm] = useState('');
   const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [modelsByBrand, setModelsByBrand] = useState({});
   const [selectedModels, setSelectedModels] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 100000000]);
-  const [isVisible, setIsVisible] = useState(true);
   const [colors, setColors] = useState([]);
   const [selectedColor, setSelectedColor] = useState('');
   const [yearRange, setYearRange] = useState([1990, 2025]);
@@ -25,14 +30,16 @@ const Szuro = ({ onFilterChange, products }) => {
   const [transmissions, setTransmissions] = useState([]);
   const [selectedTransmission, setSelectedTransmission] = useState('');
   const [maxKm, setMaxKm] = useState(1000000);
-  
-  // New state variables for min and max values
+
+  // Új állapotok a minimum és maximum értékekhez
   const [minYear, setMinYear] = useState(1990);
   const [maxYear, setMaxYear] = useState(2025);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(100000000);
 
   const { y } = useWindowScroll();
+  const [isVisible, setIsVisible] = useState(true);
+
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
@@ -43,28 +50,126 @@ const Szuro = ({ onFilterChange, products }) => {
     </div>
   );
 
+  // Ha van query az URL-ben, olvassuk be az alapértelmezett szűrőértékeket
+  useEffect(() => {
+    const params = queryString.parse(location.search);
+    if (params.search) setSearchTerm(params.search);
+    if (params.brands) setSelectedBrands(params.brands.split(','));
+    if (params.models) setSelectedModels(params.models.split(','));
+    if (params.color) setSelectedColor(params.color);
+    if (params.minPrice && params.maxPrice)
+      setPriceRange([Number(params.minPrice), Number(params.maxPrice)]);
+    if (params.minYear && params.maxYear)
+      setYearRange([Number(params.minYear), Number(params.maxYear)]);
+    if (params.engine) setSelectedEngineType(params.engine);
+    if (params.usage) setSelectedUsageType(params.usage);
+    if (params.transmission) setSelectedTransmission(params.transmission);
+    if (params.maxKm) setMaxKm(Number(params.maxKm));
+  }, [location.search]);
+
+  // Frissítjük az URL-t, ha bármelyik szűrő változik
+  useEffect(() => {
+    const filters = {
+      search: searchTerm || undefined,
+      brands: selectedBrands.length ? selectedBrands.join(',') : undefined,
+      models: selectedModels.length ? selectedModels.join(',') : undefined,
+      color: selectedColor || undefined,
+      minPrice: priceRange[0] !== minPrice ? priceRange[0] : undefined,
+      maxPrice: priceRange[1] !== maxPrice ? priceRange[1] : undefined,
+      minYear: yearRange[0] !== minYear ? yearRange[0] : undefined,
+      maxYear: yearRange[1] !== maxYear ? yearRange[1] : undefined,
+      engine: selectedEngineType || undefined,
+      usage: selectedUsageType || undefined,
+      transmission: selectedTransmission || undefined,
+      maxKm: maxKm !== 1000000 ? maxKm : undefined,
+    };
+
+    // queryString.stringify ignorálja az undefined
+    const newQuery = queryString.stringify(filters);
+    navigate(`?${newQuery}`, { replace: true });
+  }, [
+    searchTerm,
+    selectedBrands,
+    selectedModels,
+    selectedColor,
+    priceRange,
+    yearRange,
+    selectedEngineType,
+    selectedUsageType,
+    selectedTransmission,
+    maxKm,
+    minPrice,
+    maxPrice,
+    minYear,
+    maxYear,
+    navigate,
+  ]);
+
+  // Szűrés logikája – itt szűrjük a termékeket és hívjuk a callback-et
+  useEffect(() => {
+    const filtered = products.filter(product =>
+      (searchTerm === '' ||
+        searchTerm.split(' ').every(term =>
+          product.Marka.toLowerCase().includes(term.toLowerCase()) ||
+          product.Modell.toLowerCase().includes(term.toLowerCase()) ||
+          product.Szin.toLowerCase().includes(term.toLowerCase()) ||
+          product.Motortipus.toLowerCase().includes(term.toLowerCase()) ||
+          product.Hasznalat.toLowerCase().includes(term.toLowerCase()) ||
+          product.Sebessegvalto.toLowerCase().includes(term.toLowerCase())
+        )) &&
+      (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) &&
+      (selectedModels.length === 0 || selectedModels.includes(product.Modell)) &&
+      (selectedColor === '' || product.Szin === selectedColor) &&
+      Number(product.Ar) >= priceRange[0] &&
+      Number(product.Ar) <= priceRange[1] &&
+      (selectedEngineType === '' || product.Motortipus === selectedEngineType) &&
+      (selectedUsageType === '' || product.Hasznalat === selectedUsageType) &&
+      (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) &&
+      Number(product.Evjarat) >= yearRange[0] &&
+      Number(product.Evjarat) <= yearRange[1] &&
+      Number(product.Kilometerora) <= maxKm
+    );
+
+    if (onFilterChange) {
+      onFilterChange(filtered);
+    }
+  }, [
+    searchTerm,
+    selectedBrands,
+    selectedModels,
+    selectedColor,
+    priceRange,
+    yearRange,
+    selectedEngineType,
+    selectedUsageType,
+    selectedTransmission,
+    maxKm,
+    products,
+    onFilterChange,
+  ]);
+
+  // Adatok betöltése a termékekből
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8080/termek');
         const fetchedProducts = response.data.products || [];
-        
-        // Extract min and max price and year
+
+        // Ár és évjárat minimum/maximum értékek
         const prices = fetchedProducts.map(product => Number(product.Ar));
         const years = fetchedProducts.map(product => Number(product.Evjarat));
-        
-        const minPrice = Math.min(...prices); // Calculate min price
-        const maxPrice = Math.max(...prices); // Calculate max price
-        const minYear = Math.min(...years); // Calculate min year
-        const maxYear = Math.max(...years); // Calculate max year
 
-        // Update state with min and max values
-        setMinPrice(minPrice);
-        setMaxPrice(maxPrice);
-        setMinYear(minYear);
-        setMaxYear(maxYear);
-        setPriceRange([minPrice, maxPrice]);
-        setYearRange([minYear, maxYear]);
+        const minP = Math.min(...prices);
+        const maxP = Math.max(...prices);
+        const minY = Math.min(...years);
+        const maxY = Math.max(...years);
+
+        setMinPrice(minP);
+        setMaxPrice(maxP);
+        setMinYear(minY);
+        setMaxYear(maxY);
+        setPriceRange([minP, maxP]);
+        setYearRange([minY, maxY]);
 
         const fetchedBrands = [...new Set(fetchedProducts.map(product => product.Marka))];
         const fetchedModelsByBrand = {};
@@ -96,58 +201,21 @@ const Szuro = ({ onFilterChange, products }) => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const filtered = products.filter(product => 
-      (searchTerm === '' || 
-      searchTerm.split(' ').every(term => 
-        product.Marka.toLowerCase().includes(term.toLowerCase()) ||
-        product.Modell.toLowerCase().includes(term.toLowerCase()) ||
-        product.Szin.toLowerCase().includes(term.toLowerCase()) ||
-        product.Motortipus.toLowerCase().includes(term.toLowerCase()) ||
-        product.Hasznalat.toLowerCase().includes(term.toLowerCase()) ||
-        product.Sebessegvalto.toLowerCase().includes(term.toLowerCase())
-      )) &&
-      (selectedBrands.length === 0 || selectedBrands.includes(product.Marka)) && 
-      (selectedModels.length === 0 || selectedModels.includes(product.Modell)) && 
-      (selectedColor === '' || product.Szin === selectedColor) && 
-      Number(product.Ar) >= priceRange[0] && 
-      Number(product.Ar) <= priceRange[1] &&
-      (selectedEngineType === '' || product.Motortipus === selectedEngineType) && 
-      (selectedUsageType === '' || product.Hasznalat === selectedUsageType) && 
-      (selectedTransmission === '' || product.Sebessegvalto === selectedTransmission) && 
-      Number(product.Evjarat) >= yearRange[0] && 
-      Number(product.Evjarat) <= yearRange[1] && 
-      Number(product.Kilometerora) <= maxKm
-    );
-
-    if (onFilterChange) {
-      onFilterChange(filtered);
-    }
-  }, [
-    searchTerm,
-    selectedBrands,
-    selectedModels,
-    selectedColor,
-    priceRange,
-    selectedEngineType,
-    selectedUsageType,
-    selectedTransmission,
-    yearRange,
-    maxKm,
-    products
-  ]);
-
   const handleBrandChange = (event) => {
     const brand = event.target.value;
     setSelectedBrands(prevSelected =>
-      prevSelected.includes(brand) ? prevSelected.filter(b => b !== brand) : [...prevSelected, brand]
+      prevSelected.includes(brand)
+        ? prevSelected.filter(b => b !== brand)
+        : [...prevSelected, brand]
     );
   };
 
   const handleModelChange = (event) => {
     const model = event.target.value;
     setSelectedModels(prevSelected =>
-      prevSelected.includes(model) ? prevSelected.filter(m => m !== model) : [...prevSelected, model]
+      prevSelected.includes(model)
+        ? prevSelected.filter(m => m !== model)
+        : [...prevSelected, model]
     );
   };
 
@@ -198,7 +266,7 @@ const Szuro = ({ onFilterChange, products }) => {
                         checked={selectedModels.includes(model)}
                         className="text-light ms-4"
                       />
-                    ))} 
+                    ))}
                   </div>
                 </div>
               ))
@@ -206,45 +274,44 @@ const Szuro = ({ onFilterChange, products }) => {
               <p className="text-muted">Márkák és modellek betöltése...</p>
             )}
           </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label className="text-light"><strong>Évjárat:</strong></Form.Label>
-              <ReactSlider
-                min={minYear}
-                max={maxYear}
-                step={1}
-                value={yearRange}
-                onChange={setYearRange}
-                pearling
-                minDistance={1}
-                className="custom-slider"
-                thumbClassName="custom-thumb"
-                trackClassName="slider-track"
-                renderThumb={renderCarThumb}
-              />
-              <Row className="mt-2">
-                <Col><small className="text-light">Min: {yearRange[0]}</small></Col>
-                <Col className="text-end"><small className="text-light">Max: {yearRange[1]}</small></Col>
-              </Row>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label className="text-light"><strong>Ár szűrő:</strong></Form.Label>
-              <ReactSlider
-                min={minPrice}
-                max={maxPrice}
-                step={100000}
-                value={priceRange}
-                onChange={setPriceRange}
-                className="custom-slider"
-                thumbClassName="custom-thumb"
-                trackClassName="slider-track"
-                renderThumb={renderCarThumb}
-              />
-              <Row className="mt-2">
-                <Col><small className="text-light">{priceRange[0].toLocaleString()} Ft</small></Col>
-                <Col className="text-end"><small className="text-light">{priceRange[1].toLocaleString()} Ft</small></Col>
-              </Row>
-            </Form.Group>
-
+          <Form.Group className="mb-3">
+            <Form.Label className="text-light"><strong>Évjárat:</strong></Form.Label>
+            <ReactSlider
+              min={minYear}
+              max={maxYear}
+              step={1}
+              value={yearRange}
+              onChange={setYearRange}
+              pearling
+              minDistance={1}
+              className="custom-slider"
+              thumbClassName="custom-thumb"
+              trackClassName="slider-track"
+              renderThumb={renderCarThumb}
+            />
+            <Row className="mt-2">
+              <Col><small className="text-light">Min: {yearRange[0]}</small></Col>
+              <Col className="text-end"><small className="text-light">Max: {yearRange[1]}</small></Col>
+            </Row>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label className="text-light"><strong>Ár szűrő:</strong></Form.Label>
+            <ReactSlider
+              min={minPrice}
+              max={maxPrice}
+              step={100000}
+              value={priceRange}
+              onChange={setPriceRange}
+              className="custom-slider"
+              thumbClassName="custom-thumb"
+              trackClassName="slider-track"
+              renderThumb={renderCarThumb}
+            />
+            <Row className="mt-2">
+              <Col><small className="text-light">{priceRange[0].toLocaleString()} Ft</small></Col>
+              <Col className="text-end"><small className="text-light">{priceRange[1].toLocaleString()} Ft</small></Col>
+            </Row>
+          </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label className="text-light"><strong>Max futott km:</strong></Form.Label>
             <ReactSlider

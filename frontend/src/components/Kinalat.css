@@ -11,6 +11,8 @@
   justify-content: center;
   height: 150px;
   width: 100%;
+  position: relative;
+  pointer-events: none;
 }
 
 /* A "Jelenlegi kínálatunk" szöveg – középre igazítva, a kártyák fölött, most a kocsi jobb oldalán */
@@ -19,12 +21,15 @@
   font-size: 2.5rem;
   margin: 0;
   margin-left: 40px;  /* A kocsi és a szöveg közötti távolság */
+  text-align: center;
+  pointer-events: auto;
 }
 
 /* A vontatókocsi képe, amelyet animálunk */
 .car-animation {
   width: 100px;  /* Igény szerint módosítható */
   flex-shrink: 0;
+  pointer-events: none;
 }
 
 /* A vontatókocsi kép stílusa és fel-le mozgása */
@@ -33,6 +38,7 @@
   height: 220px;
   animation: upDown 1s ease-in-out infinite;
   padding-right: 40px;
+  pointer-events: auto;
 }
 
 @keyframes upDown {
@@ -47,17 +53,53 @@
   }
 }
 
-/* A kínálat rész keskenyítése és a kártyák jobbra tolása */
+/* A kínálat rész keskenyítése és a kártyák igazítása */
 .card-container {
-  width: 100%;              /* Kicsit keskenyebb, mint teljes szélesség */
-  margin-left: auto;       /* A bal oldali margó automatikusan kitölti a helyet */
-  margin-right: 30px;       /* A jobb oldali margó növelve a további jobbra toláshoz */
+  width: 100%;              
+  margin-left: auto;       
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  pointer-events: auto;
 }
 
 /* Mobil nézetben finomhangolás */
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+  .animation-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+  .kinalat-title {
+    margin-left: 0;
+    font-size: 2rem;
+    padding-top: 10px; /* Kis térköz a szöveg és a kocsi között */
+  }
+  .car-image {
+    width: 140px;
+    height: 180px;
+    padding-right: 0;
+  }
   .card-container {
-    width: 50%;            /* Mobilon kicsit szélesebb, hogy ne legyen túl szűk */
-    margin-left: 15px;     /* Kisebb jobb margó mobilon */
+    width: 100%;
+    padding: 0 15px;
+    justify-content: center; /* A kártyák középre igazítása */
+  }
+}
+
+@media (max-width: 576px) {
+  .kinalat-title {
+    font-size: 1.8rem;
+    padding-top: 8px; /* További finomhangolás */
+  }
+  .car-image {
+    width: 120px;
+    height: 160px;
+  }
+  .card-container {
+    flex-direction: column;
+    align-items: center;
+    width: 90%;  /* Tovább szűkítjük a kártyát */
+    padding: 0 10px;
   }
 }
