@@ -1,12 +1,10 @@
-// termek.js
-
 var express = require('express');
 var router = express.Router();
 var Db = require('../db/dboperations');
 
-/* GET autorendszer */
+/* autorendszer lekérése */
 router.get('/', async function(req, res, next) {
-  // Removed limit and offset to fetch all cars
+  
 
 
   try {
@@ -19,10 +17,16 @@ router.get('/', async function(req, res, next) {
   }
 });
 
-router.get('/page/:pageNo', (req, res) =>{
-  let oldal = Number(req.params.pageNo)
-  Db.selectProductPerPage(oldal)
-    .then(adat => res.json(adat))
+router.get('/betolt', (req, res) => {
+  const page = Number(req.query.page) || 1; // Lekérjük az oldalszámot a queryből
+  const limit = 25; // A betöltött elemek száma oldalanként
+  const offset = (page - 1) * limit; // kiszámolja az offsetet
+
+
+  Db.selectProductPerPage(page) 
+
+    .then(products => res.json(products))
+
     .catch(error => res.send(error))
 })
 
@@ -30,7 +34,8 @@ router.post('/filter', async (req, res) => {
   try{
     const JS = req.body
     const adat = await Db.selectProductWhere(JS)
-    res.json(adat)
+    res.status(500).send('Szerver hiba!'); // Hibakezelés
+
   }
   catch(error)
   {

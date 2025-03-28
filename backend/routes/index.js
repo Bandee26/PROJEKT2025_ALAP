@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* Kezdo oldal */
 router.get('/', function(req, res, next) {
-  res.send('Backend 2025 fut');
+  res.send('Backend szerver fut');
 });
 
 module.exports = router;

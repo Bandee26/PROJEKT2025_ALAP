@@ -12,27 +12,26 @@ return(
         </div>
 
         <div className="col-lg-4 col-md-6 mb-4 mb-md-0">
-          <h5 className="text-uppercase">Szolgáltatások</h5>
+          <h5 className="text-uppercase">Partnereink</h5>
           <ul className="list-unstyled">
-            <li><a href="#!" className="text-dark">Web Design</a></li>
-            <li><a href="#!" className="text-dark">Development</a></li>
-            <li><a href="#!" className="text-dark">Hosting</a></li>
+            <li><a target="_blank" href="https://www.hasznaltauto.hu/" className="text-dark">Használtautó.hu</a></li>
+   
           </ul>
         </div>
 
         <div className="col-lg-4 col-md-6 mb-4 mb-md-0">
-          <h5 className="text-uppercase">Contact</h5>
+          <h5 className="text-uppercase">Kapcsolatfelvétel</h5>
           <p>
             Mezőtúr Dózsa György út 17.<br />
             Email: info@hasznalautoker.hu<br />
-            Phone: +36 1 456 789
+            Telefon: +36 1 456 789
           </p>
         </div>
       </div>
     </div>
 
     <div className="text-center p-3 bg-dark text-white">
-      &copy; 2025 HAHU Website. Minden jog fenntartva.
+      &copy; 2025 B&K Autókereskedés. Minden jog fenntartva.
     </div>
   </footer>
 )

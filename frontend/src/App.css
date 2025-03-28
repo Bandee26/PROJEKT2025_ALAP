@@ -95,14 +95,14 @@ body {
   overflow-x: hidden;
   border-radius: 10px;
   margin: 0 auto; /* Középre helyezés */
-  margin-left: 50px; /* Shift right when filter is open */
+  margin-left: 50px; 
 
-  margin-left: 50px; /* Shift right when filter is open */
+  margin-left: 50px; 
 
   display: flex;
   flex-wrap: wrap;
   justify-content: center; /* Kártyák középre igazítása */
-  margin: 120px; /* Increased margin for cards */
+  margin: 120px; 
 
   gap: 20px; /* Nagyobb távolság a kártyák között */
 
@@ -141,7 +141,7 @@ body {
   border-radius: 12px;
   padding: 10px;
   transition: all 0.3s ease;
-  width: 400px; /* Increased card width */
+  width: 400px; 
   text-align: center;
 }
 

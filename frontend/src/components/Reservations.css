@@ -1,0 +1,43 @@
+.reservation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+    text-align: center; 
+}
+
+.reservation-item {
+    margin-bottom: 20px;
+    width: 100%; 
+    max-width: 600px;
+}
+
+
+.reservation-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reservation-item img {
+    width: 200px; 
+    height: auto; 
+    border-radius: 10px; 
+    margin-right: 15px; 
+    display: flex;
+}
+
+.reservation-details {
+    font-size: 16px; 
+}
+.car-image1 {
+    width: 180px;
+    height: 220px;
+    padding-right: 40px;
+    margin: 2px;
+  }
+
+  .car-image1:hover {
+    animation-play-state: paused;
+    border-radius: 30px;
+  }

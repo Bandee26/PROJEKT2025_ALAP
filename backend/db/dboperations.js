@@ -23,7 +23,7 @@ function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
-async function getCarsByIds(ids) { // Ensure the function is defined correctly
+async function getCarsByIds(ids) { 
     try {
         const [rows] = await pool.query('SELECT * FROM autorendszer WHERE Rendszam IN (?)', [ids]);
         return rows;
@@ -37,8 +37,7 @@ async function selectAutoFromAutorendszer() {
 
 
   try {
-    const [rows] = await pool.query('SELECT * FROM autorendszer'); // Fetch all cars without limits
-
+    const [rows] = await pool.query('SELECT * FROM autorendszer'); 
 
     return rows;
   } catch (error) {
@@ -71,9 +70,9 @@ async function loginUser(email, password) {
           [email, hashedPassword]
       );
       if (rows.length > 0) {
-          return rows[0];  // Return user object for JWT generation
+          return rows[0];  // sikeres bejelentkezés esetén a felhasználó adatait adjuk vissza
       } else {
-          return null;  // Return null for unsuccessful login
+          return null;  // sikertelen bejelentkezés esetén null-t adunk vissza
       }
   } catch (error) {
       console.error('Login failed:', error);
@@ -86,9 +85,9 @@ async function updateUserProfile(email, name, phone) {
   try {
       const [result] = await pool.query(
           'UPDATE regisztracio SET nev = ?, telefon = ? WHERE email = ?',
-          [name, phone, email] // Use the email passed as a parameter
+          [name, phone, email] // Az email cím alapján frissítjük a felhasználó adatait
       );
-      return result.affectedRows > 0;  // If any rows were affected, return true
+      return result.affectedRows > 0;  // Ha legalább egy sor módosult, akkor igazat adunk vissza
   } catch (error) {
       console.error('Profile update failed:', error);
       throw new Error('Hiba történt a profil frissítésekor');
@@ -151,7 +150,7 @@ async function addFavorite(userId, carId) {
 
       return { success: true, favorites: favoritesArray }; // Visszaadjuk a tömböt, nem a JSON stringet
   } catch (error) {
-      console.error('Failed to add favorite:', error.message); // Log the specific error message
+      console.error('Failed to add favorite:', error.message); // Logolja a hibát
       throw new Error('Error adding favorite.');
   }
 }
@@ -168,7 +167,7 @@ async function removeFavorite(userId, carId) {
       const favorites = await getFavorites(userId);
       return { success: true, favorites }; // Frissített kedvencek visszaadása
   } catch (error) {
-      console.error('Failed to remove favorite:', error.message); // Log the specific error message
+      console.error('Failed to remove favorite:', error.message); // logolja a hibát
       throw new Error('Error removing favorite.');
   }
 }
@@ -176,16 +175,15 @@ async function removeFavorite(userId, carId) {
 // Function to get favorites for a user
 async function getFavorites(userId) {
     try {
-        const query = 'SELECT kedvencek FROM regisztracio WHERE id = ?'; // Adjust the query as per your database schema
+        const query = 'SELECT kedvencek FROM regisztracio WHERE id = ?'; // beállítjuk a lekérdezést
         const [rows] = await pool.query(query, [userId]);
         if (rows.length === 0) {
-            throw new Error('No favorites found for this user.'); // More detailed error message
+            throw new Error('No favorites found for this user.'); // részletesebb hibaüzenet
         }
-        return rows[0].kedvencek; // Return the favorites array
-
+        return rows[0].kedvencek; // visszaadjuk a kedvenceket
     } catch (error) {
         console.error('Error fetching favorites from database:', error);
-        throw new Error('Failed to fetch favorites.'); // More descriptive error message
+        throw new Error('Failed to fetch favorites.'); // részletesebb hibaüzenet
     }
 }
 
@@ -193,9 +191,9 @@ async function getUserProfile(userId) {
     try {
         const [rows] = await pool.query('SELECT * FROM regisztracio WHERE id = ?', [userId]);
         if (rows.length > 0) {
-            return rows[0]; // Return the user profile
+            return rows[0]; // visszaadjuk a felhasználó adatait
         } else {
-            return null; // No profile found
+            return null; // nem találtunk felhasználót
         }
     } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -207,7 +205,7 @@ async function getUserIdByEmail(email) {
     try {
         const [rows] = await pool.query('SELECT id FROM regisztracio WHERE email = ?', [email]);
         if (rows.length > 0) {
-            return rows[0].id; // Return the user ID
+            return rows[0].id; // visszaadjuk a felhasználó ID-jét
         } else {
             throw new Error('User not found');
         }
@@ -219,7 +217,7 @@ async function getUserIdByEmail(email) {
 
 async function createBooking(carId, userId, paymentMethod) {
 
-    // Check if the car is already booked
+    // ellenőrizzük, hogy a kiválasztott autó nincs-e már foglalva
     const [existingBooking] = await pool.query('SELECT * FROM foglalas WHERE car_id = ?', [carId]);
     if (existingBooking.length > 0) {
         throw new Error(`The car with ID ${carId} is already booked.`);
@@ -228,13 +226,13 @@ async function createBooking(carId, userId, paymentMethod) {
     try {
         const [result] = await pool.query(
             'INSERT INTO foglalas (car_id, user_id, fizmod) VALUES (?, ?, ?)',
-            [carId, userId, paymentMethod] // Include payment method
+            [carId, userId, paymentMethod] // fizetési mód hozzáadása
 
         );
-        return result.insertId; // Return the insertId after a successful insertion
+        return result.insertId; // visszaadjuk az új foglalás ID-jét , nem a legjobb.
 
     } catch (error) {
-        console.error('Error creating booking:', error); // Log the error
+        console.error('Error creating booking:', error); // hibaüzenet logolása
         throw new Error('Failed to create booking.');
     }
 }
@@ -242,16 +240,16 @@ async function createBooking(carId, userId, paymentMethod) {
 async function getUserReservations(userId) {
     try {
         const [rows] = await pool.query('SELECT * FROM foglalas WHERE user_id = ?', [userId]);
-        return rows; // Return the reservations for the user
+        return rows; // visszaadjuk a foglalásokat
     } catch (error) {
         console.error('Error fetching user reservations:', error);
         throw new Error('Failed to fetch user reservations.');
     }
 }
 
-module.exports = { // Ensure all functions are exported correctly
+module.exports = { 
     selectAutoFromAutorendszer, selectProductPerPage, registerUser,
     loginUser, updateUserProfile, selectProductWhere, addFavorite, removeFavorite, getFavorites,
-    getUserProfile, createBooking, getCarsByIds, getUserReservations // Export the new function
+    getUserProfile, createBooking, getCarsByIds, getUserReservations // Exportáljuk a függvényeket
 };
 

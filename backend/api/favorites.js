@@ -4,7 +4,7 @@ const { addFavorite, removeFavorite, getFavorites } = require('../db/dboperation
 
 const verifyToken = require('../middleware/verifyToken'); // Import the verifyToken middleware
 
-// Add Favorite
+// Kedvencekhez adás
 router.post('/favorites/:carId', verifyToken, async (req, res) => {
     const userId = req.userId;
     const carId = req.params.carId;
@@ -26,7 +26,7 @@ router.post('/favorites/:carId', verifyToken, async (req, res) => {
 });
 
 
-// Remove Favorite
+// Kedvencek törlése
 router.delete('/favorites/:carId', verifyToken, async (req, res) => { // Apply the middleware here
     const userId = req.userId; // Use userId set by the middleware
     const carId = req.params.carId;
@@ -39,7 +39,7 @@ router.delete('/favorites/:carId', verifyToken, async (req, res) => { // Apply t
     }
 });
 
-// Get Favorites
+// KJedvencek lekérdezése
 router.get('/favorites', verifyToken, async (req, res) => {
     const userId = req.userId; // Use userId set by the middleware
 

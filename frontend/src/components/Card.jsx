@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
-import Slider from 'react-slick'; // Import Slider for carousel functionality
+import Slider from 'react-slick'; 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import CardCSS from './Card.css';
@@ -25,7 +25,7 @@ const CustomCard = ({
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
-  // Dark theme styles for the modal
+  // Fekete téma a modális ablakhoz
   const modalStyles = {
     header: {
       backgroundColor: '#222',
@@ -46,7 +46,7 @@ const CustomCard = ({
     }
   };
 
-  // React-Slick settings for the image carousel
+  // React-Slick beállítások
   const settings = {
     dots: true,
     infinite: true,
