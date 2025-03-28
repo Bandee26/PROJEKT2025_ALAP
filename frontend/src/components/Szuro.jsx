@@ -84,7 +84,6 @@ const Szuro = ({ onFilterChange, products }) => {
       maxKm: maxKm !== 1000000 ? maxKm : undefined,
     };
 
-    // queryString.stringify ignorálja az undefined
     const newQuery = queryString.stringify(filters);
     navigate(`?${newQuery}`, { replace: true });
   }, [
@@ -219,6 +218,20 @@ const Szuro = ({ onFilterChange, products }) => {
     );
   };
 
+  // Clear Filters: törli az összes szűrési feltételt
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedBrands([]);
+    setSelectedModels([]);
+    setSelectedColor('');
+    setPriceRange([minPrice, maxPrice]);
+    setYearRange([minYear, maxYear]);
+    setSelectedEngineType('');
+    setSelectedUsageType('');
+    setSelectedTransmission('');
+    setMaxKm(1000000);
+  };
+
   const arrowStyle = {
     position: 'fixed',
     top: '120px',
@@ -242,6 +255,12 @@ const Szuro = ({ onFilterChange, products }) => {
               style={{ width: '100%' }}
             />
           </Form.Group>
+          {/* Clear Filters Button */}
+          <div className="d-grid gap-2 mt-3">
+            <Button variant="danger" onClick={clearFilters} style={{backgroundColor: "#ff4500", color: "black", fontWeight:600}}>
+              Szűrés törlése
+            </Button>
+          </div>
           <Form.Group className="mb-3">
             <Form.Label className="text-light"><strong>Válassz márkát és modellt:</strong></Form.Label>
             {brands.length > 0 ? (
