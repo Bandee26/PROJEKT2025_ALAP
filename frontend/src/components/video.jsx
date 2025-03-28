@@ -1,4 +1,3 @@
-// src/components/Video.js
 import React from 'react';
 
 const Video = () => {

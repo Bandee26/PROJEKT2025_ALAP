@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Nagyitottkep from './nagyitottkep'; // Import the modal component
-import './Reservations.css'; // Import the new CSS file
+import Nagyitottkep from './nagyitottkep'; 
+import './Reservations.css'; 
 
 function Reservations() {
     const [reservations, setReservations] = useState([]);
     const [carDetails, setCarDetails] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-    const [selectedImage, setSelectedImage] = useState(''); // State to hold the selected image source
+    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [selectedImage, setSelectedImage] = useState(''); 
 
     useEffect(() => {
         const fetchReservations = async () => {
@@ -24,7 +24,7 @@ function Reservations() {
                     const result = await response.json();
                     if (result.success) {
                         setReservations(result.reservations);
-                        // Fetch car details based on the car IDs from reservations
+                        // Az autók lekérése a foglalásokhoz
                         const carIds = result.reservations.map(reservation => reservation.car_id);
                         const carResponse = await fetch(`http://localhost:8080/cars?ids=${carIds.join(',')}`);
                         const carResult = await carResponse.json();

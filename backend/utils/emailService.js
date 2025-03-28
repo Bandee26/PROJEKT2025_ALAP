@@ -1,16 +1,16 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com', // Specify the SMTP server
-    port: 587, // Use port 587 for TLS
-    secure: false, // Use TLS
+    host: 'smtp.gmail.com', // SMTP szervert használunk
+    port: 587, // SMTP port
+    secure: false, // TLS beállítás
     auth: {
-        user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS, // Use the App Password here
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS, 
     },
 });
 
-// Function to send confirmation email
+// Email küldése
 const sendConfirmationEmail = async (to, bookingId, carDetails, userDetails) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -30,10 +30,10 @@ const sendConfirmationEmail = async (to, bookingId, carDetails, userDetails) => 
     };
 
     try {
-        await transporter.sendMail(mailOptions); // Await sendMail
+        await transporter.sendMail(mailOptions); // sendmail metódus meghívása
         console.log('Email sent successfully');
     } catch (error) {
-        console.error('Error sending email:', error); // Log error
+        console.error('Error sending email:', error); // Hibakezelés
     }
 };
 

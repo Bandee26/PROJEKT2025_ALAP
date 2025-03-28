@@ -1,5 +1,5 @@
 import React from 'react';
-import './Modal.css'; // Assuming you will create a CSS file for modal styles
+import './Modal.css'; 
 
 const Nagyitottkep = ({ isOpen, onClose, imageSrc }) => {
     if (!isOpen) return null;

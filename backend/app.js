@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var termekRouter = require('./routes/termek');
 
-const cors = require('cors'); // Cross-Origin Resource Sharing
+const cors = require('cors'); 
 
 var app = express();
 
@@ -24,10 +24,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const jwt = require('jsonwebtoken'); // Import JWT library
+const jwt = require('jsonwebtoken'); // JWT importálása
 
 function verifyToken(req, res, next) {
-    const token = req.headers['authorization']?.split(' ')[1]; // Get token from headers
+    const token = req.headers['authorization']?.split(' ')[1]; // Token lekérése a headerből
     if (!token) {
         return res.status(403).json({ success: false, message: 'No token provided.' });
     }
@@ -35,40 +35,40 @@ function verifyToken(req, res, next) {
         if (err) {
             return res.status(401).json({ success: false, message: 'Unauthorized.' });
         }
-        req.userId = decoded.id; // Save user ID for use in other routes
+        req.userId = decoded.id; // User id elmentése a request objektumba
         next();
     });
 }
 
 // API végpontok
-app.use('/protected', verifyToken); // Apply JWT verification middleware to protected routes
+app.use('/protected', verifyToken); 
 
 app.use('/',indexRouter)
 app.get('/cars', async (req, res) => {
-    const ids = req.query.ids ? req.query.ids.split(',') : []; // Get the IDs from the query string, ensure it's defined
+    const ids = req.query.ids ? req.query.ids.split(',') : []; 
    
 
     try {
-        const cars = await require('./db/dboperations').getCarsByIds(ids); // Fetch cars by IDs
+        const cars = await require('./db/dboperations').getCarsByIds(ids); // Autók lekérdezése id alapján
         
 
         res.json({ cars });
     } catch (error) {
-        console.error('Error fetching cars:', error); // Log the error for debugging
+        console.error('Error fetching cars:', error); // Hiba logolása
         res.status(500).json({ message: error.message });
     }
 });
 
 
 app.post('/bookings', async (req, res) => {
-    const { carId, userId, paymentMethod } = req.body; // Assuming userId and paymentMethod are passed in the request body
+    const { carId, userId, paymentMethod } = req.body; // userid és paymentMethod lekérése a requestből
 
     try {
         const result = await require('./db/dboperations').createBooking(carId, userId, paymentMethod);
 
-        const userProfile = await require('./db/dboperations').getUserProfile(userId); // Retrieve user profile
-        const carDetails = await require('./db/dboperations').getCarsByIds([carId]); // Fetch car details
-        const car = carDetails[0]; // Assuming we get the first car details
+        const userProfile = await require('./db/dboperations').getUserProfile(userId); 
+        const carDetails = await require('./db/dboperations').getCarsByIds([carId]); // Autó adatainak lekérése
+        const car = carDetails[0];
 
         await require('./utils/emailService').sendConfirmationEmail(userProfile.email, car.Rendszam, car, { Nev: car.Nev, Telefon: car.Telefon, Email: car.Email }); // Send confirmation email with car details and seller info
 
@@ -82,8 +82,8 @@ app.post('/bookings', async (req, res) => {
 
 app.get('/reservations', verifyToken, async (req, res) => {
     try {
-        const userId = req.userId; // Get user ID from the request
-        const reservations = await require('./db/dboperations').getUserReservations(userId); // Fetch reservations for the user
+        const userId = req.userId; // userid lekérése a requestből
+        const reservations = await require('./db/dboperations').getUserReservations(userId); // Foglalások lekérése
         res.json({ success: true, reservations });
     } catch (error) {
         console.error('Error fetching reservations:', error);
@@ -96,6 +96,6 @@ app.use('/users', usersRouter);  // Az API végpontokat a /users prefixszel regi
 
 
 app.use('/termek', termekRouter);  // A termékek végpontjait is az /termek prefixszel
-app.use('/users', require('./api/favorites')); // Integrate favorites routes
+app.use('/users', require('./api/favorites')); // Integráljuk a kedvencek API-t
 
 module.exports = app;

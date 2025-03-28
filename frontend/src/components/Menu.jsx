@@ -42,7 +42,7 @@ function Menu({ favorites, setFavorites, products }) {
         setValidatedFavorites(Array.isArray(favorites) ? favorites : []);
     }, [favorites]);
 
-    // Fetch user profile data when the profile modal is opened
+    // Lekérdezés a profilhoz
     useEffect(() => {
         const fetchUserProfile = async () => {
             const token = localStorage.getItem('token');
@@ -116,7 +116,7 @@ function Menu({ favorites, setFavorites, products }) {
             setIsLoggedIn(true);
             setUserEmail(loginEmail);
 
-            // Fetch favorites after login
+            // bejelentkezés 
             const fetchFavorites = async () => {
                 try {
                     const favoritesResponse = await fetch('http://localhost:8080/users/favorites', {
@@ -174,7 +174,6 @@ function Menu({ favorites, setFavorites, products }) {
                 setShowLoginModal(false);
                 alert('Sikeres bejelentkezés!');
 
-                // Now fetch favorites
                 const favoritesResponse = await fetch('http://localhost:8080/users/favorites', {
                     headers: {
                         'Content-Type': 'application/json',
@@ -232,7 +231,7 @@ function Menu({ favorites, setFavorites, products }) {
         }
     };
 
-    // Slider settings for favorites modal
+    // Slider beállítások
     const settings = {
         dots: true,
         infinite: true,

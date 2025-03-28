@@ -58,7 +58,7 @@
     transition: .2s .2s, scale 0s .4s;
 }
 .modal-text {
-    color: black; /* Set modal text color to black */
+    color: black; 
 }
 /* Dropdown stílus és animáció */
 .custom-dropdown .dropdown-menu {
@@ -78,13 +78,13 @@
 .favorites-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Adjust spacing between items */
+    justify-content: space-between; 
     ;
 }
 
 .favorite-car {
-    width: calc(60% - 110px); /* Two items per row with some margin */
-    margin-bottom: 20px; /* Space between rows */
+    width: calc(60% - 110px); 
+    margin-bottom: 20px;
 
 }
 /* Slide down animáció kulcsképkockái */
